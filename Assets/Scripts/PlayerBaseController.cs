@@ -6,6 +6,7 @@ using System;
 public class PlayerBaseController : MonoBehaviour {
     public float speed;
     public float jumpHeight;
+    private const double Y_VELOCITY_THRESHOLD = -2.00000000;
     private Rigidbody2D rb2d;
     private float yPos;
 
@@ -37,7 +38,11 @@ public class PlayerBaseController : MonoBehaviour {
                 rb2d.AddForce(new Vector2(0, 100) * jumpHeight);
             } else if (isCharacterFalling())
             { // hover
-                rb2d.AddForce(new Vector2(0, 3) * jumpHeight);
+                //print(rb2d.velocity.y);
+                if (rb2d.velocity.y < Y_VELOCITY_THRESHOLD)
+                {
+                    rb2d.AddForce(new Vector2(0, 5) * jumpHeight);
+                }
             }
         }
     }
