@@ -81,7 +81,7 @@ public class PlayerBaseController : MonoBehaviour {
                 updateDigging();
                 float currX = transform.position.x;
                 float currY = transform.position.y;
-                Vector2 ptA = new Vector2((float)(currX - 0.45), currY);
+                Vector2 ptA = new Vector2((float)(currX - 0.45), (float)(currY - 0.95));
                 Vector2 ptB = new Vector2((float)(currX + 0.45), currY - 1);
                 Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1<<8);
                 /*if (col.Length == 1)
@@ -148,6 +148,7 @@ public class PlayerBaseController : MonoBehaviour {
         /*float moveHorizontal = Input.GetAxis("Horizontal");
         Vector2 movement = new Vector2(moveHorizontal, 0);
         rb2d.AddForce(movement * speed);*/
+
         if (!isDigging)
         {
             if (Input.GetKey(KeyCode.D))
