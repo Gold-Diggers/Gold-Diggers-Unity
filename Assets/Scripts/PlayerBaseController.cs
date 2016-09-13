@@ -7,6 +7,7 @@ public class PlayerBaseController : MonoBehaviour {
     public float speed;
     public float jumpHeight;
     private const double Y_VELOCITY_THRESHOLD = -2.00000000;
+    private const float HORIZONTAL_COLLISION_THRESHOLD = 0.25f;
     private Rigidbody2D rb2d;
     private float yPos;
     // For handling period when player is digging
@@ -28,9 +29,9 @@ public class PlayerBaseController : MonoBehaviour {
 
     void FixedUpdate()
     {
+        handleHorizontalMovement();
         handleJump();
         handleDig();
-        handleHorizontalMovement();
         handleDigCooldown();
         updateYPos(); // must be last
     }
@@ -81,8 +82,8 @@ public class PlayerBaseController : MonoBehaviour {
                 updateDigging();
                 float currX = transform.position.x;
                 float currY = transform.position.y;
-                Vector2 ptA = new Vector2((float)(currX - 0.45), (float)(currY - 0.95));
-                Vector2 ptB = new Vector2((float)(currX + 0.45), currY - 1);
+                Vector2 ptA = new Vector2((float)(currX - 0.23), (float)(currY - 0.95));
+                Vector2 ptB = new Vector2((float)(currX + 0.23), currY - 1);
                 Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1<<8);
                 /*if (col.Length == 1)
                 {
@@ -122,7 +123,7 @@ public class PlayerBaseController : MonoBehaviour {
     {
         //if (transform.position.y == yPos)
         if (Math.Abs(transform.position.y - yPos) < 0.001)
-        {
+            {
             return true;
         } else
         {
@@ -151,14 +152,44 @@ public class PlayerBaseController : MonoBehaviour {
 
         if (!isDigging)
         {
+            if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.A))
+            { // when pressing left and right keys together
+                return;
+            }
+            // Restricts movement if moving left or right will collide into wall/platform blocks.
             if (Input.GetKey(KeyCode.D))
             {
-                transform.position += Vector3.right * speed * Time.deltaTime;
+                Vector3 movement = Vector3.right * speed * Time.deltaTime;
+                if (!isColliding(transform.position + movement))
+                {
+                    transform.position += movement;
+                }
             }
-            if (Input.GetKey(KeyCode.A))
+            else if (Input.GetKey(KeyCode.A))
             {
-                transform.position += Vector3.left * speed * Time.deltaTime;
+                Vector3 movement = Vector3.left * speed * Time.deltaTime;
+                if (!isColliding(transform.position + movement))
+                {
+                    transform.position += movement;
+                }
             }
         } 
+    }
+
+    bool isColliding(Vector3 point)
+    {
+        float currX = point.x;
+        float currY = point.y;
+        float threshold = HORIZONTAL_COLLISION_THRESHOLD;
+        Vector2 ptA = new Vector2((float) (currX- threshold), (float)(currY + threshold));
+        Vector2 ptB = new Vector2((float)(currX + threshold), (float)(currY - threshold * 2));
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8);
+        if (col.Length == 0)
+        {
+            return false;
+        } else
+        {
+            return true;
+        }
     }
 }
