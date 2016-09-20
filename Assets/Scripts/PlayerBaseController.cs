@@ -257,6 +257,15 @@ public class PlayerBaseController : MonoBehaviour {
         else throw new System.ApplicationException(ERROR_INVALID_INVINCIBILITY_VALUE);
     }
 
+    // Handles collisions with diamonds
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Diamond"))
+        {
+            triggerDiamondInteraction(other);
+        }
+    }
+
     // Dummy implementations
     // Use OnCollisionStay2D to check every frame for collision handling.
     void OnCollisionStay2D(Collision2D coll)
@@ -274,7 +283,7 @@ public class PlayerBaseController : MonoBehaviour {
                 break;
 
             case "Diamond":
-                triggerDiamondInteraction(coll);
+                // Action handled by OnTriggerEnter2D()
                 break;
 
             case "TreasureChest":
@@ -301,7 +310,7 @@ public class PlayerBaseController : MonoBehaviour {
         }
     }
 
-    private void triggerDiamondInteraction(Collision2D coll)
+    private void triggerDiamondInteraction(Collider2D coll)
     {
         print("Player has collected a diamond.");
         diamonds++;
