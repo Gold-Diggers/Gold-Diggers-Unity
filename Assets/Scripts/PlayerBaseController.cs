@@ -26,11 +26,15 @@ public class PlayerBaseController : MonoBehaviour {
     public float jumpHeight;
     private Rigidbody2D rb2d;
     private float yPos;
+    private float xPos;
 
     /* ================= Player control mechanic attributes ================= */
     // For handling period when player is digging
     private bool isDigging;
     private int diggingCounter;
+
+    private bool isRunning;
+    private Animator anim;
 
     /* ================= Player in-game rule mechanic attributes ================= */
     public int lives;
@@ -59,10 +63,13 @@ public class PlayerBaseController : MonoBehaviour {
         specialDiamonds = NUM_SPECIAL_DIAMONDS_START;
         rb2d = GetComponent<Rigidbody2D>();
         yPos = transform.position.y;
+        xPos = transform.position.x;
         isDigging = false;
         isHurt = false;
         diggingCounter = 0;
         invincibility = 0;
+        isRunning = false;
+        anim = GetComponent<Animator>();
     }
 
     /* ================= Use this for restarting the level ================= */
@@ -73,9 +80,10 @@ public class PlayerBaseController : MonoBehaviour {
     }
 
     /* --------------------------------- START PLAYER CONTROL FUNCTIONS --------------------------------- */
-    void updateYPos()
+    void updatePos()
     {
         yPos = transform.position.y;
+        xPos = transform.position.x;
     }
 
     void FixedUpdate()
@@ -85,7 +93,31 @@ public class PlayerBaseController : MonoBehaviour {
         handleJump();
         handleDig();
         handleDigCooldown();
-        updateYPos(); // must be last
+        handleAnimation();
+        updatePos(); // must be last
+    }
+
+    void handleAnimation() {
+    	if (Math.Abs(transform.position.x - xPos) >= 0.005) {
+    		if (isRunning) {
+
+			} else {
+				print ("run");
+				isRunning = true;
+				anim.SetBool("isRunning", isRunning);
+				//GetComponent<Animator>().StartPlayback();
+			}
+    	} else {
+    		if (isRunning) {
+    			isRunning = false;
+    			print("idle");
+    			//anim.Play("idle");
+    			anim.SetBool("isRunning", isRunning);
+    			//GetComponent<Animator>().StartPlayback();
+			} else {
+
+			}
+    	}
     }
 
     void handleJump()
