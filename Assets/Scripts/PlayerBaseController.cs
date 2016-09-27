@@ -10,7 +10,7 @@ public class PlayerBaseController : MonoBehaviour {
     /* ================= Important constant definitions ================= */
     // player mechanics calculations
     private const double Y_VELOCITY_THRESHOLD = -2.0;
-    private const float HORIZONTAL_COLLISION_THRESHOLD = 0.1f;
+    private const float HORIZONTAL_COLLISION_THRESHOLD = 0.2f;
     private const float PLAYER_X_OFFSET = 0.10f;
     private const float MONSTER_COLLISION_TOLERANCE = 0.5f;
 
