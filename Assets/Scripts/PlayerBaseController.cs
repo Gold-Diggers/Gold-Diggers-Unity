@@ -98,7 +98,7 @@ public class PlayerBaseController : MonoBehaviour {
     }
 
     void handleAnimation() {
-    	if (Math.Abs(transform.position.x - xPos) >= 0.005) {
+    	if (Math.Abs(transform.position.x - xPos) >= 0.00005) {
     		if (isRunning) {
 
 			} else {
