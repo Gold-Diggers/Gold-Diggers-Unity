@@ -7,8 +7,7 @@ public class PlayerBaseController : MonoBehaviour {
     /* --------------------------------- START PLAYER DEFINITIONS --------------------------------- */
     /* ================= player mechanics calculations ================= */
     private const double Y_VELOCITY_THRESHOLD = -2.0;
-    private const float HORIZONTAL_COLLISION_THRESHOLD = 0.2f;
-    private const float MONSTER_COLLISION_TOLERANCE = 0.5f;
+    private const float HORIZONTAL_COLLISION_THRESHOLD = 0.3f;
 
     /* ================= Player physics attributes ================= */
     public float speed;
@@ -124,10 +123,10 @@ public class PlayerBaseController : MonoBehaviour {
             if (isCharacterOnPlatform())
             {
                 updateDigging();
-                float currX = transform.position.x;
-                float currY = transform.position.y;
-                Vector2 ptA = new Vector2((float)(currX - 0.23), (float)(currY - 0.95));
-                Vector2 ptB = new Vector2((float)(currX + 0.23), currY - 1);
+                float currX = transform.GetComponent<Collider2D>().bounds.center.x;
+                float currY = transform.GetComponent<Collider2D>().bounds.center.y;
+                Vector2 ptA = new Vector2((float)(currX - 0.27), (float)(currY - 0.95));
+                Vector2 ptB = new Vector2((float)(currX + 0.27), currY - 1);
                 Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1<<8);
                 /*if (col.Length == 1)
                 {
