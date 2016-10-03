@@ -7,6 +7,7 @@ public class ItemsGenerator : MonoBehaviour
     public GameObject diamond;
     public GameObject trap;
     public GameObject treasureChest;
+    public GameObject specialChest;
     // Handle the bounds of the map / background
     private Vector3 topLeft;
     private Vector3 btmRight;
@@ -45,6 +46,8 @@ public class ItemsGenerator : MonoBehaviour
     private const int NUM_IN_HORIZONTAL_CHEST = 3; // 1 set consist of how many diamonds
     private const float SPACING_HORIZONTAL_CHEST = 1.75f;
     private const float SPACING_OFF_GROUND_HORIZONTAL_CHEST = 1.1f;
+    // special chest
+    private const float SPACING_OFF_GROUND_CHEST = 1.1f;
 
     void Start()
     {
@@ -54,6 +57,7 @@ public class ItemsGenerator : MonoBehaviour
         btmRight = new Vector3(topLeft.x + sizeBg.x, topLeft.y - sizeBg.y + DIST_NO_SPAWN_FROM_BTM, topLeft.z);
 
         generateDiamonds();
+        generateSpecialChest();
     }
 
     private void generateDiamonds()
@@ -173,7 +177,7 @@ public class ItemsGenerator : MonoBehaviour
         Collider2D chosenPlatform = col[choiceOfPlatform];
 
         float randX = chosenPlatform.transform.position.x;
-        float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_VERTICAL_SPIKE;
+        float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_CHEST;
 
         // Check if spawning diamonds will collide
         Vector2 ptC = new Vector2((float)(randX - 0.5), (float)(randY + 0.5));
@@ -188,6 +192,33 @@ public class ItemsGenerator : MonoBehaviour
 
         // Spawn chest
         Instantiate(treasureChest, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
+    }
+
+    private void generateSpecialChest()
+    {
+        Vector2 ptA = new Vector2(topLeft.x, topLeft.y);
+        Vector2 ptB = new Vector2(btmRight.x, btmRight.y);
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8); // platform detection
+
+        int choiceOfPlatform = Random.Range(0, col.Length - 1);
+        Collider2D chosenPlatform = col[choiceOfPlatform];
+
+        float randX = chosenPlatform.transform.position.x;
+        float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_CHEST;
+
+        // Check if spawning diamonds will collide
+        Vector2 ptC = new Vector2((float)(randX - 0.5), (float)(randY + 0.5));
+        Vector2 ptD = new Vector2((float)(randX + 0.5), (float)(randY - 0.5));
+        Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);
+
+        if (coll.Length > 0) // If collide with something else, spawn again.
+        {
+            generateSpecialChest();
+            return;
+        }
+
+        // Spawn special chest
+        Instantiate(specialChest, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
     }
 
     private void generateDiagonalLeftRegular()
