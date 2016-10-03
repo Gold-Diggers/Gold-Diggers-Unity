@@ -92,7 +92,7 @@ public class PlayerBaseController : MonoBehaviour {
             {
                 if (rb2d.velocity.y < Y_VELOCITY_THRESHOLD)
                 {
-                    rb2d.AddForce(new Vector2(0, 5) * jumpHeight);
+                    rb2d.AddForce(new Vector2(0, 3.5f) * jumpHeight);
                 }
             }
         }
