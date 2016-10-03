@@ -5,6 +5,7 @@ public class ItemsGenerator : MonoBehaviour
 {
     public GameObject background;
     public GameObject diamond;
+    public GameObject trap;
     // Handle the bounds of the map / background
     private Vector3 topLeft;
     private Vector3 btmRight;
@@ -31,6 +32,12 @@ public class ItemsGenerator : MonoBehaviour
     // Lone diamond
     private const int NUM_LONE_DIAMOND_SET = 2;
     private const float SPACING_OFF_GROUND_LONE_DIAMOND = 1.25f;
+    // Vertical diamond with spike
+    private const int NUM_TOTAL_SPIKES = 8; // inclusive of those with diamonds
+    private const int NUM_VERTICAL_SPIKE = 3; // number of sets
+    private const int NUM_IN_VERTICAL_SPIKE = 3; // 1 set consist of how many diamonds
+    private const float SPACING_VERTICAL_SPIKE = 1.75f;
+    private const float SPACING_OFF_GROUND_VERTICAL_SPIKE = 1.1f;
 
     void Start()
     {
@@ -49,6 +56,21 @@ public class ItemsGenerator : MonoBehaviour
         generateDiagonalRightRegularSet();
         generateDiagonalLeftRegularSet();
         generateLoneDiamondSet();
+        generateSpikes();
+    }
+
+    private void generateSpikes()
+    {
+        for (int i = 0; i < NUM_TOTAL_SPIKES; i++)
+        {
+            if (i < NUM_VERTICAL_SPIKE)
+            {
+                generateVerticalSpike();
+            } else
+            {
+                generateSpike();
+            }
+         }
     }
 
     private void generateLoneDiamondSet()
@@ -89,6 +111,33 @@ public class ItemsGenerator : MonoBehaviour
         {
             generateHorizontalRegular();
         }
+    }
+
+    private void generateSpike()
+    {
+        Vector2 ptA = new Vector2(topLeft.x, topLeft.y);
+        Vector2 ptB = new Vector2(btmRight.x, btmRight.y);
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8); // platform detection
+
+        int choiceOfPlatform = Random.Range(0, col.Length - 1);
+        Collider2D chosenPlatform = col[choiceOfPlatform];
+
+        float randX = chosenPlatform.transform.position.x;
+        float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_VERTICAL_SPIKE;
+
+        // Check if spawning diamonds will collide
+        Vector2 ptC = new Vector2((float)(randX - 0.5), (float)(randY + 0.5));
+        Vector2 ptD = new Vector2((float)(randX + 0.5), (float)(randY - 0.5));
+        Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);
+
+        if (coll.Length > 0) // If collide with something else, spawn again.
+        {
+            generateSpike();
+            return;
+        }
+        
+        // Spawn spike
+        Instantiate(trap, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
     }
 
     private void generateDiagonalLeftRegular()
@@ -181,6 +230,44 @@ public class ItemsGenerator : MonoBehaviour
         {
             Instantiate(diamond, new Vector3(randX, randY, 0), Quaternion.identity);
             randX += SPACING_REGULAR_HORIZONTAL;
+        }
+    }
+
+    private void generateVerticalSpike()
+    {
+        Vector2 ptA = new Vector2(topLeft.x, topLeft.y);
+        Vector2 ptB = new Vector2(btmRight.x, btmRight.y);
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8); // platform detection
+
+        int choiceOfPlatform = Random.Range(0, col.Length - 1);
+        Collider2D chosenPlatform = col[choiceOfPlatform];
+
+        float randX = chosenPlatform.transform.position.x;
+        float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_VERTICAL_SPIKE;
+        float tempX = randX;
+        float tempY = randY;
+
+        for (int i = 0; i < NUM_IN_VERTICAL_SPIKE + 1; i++)
+        { // Check if spawning diamonds will collide
+            Vector2 ptC = new Vector2((float)(tempX - 0.5), (float)(tempY + 0.5));
+            Vector2 ptD = new Vector2((float)(tempX + 0.5), (float)(tempY - 0.5));
+            Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);
+
+            if (coll.Length > 0) // If collide with something else, spawn again.
+            {
+                generateVerticalSpike();
+                return;
+            }
+            tempY += SPACING_VERTICAL_SPIKE;
+        }
+        // Spawn spike
+        Instantiate(trap, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
+        randY += SPACING_VERTICAL_SPIKE;
+        // Spawn all diamonds
+        for (int i = 0; i < NUM_IN_VERTICAL_SPIKE; i++)
+        {
+            Instantiate(diamond, new Vector3(randX, randY, 0), Quaternion.identity);
+            randY += SPACING_VERTICAL_SPIKE;
         }
     }
 
