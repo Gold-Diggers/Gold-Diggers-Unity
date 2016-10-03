@@ -7,7 +7,8 @@ public class PlayerBaseController : MonoBehaviour {
     /* --------------------------------- START PLAYER DEFINITIONS --------------------------------- */
     /* ================= player mechanics calculations ================= */
     private const double Y_VELOCITY_THRESHOLD = -2.0;
-    private const float HORIZONTAL_COLLISION_THRESHOLD = 0.3f;
+    //private const float HORIZONTAL_COLLISION_THRESHOLD = 0.3f;
+    private const float HORIZONTAL_COLLISION_THRESHOLD = 0.1f;
 
     /* ================= Player physics attributes ================= */
     public float speed;
@@ -203,7 +204,9 @@ public class PlayerBaseController : MonoBehaviour {
             if (Input.GetKey(KeyCode.D)) // Restricts movement if moving left or right will collide into wall/platform blocks.
             {
                 Vector3 movement = Vector3.right * speed * Time.deltaTime;
-                if (!isColliding(transform.position + movement))
+                //if (!isColliding(transform.position + movement))
+                Vector3 currPos = transform.GetComponent<Collider2D>().bounds.center;
+                if (!isColliding(currPos + movement))
                 {
                     transform.position += movement;
                 }
@@ -211,7 +214,9 @@ public class PlayerBaseController : MonoBehaviour {
             else if (Input.GetKey(KeyCode.A))
             {
                 Vector3 movement = Vector3.left * speed * Time.deltaTime;
-                if (!isColliding(transform.position + movement))
+                //if (!isColliding(transform.position + movement))
+                Vector3 currPos = transform.GetComponent<Collider2D>().bounds.center;
+                if (!isColliding(currPos + movement))
                 {
                     transform.position += movement;
                 }
