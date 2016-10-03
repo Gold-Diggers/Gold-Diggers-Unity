@@ -17,6 +17,7 @@ public class PlayerCollisionController : MonoBehaviour {
     private const int SPAWN_MONSTER = 1;
 
     // strings
+    private const string TEN_DIAMOND_NAME = "Diamond10(Clone)";
     private const string PLATFORM = "Platform";
     private const string MONSTER = "Monster";
     private const string TRAP = "Trap";
@@ -141,9 +142,16 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void triggerDiamondInteraction(Collider2D coll)
     {
-        print("Player has collected a diamond.");
-        IncrementDiamondCountByOne();
-        Destroy(coll.gameObject);
+        if (Equals(coll.gameObject.name, TEN_DIAMOND_NAME)) {
+            print("Player has collected 10 diamonds.");
+            IncrementDiamondCountByTen();
+            Destroy(coll.gameObject);
+        } else
+        {
+            print("Player has collected a diamond.");
+            IncrementDiamondCountByOne();
+            Destroy(coll.gameObject);
+        }
     }
 
     private void triggerSpecialDiamondInteraction(Collider2D coll)
@@ -235,6 +243,11 @@ public class PlayerCollisionController : MonoBehaviour {
     private void IncrementDiamondCountByOne()
     {
         diamonds++;
+    }
+
+    private void IncrementDiamondCountByTen()
+    {
+        diamonds += 10;
     }
 
     private void spawnObject(GameObject obj, Collision2D coll)
