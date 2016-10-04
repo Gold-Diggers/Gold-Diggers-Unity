@@ -16,6 +16,10 @@ public class PlayerCollisionController : MonoBehaviour {
     private const int SPAWN_DIAMOND = 0;
     private const int SPAWN_MONSTER = 1;
 
+    // monster type constants
+    private const int MONSTER_ONE = 0;
+    private const int MONSTER_TWO = 1;
+
     // strings
     private const string TEN_DIAMOND_NAME = "Diamond10(Clone)";
     private const string PLATFORM = "Platform";
@@ -45,7 +49,8 @@ public class PlayerCollisionController : MonoBehaviour {
     // treasure chest asset attributes
     public GameObject spawnedDiamond;
     public GameObject spawnedSpecialDiamond;
-    public GameObject spawnedMonster;
+    public GameObject spawnedMonsterType1;
+    public GameObject spawnedMonsterType2;
 
     // Use this for initialization
     void Start () {
@@ -169,7 +174,14 @@ public class PlayerCollisionController : MonoBehaviour {
         }
         else if (ToSpawnMonster(option))
         {
-            spawnObject(spawnedMonster, coll);
+            int randSpawn = Random.Range(0, 1);
+            if (randSpawn == MONSTER_ONE)
+            {
+                spawnObject(spawnedMonsterType1, coll);
+            } else if (randSpawn == MONSTER_TWO)
+            {
+                spawnObject(spawnedMonsterType2, coll);
+            }        
         }
         Destroy(coll.gameObject);
     }

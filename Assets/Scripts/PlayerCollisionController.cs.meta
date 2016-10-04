@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a89ee250f2d7dfc469b2daa569ef62c0
-timeCreated: 1475513969
+timeCreated: 1475601329
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
@@ -9,7 +9,10 @@ MonoImporter:
       type: 2}
   - spawnedSpecialDiamond: {fileID: 1000013555863600, guid: 097d7a7b758cc3b458a386aee2f643e9,
       type: 2}
-  - spawnedMonster: {instanceID: 0}
+  - spawnedMonsterType1: {fileID: 1000013193330540, guid: 9ecdead2dcffea449a92cd8216004b8e,
+      type: 2}
+  - spawnedMonsterType2: {fileID: 1000013193330540, guid: ea92025a85d698642a066c164760ee3a,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

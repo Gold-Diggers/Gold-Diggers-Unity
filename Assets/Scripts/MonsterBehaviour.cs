@@ -8,6 +8,8 @@ public class MonsterBehaviour : MonoBehaviour {
     public Vector3 movements;
     private Bounds monsterBound;
 
+    private SpriteRenderer mobSpriteRend;
+
     // Attributes that will be wrapped around with by the 'property' wrapper for OOP
     private float moveX = 0;
     private float moveY = 0;
@@ -119,6 +121,7 @@ public class MonsterBehaviour : MonoBehaviour {
     // Use this for initialization
     public virtual void Start()
     {
+        mobSpriteRend = GetComponent<SpriteRenderer>();
         monsterBound = GetComponent<Collider2D>().bounds;
         InitializeMovements();
     }
@@ -130,7 +133,11 @@ public class MonsterBehaviour : MonoBehaviour {
 
     public virtual void FixedUpdate()
     {
-        checkMovementLimits();
+        if (!isFlying)
+        {
+            checkMovementLimits();
+        }
+        
         Move(IsFacingLeft, IsFacingUp);
     }
 
@@ -174,33 +181,61 @@ public class MonsterBehaviour : MonoBehaviour {
          * The diagonal points are taken in general convention,
          * i.e. bottom-left and top-right corners.
          */
-        float leftBoundAX = transform.position.x - 1.5f * diff.x - EDGE_DETECTION_THRESHOLD;
-        float leftBoundAY = transform.position.y - 1.5f * diff.y;
+        float leftBoundAX = transform.position.x - 1f * diff.x - EDGE_DETECTION_THRESHOLD;
+        float leftBoundAY = transform.position.y - 1f * diff.y;
         float leftBoundBX = transform.position.x - 0.5f * diff.x - EDGE_DETECTION_THRESHOLD;
         float leftBoundBY = transform.position.y - 0.5f * diff.y;
         float rightBoundAX = transform.position.x + 0.5f * diff.x + EDGE_DETECTION_THRESHOLD;
         float rightBoundAY = leftBoundAY;
-        float rightBoundBX = transform.position.x + 1.5f * diff.x + EDGE_DETECTION_THRESHOLD;
+        float rightBoundBX = transform.position.x + 1f * diff.x + EDGE_DETECTION_THRESHOLD;
         float rightBoundBY = leftBoundBY;
         int leftIntersections = Physics2D.OverlapAreaAll(new Vector2(leftBoundAX, leftBoundAY), new Vector2(leftBoundBX, leftBoundBY), 1<<8).Length;
         int rightIntersections = Physics2D.OverlapAreaAll(new Vector2(rightBoundAX, rightBoundAY), new Vector2(rightBoundBX, rightBoundBY), 1<<8).Length;
-        if (leftIntersections == 0) IsFacingLeft = false;
-        if (rightIntersections == 0) IsFacingLeft = true;
+        if (leftIntersections == 0)
+        {
+            IsFacingLeft = false;
+            flipMob(IsFacingLeft);
+        }
+        if (rightIntersections == 0)
+        {
+            IsFacingLeft = true;
+            flipMob(IsFacingLeft);
+        }
     }
 
     public virtual void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.gameObject.CompareTag("BackgroundBoundary"))
         {
-            // handles horizontal movements
-            if (IsFacingLeft)
-            {
-                IsFacingLeft = false;
-            }
-            else if (!IsFacingLeft)
-            {
-                IsFacingLeft = true;
-            }
+            handleHorizontalMovements();
+        } else if (coll.gameObject.CompareTag("Platform"))
+        {
+             handleHorizontalMovements();
+        }
+    }
+
+    private void handleHorizontalMovements()
+    {
+        if (IsFacingLeft)
+        {
+            IsFacingLeft = false;
+            flipMob(IsFacingLeft);
+        }
+        else if (!IsFacingLeft)
+        {
+            IsFacingLeft = true;
+            flipMob(IsFacingLeft);
+        }
+    }
+
+    private void flipMob(bool IsFacingLeft)
+    {
+        if (IsFacingLeft)
+        {
+            mobSpriteRend.flipX = false;
+        } else
+        {
+            mobSpriteRend.flipX = true;
         }
     }
 
