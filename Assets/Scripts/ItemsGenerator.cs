@@ -8,6 +8,8 @@ public class ItemsGenerator : MonoBehaviour
     public GameObject trap;
     public GameObject treasureChest;
     public GameObject specialChest;
+
+    private Collider2D[] allPlatforms;
     // Handle the bounds of the map / background
     private Vector3 topLeft;
     private Vector3 btmRight;
@@ -56,8 +58,16 @@ public class ItemsGenerator : MonoBehaviour
         Vector3 sizeBg = sr.bounds.size;
         btmRight = new Vector3(topLeft.x + sizeBg.x, topLeft.y - sizeBg.y + DIST_NO_SPAWN_FROM_BTM, topLeft.z);
 
+        storeAllPlatforms();
         generateDiamonds();
         generateSpecialChest();
+    }
+
+    private void storeAllPlatforms()
+    {
+        Vector2 ptA = new Vector2(topLeft.x, topLeft.y);
+        Vector2 ptB = new Vector2(btmRight.x, btmRight.y);
+        allPlatforms = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8); // platform detection
     }
 
     private void generateDiamonds()
@@ -142,12 +152,8 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateSpike()
     {
-        Vector2 ptA = new Vector2(topLeft.x, topLeft.y);
-        Vector2 ptB = new Vector2(btmRight.x, btmRight.y);
-        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8); // platform detection
-
-        int choiceOfPlatform = Random.Range(0, col.Length - 1);
-        Collider2D chosenPlatform = col[choiceOfPlatform];
+        int choiceOfPlatform = Random.Range(0, allPlatforms.Length - 1);
+        Collider2D chosenPlatform = allPlatforms[choiceOfPlatform];
 
         float randX = chosenPlatform.transform.position.x;
         float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_VERTICAL_SPIKE;
@@ -169,12 +175,8 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateChest()
     {
-        Vector2 ptA = new Vector2(topLeft.x, topLeft.y);
-        Vector2 ptB = new Vector2(btmRight.x, btmRight.y);
-        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8); // platform detection
-
-        int choiceOfPlatform = Random.Range(0, col.Length - 1);
-        Collider2D chosenPlatform = col[choiceOfPlatform];
+        int choiceOfPlatform = Random.Range(0, allPlatforms.Length - 1);
+        Collider2D chosenPlatform = allPlatforms[choiceOfPlatform];
 
         float randX = chosenPlatform.transform.position.x;
         float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_CHEST;
@@ -196,12 +198,8 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateSpecialChest()
     {
-        Vector2 ptA = new Vector2(topLeft.x, topLeft.y);
-        Vector2 ptB = new Vector2(btmRight.x, btmRight.y);
-        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8); // platform detection
-
-        int choiceOfPlatform = Random.Range(0, col.Length - 1);
-        Collider2D chosenPlatform = col[choiceOfPlatform];
+        int choiceOfPlatform = Random.Range(0, allPlatforms.Length - 1);
+        Collider2D chosenPlatform = allPlatforms[choiceOfPlatform];
 
         float randX = chosenPlatform.transform.position.x;
         float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_CHEST;
@@ -281,12 +279,8 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateHorizontalChest()
     {
-        Vector2 ptA = new Vector2(topLeft.x, topLeft.y);
-        Vector2 ptB = new Vector2(btmRight.x, btmRight.y);
-        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8); // platform detection
-
-        int choiceOfPlatform = Random.Range(0, col.Length - 1);
-        Collider2D chosenPlatform = col[choiceOfPlatform];
+        int choiceOfPlatform = Random.Range(0, allPlatforms.Length - 1);
+        Collider2D chosenPlatform = allPlatforms[choiceOfPlatform];
 
         float randX = chosenPlatform.transform.position.x;
         float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_HORIZONTAL_CHEST;
@@ -320,12 +314,8 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateHorizontalRegular()
     {
-        Vector2 ptA = new Vector2(topLeft.x, topLeft.y);
-        Vector2 ptB = new Vector2(btmRight.x, btmRight.y);
-        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1<<8); // platform detection
-
-        int choiceOfPlatform = Random.Range(0, col.Length - 1);
-        Collider2D chosenPlatform = col[choiceOfPlatform];
+        int choiceOfPlatform = Random.Range(0, allPlatforms.Length - 1);
+        Collider2D chosenPlatform = allPlatforms[choiceOfPlatform];
 
         float randX = chosenPlatform.transform.position.x;
         float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_REGULAR_HORIZONTAL;
@@ -355,12 +345,8 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateVerticalSpike()
     {
-        Vector2 ptA = new Vector2(topLeft.x, topLeft.y);
-        Vector2 ptB = new Vector2(btmRight.x, btmRight.y);
-        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8); // platform detection
-
-        int choiceOfPlatform = Random.Range(0, col.Length - 1);
-        Collider2D chosenPlatform = col[choiceOfPlatform];
+        int choiceOfPlatform = Random.Range(0, allPlatforms.Length - 1);
+        Collider2D chosenPlatform = allPlatforms[choiceOfPlatform];
 
         float randX = chosenPlatform.transform.position.x;
         float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_VERTICAL_SPIKE;
@@ -369,8 +355,8 @@ public class ItemsGenerator : MonoBehaviour
 
         for (int i = 0; i < NUM_IN_VERTICAL_SPIKE + 1; i++)
         { // Check if spawning diamonds will collide
-            Vector2 ptC = new Vector2((float)(tempX - 0.5), (float)(tempY + 0.5));
-            Vector2 ptD = new Vector2((float)(tempX + 0.5), (float)(tempY - 0.5));
+            Vector2 ptC = new Vector2((float)(tempX - 0.3), (float)(tempY + 0.3));
+            Vector2 ptD = new Vector2((float)(tempX + 0.3), (float)(tempY - 0.3));
             Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);
 
             if (coll.Length > 0) // If collide with something else, spawn again.
@@ -420,12 +406,8 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateLoneDiamond()
     {
-        Vector2 ptA = new Vector2(topLeft.x, topLeft.y);
-        Vector2 ptB = new Vector2(btmRight.x, btmRight.y);
-        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8); // platform detection
-
-        int choiceOfPlatform = Random.Range(0, col.Length - 1);
-        Collider2D chosenPlatform = col[choiceOfPlatform];
+        int choiceOfPlatform = Random.Range(0, allPlatforms.Length - 1);
+        Collider2D chosenPlatform = allPlatforms[choiceOfPlatform];
 
         float randX = chosenPlatform.transform.position.x;
         float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_LONE_DIAMOND;
