@@ -193,7 +193,7 @@ public class ItemsGenerator : MonoBehaviour
         }
 
         // Spawn chest
-        Instantiate(treasureChest, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
+        Instantiate(treasureChest, new Vector3(randX, randY, 0), Quaternion.identity);
     }
 
     private void generateSpecialChest()
@@ -216,7 +216,7 @@ public class ItemsGenerator : MonoBehaviour
         }
 
         // Spawn special chest
-        Instantiate(specialChest, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
+        Instantiate(specialChest, new Vector3(randX, randY, 0), Quaternion.identity);
     }
 
     private void generateDiagonalLeftRegular()
@@ -300,7 +300,7 @@ public class ItemsGenerator : MonoBehaviour
             }
             tempX += SPACING_HORIZONTAL_CHEST;
         }
-        randY -= 0.1f;
+        
         // Spawn chest
         Instantiate(treasureChest, new Vector3(randX, randY, 0), Quaternion.identity);
         randX += SPACING_HORIZONTAL_CHEST;
