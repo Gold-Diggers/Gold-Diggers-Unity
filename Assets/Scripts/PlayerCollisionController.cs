@@ -167,7 +167,9 @@ public class PlayerCollisionController : MonoBehaviour {
     // to run the coroutine function, use StartCoroutine(<coroutine_function>(args))
     IEnumerator triggerTreasureChestInteraction(Collision2D coll)
     {
-        coll.gameObject.SetActive(false);
+        //coll.gameObject.SetActive(false);
+        Destroy(coll.gameObject.GetComponent<BoxCollider2D>());
+        coll.gameObject.GetComponent<Animator>().Play("Chest Open");
         // needed to make the script "pause" for a specified amount of time
         yield return new WaitForSeconds(1F);
         int option = UnityEngine.Random.Range(SPAWN_DIAMOND, SPAWN_MONSTER + 1); // interval is [min, max), so we add 1 to 'max'
@@ -185,7 +187,9 @@ public class PlayerCollisionController : MonoBehaviour {
 
     IEnumerator triggerSpecialTreasureChestInteraction(Collision2D coll)
     {
-        coll.gameObject.SetActive(false);
+        //coll.gameObject.SetActive(false);
+        Destroy(coll.gameObject.GetComponent<BoxCollider2D>());
+        coll.gameObject.GetComponent<Animator>().Play("Chest Open");
         // needed to make the script "pause" for a specified amount of time
         yield return new WaitForSeconds(1F);
         spawnObject(spawnedSpecialDiamond, coll);
