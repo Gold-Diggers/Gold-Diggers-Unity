@@ -1,10 +1,15 @@
 fileFormatVersion: 2
 guid: 58c359980b3a27949a98ac14a49c12e1
-timeCreated: 1474345247
+timeCreated: 1475511842
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - background: {instanceID: 0}
+  - diamond: {fileID: 1000013033179666, guid: 8b2a150b2405e3842a7ec51c734839b4, type: 2}
+  - trap: {fileID: 1000012504450544, guid: af2246348ce8b8a4ab04aabbc7c4ade9, type: 2}
+  - treasureChest: {fileID: 1000014178776896, guid: 178c6175cb8328a409e3fa7956f3292d,
+      type: 2}
   executionOrder: 400
   icon: {instanceID: 0}
   userData: 

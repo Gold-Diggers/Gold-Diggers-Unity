@@ -1,10 +1,15 @@
 fileFormatVersion: 2
 guid: a89ee250f2d7dfc469b2daa569ef62c0
-timeCreated: 1475241369
+timeCreated: 1475513969
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - spawnedDiamond: {fileID: 1000013033179666, guid: e25ded81971927044a00157ef817a8d4,
+      type: 2}
+  - spawnedSpecialDiamond: {fileID: 1000013555863600, guid: 097d7a7b758cc3b458a386aee2f643e9,
+      type: 2}
+  - spawnedMonster: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

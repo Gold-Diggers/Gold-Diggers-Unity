@@ -7,7 +7,8 @@ public class PlayerBaseController : MonoBehaviour {
     /* --------------------------------- START PLAYER DEFINITIONS --------------------------------- */
     /* ================= player mechanics calculations ================= */
     private const double Y_VELOCITY_THRESHOLD = -2.0;
-    private const float HORIZONTAL_COLLISION_THRESHOLD = 0.3f;
+    private const float HORIZONTAL_COLLISION_THRESHOLD_ENEMIES = 0.1f;
+    private const float HORIZONTAL_COLLISION_THRESHOLD_PLATFORM = 0.3f;
 
     /* ================= Player physics attributes ================= */
     public float speed;
@@ -91,7 +92,7 @@ public class PlayerBaseController : MonoBehaviour {
             {
                 if (rb2d.velocity.y < Y_VELOCITY_THRESHOLD)
                 {
-                    rb2d.AddForce(new Vector2(0, 5) * jumpHeight);
+                    rb2d.AddForce(new Vector2(0, 3.5f) * jumpHeight);
                 }
             }
         }
@@ -203,7 +204,9 @@ public class PlayerBaseController : MonoBehaviour {
             if (Input.GetKey(KeyCode.D)) // Restricts movement if moving left or right will collide into wall/platform blocks.
             {
                 Vector3 movement = Vector3.right * speed * Time.deltaTime;
-                if (!isColliding(transform.position + movement))
+                //if (!isColliding(transform.position + movement))
+                Vector3 currPos = transform.GetComponent<Collider2D>().bounds.center;
+                if (!isColliding(currPos + movement))
                 {
                     transform.position += movement;
                 }
@@ -211,7 +214,9 @@ public class PlayerBaseController : MonoBehaviour {
             else if (Input.GetKey(KeyCode.A))
             {
                 Vector3 movement = Vector3.left * speed * Time.deltaTime;
-                if (!isColliding(transform.position + movement))
+                //if (!isColliding(transform.position + movement))
+                Vector3 currPos = transform.GetComponent<Collider2D>().bounds.center;
+                if (!isColliding(currPos + movement))
                 {
                     transform.position += movement;
                 }
@@ -223,11 +228,17 @@ public class PlayerBaseController : MonoBehaviour {
     {
         float currX = point.x;
         float currY = point.y;
-        float threshold = HORIZONTAL_COLLISION_THRESHOLD;
-        Vector2 ptA = new Vector2((float) (currX - threshold), (float)(currY + threshold));
-        Vector2 ptB = new Vector2((float)(currX + threshold), (float)(currY - threshold * 2));
-        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, ((1 << 8) | (1 << 10) | (1 << 11)));
-        if (col.Length == 0)
+        float thresholdPlatform = HORIZONTAL_COLLISION_THRESHOLD_PLATFORM;
+        Vector2 ptA = new Vector2((float) (currX - thresholdPlatform), (float)(currY + thresholdPlatform));
+        Vector2 ptB = new Vector2((float)(currX + thresholdPlatform), (float)(currY - thresholdPlatform * 2));
+        Collider2D[] colPlatform = Physics2D.OverlapAreaAll(ptA, ptB, (1 << 8));
+
+        // monsters and traps
+        float thresholdEnemies = HORIZONTAL_COLLISION_THRESHOLD_ENEMIES;
+        Vector2 ptC = new Vector2((float)(currX - thresholdEnemies), (float)(currY + thresholdEnemies));
+        Vector2 ptD = new Vector2((float)(currX + thresholdEnemies), (float)(currY - thresholdEnemies * 2));
+        Collider2D[] colEnemies = Physics2D.OverlapAreaAll(ptC, ptD, ((1 << 10) | (1 << 11)));
+        if (colPlatform.Length + colEnemies.Length == 0)
         {
             return false;
         } else

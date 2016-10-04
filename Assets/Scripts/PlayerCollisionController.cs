@@ -17,6 +17,7 @@ public class PlayerCollisionController : MonoBehaviour {
     private const int SPAWN_MONSTER = 1;
 
     // strings
+    private const string TEN_DIAMOND_NAME = "Diamond10(Clone)";
     private const string PLATFORM = "Platform";
     private const string MONSTER = "Monster";
     private const string TRAP = "Trap";
@@ -24,6 +25,7 @@ public class PlayerCollisionController : MonoBehaviour {
     private const string SPECIAL_DIAMOND = "SpecialDiamond";
     private const string TREASURE_CHEST = "TreasureChest";
     private const string SPECIAL_TREASURE_CHEST = "SpecialTreasureChest";
+    private const string BG_BOUNDARY = "BackgroundBoundary";
     private const string ERROR_INVALID_LIVES_VALUE = "ERROR: 'lives' attribute cannot be < 0.";
     private const string ERROR_INVALID_INVINCIBILITY_VALUE = "ERROR: 'invincibility' attribute cannot be < 0.";
     private const string ERROR_INVALID_SPECIAL_DIAMOND_VALUE = "ERROR: 'specialDiamonds' attribute cannot be > 3.";
@@ -81,9 +83,10 @@ public class PlayerCollisionController : MonoBehaviour {
     void OnCollisionStay2D(Collision2D coll)
     {
         string collidedObject = coll.gameObject.tag;
+        // if (!Equals(collidedObject, PLATFORM)) print(collidedObject);
         Assert.IsTrue(Equals(collidedObject, PLATFORM) || Equals(collidedObject, DIAMOND) || Equals(collidedObject, SPECIAL_DIAMOND) ||
                       Equals(collidedObject, TREASURE_CHEST) || Equals(collidedObject, SPECIAL_TREASURE_CHEST) || Equals(collidedObject, MONSTER) ||
-                      Equals(collidedObject, TRAP), ERROR_UNEXPECTED_COLLISION_EVENT);
+                      Equals(collidedObject, TRAP) || Equals(collidedObject, BG_BOUNDARY), ERROR_UNEXPECTED_COLLISION_EVENT);
 
         switch (collidedObject)
         {
@@ -91,7 +94,7 @@ public class PlayerCollisionController : MonoBehaviour {
                 // this case is already handled in the control functions
                 break;
 
-            case "BackgroundBoundary":
+            case BG_BOUNDARY:
                 // no action needed here
                 break;
 
@@ -139,9 +142,16 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void triggerDiamondInteraction(Collider2D coll)
     {
-        print("Player has collected a diamond.");
-        IncrementDiamondCountByOne();
-        Destroy(coll.gameObject);
+        if (Equals(coll.gameObject.name, TEN_DIAMOND_NAME)) {
+            print("Player has collected 10 diamonds.");
+            IncrementDiamondCountByTen();
+            Destroy(coll.gameObject);
+        } else
+        {
+            print("Player has collected a diamond.");
+            IncrementDiamondCountByOne();
+            Destroy(coll.gameObject);
+        }
     }
 
     private void triggerSpecialDiamondInteraction(Collider2D coll)
@@ -233,6 +243,11 @@ public class PlayerCollisionController : MonoBehaviour {
     private void IncrementDiamondCountByOne()
     {
         diamonds++;
+    }
+
+    private void IncrementDiamondCountByTen()
+    {
+        diamonds += 10;
     }
 
     private void spawnObject(GameObject obj, Collision2D coll)
