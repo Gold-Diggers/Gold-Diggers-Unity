@@ -6,7 +6,6 @@ using System.Collections;
 public class PlayerCollisionController : MonoBehaviour {
     // player constants for handling all types of collisions
     private const int NUM_LIVES_START = 300;
-    private const int INVINCIBILITY_FRAME = 100;
     private const float PLAYER_X_OFFSET = 0.10f;
     private const int NUM_DIAMONDS_START = 0;
     private const int NUM_SPECIAL_DIAMONDS_START = 0;
@@ -28,7 +27,6 @@ public class PlayerCollisionController : MonoBehaviour {
     private const string SPECIAL_TREASURE_CHEST = "SpecialTreasureChest";
     private const string BG_BOUNDARY = "BackgroundBoundary";
     private const string ERROR_INVALID_LIVES_VALUE = "ERROR: 'lives' attribute cannot be < 0.";
-    private const string ERROR_INVALID_INVINCIBILITY_VALUE = "ERROR: 'invincibility' attribute cannot be < 0.";
     private const string ERROR_INVALID_SPECIAL_DIAMOND_VALUE = "ERROR: 'specialDiamonds' attribute cannot be > 3.";
     private const string ERROR_INVALID_RANDOM_VALUE = "ERROR: Random integer for treasure chest is not between [0, 1].";
     private const string ERROR_UNEXPECTED_COLLISION_EVENT = "ERROR: Unexpected collision event occurred.\n\n"
@@ -38,7 +36,6 @@ public class PlayerCollisionController : MonoBehaviour {
 
     // player attributes
     private bool isHurt;
-    private int invincibility;
     private Rigidbody2D rb2d;
 
     public int lives;
@@ -55,14 +52,13 @@ public class PlayerCollisionController : MonoBehaviour {
         rb2d = GetComponent<Rigidbody2D>();
         lives = NUM_LIVES_START;
         isHurt = false;
-        invincibility = 0;
         diamonds = NUM_DIAMONDS_START;
         specialDiamonds = NUM_SPECIAL_DIAMONDS_START;
     }
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        updateInvincibility();
+
     }
 
     // Handles collisions with diamonds
@@ -132,13 +128,6 @@ public class PlayerCollisionController : MonoBehaviour {
     {
         int scene = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(scene, LoadSceneMode.Single);
-    }
-
-    void updateInvincibility()
-    {
-        Assert.IsTrue(invincibility >= 0, ERROR_INVALID_INVINCIBILITY_VALUE);
-        if (IsInvincible()) DecrementInvincibility();
-        else if (IsVulnerable()) isHurt = false;
     }
 
     private void triggerDiamondInteraction(Collider2D coll)
@@ -234,25 +223,12 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void repelPlayer(Collision2D coll)
     {
+        return;
         rb2d.AddForce(new Vector2((transform.position.x - coll.gameObject.transform.position.x) * REPEL_PLAYER_FORCE,
-            (transform.position.y - coll.gameObject.transform.position.y) * (REPEL_PLAYER_FORCE/2)));
+            (transform.position.y - coll.gameObject.transform.position.y) * (REPEL_PLAYER_FORCE/10)));
     }
 
     /* ======================================  PRIMITIVE METHODS ====================================== */
-    private bool IsVulnerable()
-    {
-        return invincibility == 0;
-    }
-
-    private bool IsInvincible()
-    {
-        return invincibility > 0;
-    }
-
-    private int DecrementInvincibility()
-    {
-        return invincibility--;
-    }
 
     private void IncrementDiamondCountByOne()
     {
@@ -310,7 +286,7 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void enforceInjury()
     {
-        StartCoroutine(Blink(5, 0.2f, 0.4f));
+        StartCoroutine(Blink(10, 0.1f, 0.1f));
         isHurt = true;
         lives -= 1;
         checkIfPlayerDied();
@@ -327,6 +303,7 @@ public class PlayerCollisionController : MonoBehaviour {
             nTimes--;
         }
         GetComponent<SpriteRenderer>().enabled = true;
+        isHurt = false;
     }
 
     private void checkIfPlayerDied()
@@ -340,7 +317,6 @@ public class PlayerCollisionController : MonoBehaviour {
         else if (IsAlive())
         {
             print("Player has lost 1 life with [" + lives + "] remaining.");
-            invincibility = INVINCIBILITY_FRAME;
         }
     }
 
