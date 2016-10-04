@@ -117,8 +117,7 @@ public class MonsterBehaviour : MonoBehaviour {
      */
 
     // Use this for initialization
-    // Override this in subclasses
-    public virtual void Start ()
+    public virtual void Start()
     {
         monsterBound = GetComponent<Collider2D>().bounds;
         InitializeMovements();
@@ -129,18 +128,15 @@ public class MonsterBehaviour : MonoBehaviour {
         movements = new Vector3(moveX, moveY, moveZ);
     }
 
-    // Update is called once per frame
-    public virtual void FixedUpdate ()
+    public virtual void FixedUpdate()
     {
         checkMovementLimits();
         Move(IsFacingLeft, IsFacingUp);
     }
 
-    // Override this in subclasses
     public virtual void Move(bool toMoveLeft, bool toMoveUp)
     {
         adjustHorizontalDirection(toMoveLeft);
-        adjustVerticalDirection(toMoveUp);
         transform.position += movements * Time.deltaTime;
     }
 
@@ -156,23 +152,28 @@ public class MonsterBehaviour : MonoBehaviour {
         }
     }
 
-    public virtual void adjustVerticalDirection(bool toMoveUp)
-    {
-        if (toMoveUp)
-        {
-            movements.y = -1 * Mathf.Abs(movements.y);
-        }
-        else if (!toMoveUp)
-        {
-            movements.y = Mathf.Abs(movements.y);
-        }
-    }
-
     public virtual void checkMovementLimits()
     {
-        //print(monsterBound.max);
-        //print(monsterBound.min);
         Vector3 diff = monsterBound.max - monsterBound.min;
+        /*
+         *            ______
+         *           |      |
+         *           | Mons |
+         *           |      |
+         *   |``````|````````|``````|
+         *   |   A  |        |  B   |
+         *   |      |        |      |
+         *   ````````        ````````
+         * A and B are bounded regions used to test movement limit
+         * (i.e. detecting platform edges on left and right).
+         * 
+         * There is a defined EDGE_DETECTION_THRESHOLD between each bounding
+         * region and the monster to avoid touching-borders counting towards
+         * the intersection count in OverlapAreaAll() method.
+         * 
+         * The diagonal points are taken in general convention,
+         * i.e. bottom-left and top-right corners.
+         */
         float leftBoundAX = transform.position.x - 1.5f * diff.x - EDGE_DETECTION_THRESHOLD;
         float leftBoundAY = transform.position.y - 1.5f * diff.y;
         float leftBoundBX = transform.position.x - 0.5f * diff.x - EDGE_DETECTION_THRESHOLD;
@@ -200,20 +201,10 @@ public class MonsterBehaviour : MonoBehaviour {
             {
                 IsFacingLeft = true;
             }
-
-            // handles vertical movements
-            if (IsFacingUp)
-            {
-                IsFacingUp = false;
-            }
-            else if (!IsFacingUp)
-            {
-                IsFacingUp = true;
-            }
         }
     }
 
-    // Override this in subclasses
+    // Deliberately kept empty; This is to prepare for the introduction of the worm monsters
     public virtual void Attack()
     {
 
