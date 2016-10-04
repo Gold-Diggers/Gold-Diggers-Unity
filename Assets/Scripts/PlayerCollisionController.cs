@@ -223,9 +223,9 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void repelPlayer(Collision2D coll)
     {
-        return;
+        //return;
         rb2d.AddForce(new Vector2((transform.position.x - coll.gameObject.transform.position.x) * REPEL_PLAYER_FORCE,
-            (transform.position.y - coll.gameObject.transform.position.y) * (REPEL_PLAYER_FORCE/10)));
+            (transform.position.y - coll.gameObject.transform.position.y) * (REPEL_PLAYER_FORCE/5)));
     }
 
     /* ======================================  PRIMITIVE METHODS ====================================== */
@@ -286,8 +286,8 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void enforceInjury()
     {
-        StartCoroutine(Blink(10, 0.1f, 0.1f));
-        isHurt = true;
+        StartCoroutine(Blink(3, 0.1f, 0.1f));
+        updateHurt(true);
         lives -= 1;
         checkIfPlayerDied();
     }
@@ -303,7 +303,16 @@ public class PlayerCollisionController : MonoBehaviour {
             nTimes--;
         }
         GetComponent<SpriteRenderer>().enabled = true;
-        isHurt = false;
+        updateHurt(false);
+    }
+
+    private void updateHurt(bool isPlayerHurt)
+    {
+        isHurt = isPlayerHurt;
+        if (isHurt)
+        {
+            GetComponent<PlayerBaseController>().updateRepelled();
+        }
     }
 
     private void checkIfPlayerDied()
