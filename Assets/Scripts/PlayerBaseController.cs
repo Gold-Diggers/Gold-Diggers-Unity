@@ -22,8 +22,11 @@ public class PlayerBaseController : MonoBehaviour {
     private bool isDigging;
     private int diggingCounter;
 
+    /* ================= Player animations ================= */
     private bool isRunning;
     private Animator anim;
+    private bool toFlip;
+    private SpriteRenderer playerSpriteRend;
 
     // Boolean constant to change for testing/production purposes
     private const bool IS_TESTING = true;
@@ -39,6 +42,8 @@ public class PlayerBaseController : MonoBehaviour {
         diggingCounter = 0;
         isRunning = false;
         anim = GetComponent<Animator>();
+        toFlip = false;
+        playerSpriteRend = GetComponent<SpriteRenderer>();
     }
 
     /* --------------------------------- START PLAYER CONTROL FUNCTIONS --------------------------------- */
@@ -203,6 +208,7 @@ public class PlayerBaseController : MonoBehaviour {
             
             if (Input.GetKey(KeyCode.D)) // Restricts movement if moving left or right will collide into wall/platform blocks.
             {
+                flipPlayer(false);
                 Vector3 movement = Vector3.right * speed * Time.deltaTime;
                 //if (!isColliding(transform.position + movement))
                 Vector3 currPos = transform.GetComponent<Collider2D>().bounds.center;
@@ -213,6 +219,7 @@ public class PlayerBaseController : MonoBehaviour {
             }
             else if (Input.GetKey(KeyCode.A))
             {
+                flipPlayer(true);
                 Vector3 movement = Vector3.left * speed * Time.deltaTime;
                 //if (!isColliding(transform.position + movement))
                 Vector3 currPos = transform.GetComponent<Collider2D>().bounds.center;
@@ -222,6 +229,15 @@ public class PlayerBaseController : MonoBehaviour {
                 }
             }
         } 
+    }
+
+    void flipPlayer(bool expected)
+    {
+        if (toFlip != expected)
+        {
+            toFlip = !toFlip;
+            playerSpriteRend.flipX = toFlip;
+        }
     }
 
     bool isColliding(Vector3 point)
