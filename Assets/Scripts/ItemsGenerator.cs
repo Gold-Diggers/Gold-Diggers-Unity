@@ -52,6 +52,10 @@ public class ItemsGenerator : MonoBehaviour
     private const float SPACING_OFF_GROUND_HORIZONTAL_CHEST = 1.1f;
     // special chest
     private const float SPACING_OFF_GROUND_CHEST = 1.1f;
+    // Monsters
+    private const int NUM_BATS = 8;
+    private const int NUM_MOLES = 10;
+    private const float SPACING_OFF_GROUND_MOLES = 1f;
 
     void Start()
     {
@@ -63,6 +67,7 @@ public class ItemsGenerator : MonoBehaviour
         storeAllPlatforms();
         generateDiamonds();
         generateSpecialChest();
+        generateMonsters();
     }
 
     private void storeAllPlatforms()
@@ -81,6 +86,18 @@ public class ItemsGenerator : MonoBehaviour
         generateLoneDiamondSet();
         generateSpikes();
         generateChests();
+    }
+
+    private void generateMonsters()
+    {
+        for (int i = 0; i < NUM_BATS; i++)
+        {
+            spawnBat();
+        }
+        for (int i = 0; i < NUM_MOLES; i++)
+        {
+            spawnMole();
+        }
     }
 
     private void generateSpikes()
@@ -152,6 +169,47 @@ public class ItemsGenerator : MonoBehaviour
         }
     }
 
+    private void spawnBat()
+    {
+        float randX = Random.Range(topLeft.x, btmRight.x);
+        float randY = Random.Range(btmRight.y, topLeft.y);
+        
+        // Check if spawning bats will collide
+        Vector2 ptA = new Vector2((float)(randX - 0.5), (float)(randY + 0.5));
+        Vector2 ptB = new Vector2((float)(randX + 0.5), (float)(randY - 0.5));
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 262143);
+        if (col.Length > 0) // If collide with something else, spawn again.
+        {
+            spawnBat();
+            return;
+        }
+        // Spawn bat
+        Instantiate(bat, new Vector3(randX, randY, 0), Quaternion.identity);
+    }
+
+    private void spawnMole()
+    {
+        int choiceOfPlatform = Random.Range(0, allPlatforms.Length - 1);
+        Collider2D chosenPlatform = allPlatforms[choiceOfPlatform];
+
+        float randX = chosenPlatform.transform.position.x;
+        float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_MOLES;
+
+        // Check if spawning mole will collide
+        Vector2 ptC = new Vector2((float)(randX - 0.5), (float)(randY + 0.5));
+        Vector2 ptD = new Vector2((float)(randX + 0.5), (float)(randY - 0.5));
+        Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);
+
+        if (coll.Length > 0) // If collide with something else, spawn again.
+        {
+            spawnMole();
+            return;
+        }
+
+        // Spawn mole
+        Instantiate(mole, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
+    }
+
     private void generateSpike()
     {
         int choiceOfPlatform = Random.Range(0, allPlatforms.Length - 1);
@@ -160,7 +218,7 @@ public class ItemsGenerator : MonoBehaviour
         float randX = chosenPlatform.transform.position.x;
         float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_VERTICAL_SPIKE;
 
-        // Check if spawning diamonds will collide
+        // Check if spawning spikes will collide
         Vector2 ptC = new Vector2((float)(randX - 0.5), (float)(randY + 0.5));
         Vector2 ptD = new Vector2((float)(randX + 0.5), (float)(randY - 0.5));
         Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);
@@ -183,7 +241,7 @@ public class ItemsGenerator : MonoBehaviour
         float randX = chosenPlatform.transform.position.x;
         float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_CHEST;
 
-        // Check if spawning diamonds will collide
+        // Check if spawning chests will collide
         Vector2 ptC = new Vector2((float)(randX - 0.5), (float)(randY + 0.5));
         Vector2 ptD = new Vector2((float)(randX + 0.5), (float)(randY - 0.5));
         Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);
@@ -206,7 +264,7 @@ public class ItemsGenerator : MonoBehaviour
         float randX = chosenPlatform.transform.position.x;
         float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_CHEST;
 
-        // Check if spawning diamonds will collide
+        // Check if spawning chests will collide
         Vector2 ptC = new Vector2((float)(randX - 0.5), (float)(randY + 0.5));
         Vector2 ptD = new Vector2((float)(randX + 0.5), (float)(randY - 0.5));
         Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);

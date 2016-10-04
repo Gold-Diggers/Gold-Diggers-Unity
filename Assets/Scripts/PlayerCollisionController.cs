@@ -254,7 +254,7 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void spawnObject(GameObject obj, Collision2D coll)
     {
-        Instantiate(obj, new Vector3(coll.gameObject.transform.position.x, coll.gameObject.transform.position.y, 0), Quaternion.identity);
+        Instantiate(obj, new Vector3(coll.gameObject.transform.position.x, coll.gameObject.transform.position.y - 0.2f, 0), Quaternion.identity);
     }
 
     private static bool ToSpawnMonster(int option)
