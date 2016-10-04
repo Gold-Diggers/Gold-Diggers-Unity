@@ -11,6 +11,7 @@ public class PlayerCollisionController : MonoBehaviour {
     private const int NUM_DIAMONDS_START = 0;
     private const int NUM_SPECIAL_DIAMONDS_START = 0;
     private const int NUM_SPECIAL_DIAMONDS_MAX = 3;
+    private const int REPEL_PLAYER_FORCE = 600;
 
     // treasure chest constants
     private const int SPAWN_DIAMOND = 0;
@@ -119,7 +120,7 @@ public class PlayerCollisionController : MonoBehaviour {
                 break;
 
             case TRAP:
-                triggerTrapInteraction();
+                triggerTrapInteraction(coll);
                 break;
 
             default:
@@ -207,6 +208,7 @@ public class PlayerCollisionController : MonoBehaviour {
                 if (isHurt) return; // if player is already hurt, he/she is granted invincibility frames
                 print("Player has touched a monster.");
                 enforceInjury();
+                repelPlayer(coll);
             }
         }
         else
@@ -214,14 +216,22 @@ public class PlayerCollisionController : MonoBehaviour {
             if (isHurt) return; // if player is already hurt, he/she is granted invincibility frames
             print("Player has touched a monster.");
             enforceInjury();
+            repelPlayer(coll);
         }
     }
 
-    private void triggerTrapInteraction()
+    private void triggerTrapInteraction(Collision2D coll)
     {
         if (isHurt) return; // if player is already hurt, he/she is granted invincibility frames
         print("Player has touched a trap.");
         enforceInjury();
+        repelPlayer(coll);
+    }
+
+    private void repelPlayer(Collision2D coll)
+    {
+        rb2d.AddForce(new Vector2((transform.position.x - coll.gameObject.transform.position.x) * REPEL_PLAYER_FORCE,
+            (transform.position.y - coll.gameObject.transform.position.y) * (REPEL_PLAYER_FORCE/2)));
     }
 
     /* ======================================  PRIMITIVE METHODS ====================================== */
