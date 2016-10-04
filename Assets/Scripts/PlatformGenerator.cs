@@ -4,13 +4,13 @@ using System.Collections;
 public class PlatformGenerator : MonoBehaviour {
     public Transform block;
     private const int PLATFORM_MIN_LENGTH = 8;
-    private const int PLATFORM_MAX_LENGTH = 16;
+    private const int PLATFORM_MAX_LENGTH = 12;
 
     // Use this for initialization
     void Start()
     {
         int platformLength = Random.Range(PLATFORM_MIN_LENGTH, PLATFORM_MAX_LENGTH);
-        int startUpperLimit = Random.Range(platformLength + 1, 18);
+        int startUpperLimit = Random.Range(platformLength + 3, PLATFORM_MAX_LENGTH + 5);
         for (int i=startUpperLimit; i>startUpperLimit-platformLength; i--)
         {
             createBlock(i, transform.position.y);

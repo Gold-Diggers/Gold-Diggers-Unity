@@ -13,7 +13,7 @@ public class ItemsGenerator : MonoBehaviour
     private Vector3 btmRight;
 
     // constants
-    private const float DIST_NO_SPAWN_FROM_BTM = 20f;
+    private const float DIST_NO_SPAWN_FROM_BTM = 40f;
     // Regular Vertical
     private const int NUM_REGULAR_VERTICAL_SET = 3; // number of sets
     private const int NUM_IN_REGULAR_VERTICAL = 3; // 1 set consist of how many diamonds
@@ -38,7 +38,7 @@ public class ItemsGenerator : MonoBehaviour
     private const int NUM_TOTAL_SPIKES = 8; // inclusive of those with diamonds
     private const int NUM_VERTICAL_SPIKE = 3; // number of sets
     private const int NUM_IN_VERTICAL_SPIKE = 3; // 1 set consist of how many diamonds
-    private const float SPACING_VERTICAL_SPIKE = 1.75f;
+    private const float SPACING_VERTICAL_SPIKE = 1.5f;
     private const float SPACING_OFF_GROUND_VERTICAL_SPIKE = 1.1f;
     // Horizontal diamond with chest
     private const int NUM_TOTAL_CHESTS = 3; // inclusive of those with diamonds

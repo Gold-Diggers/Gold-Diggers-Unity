@@ -296,9 +296,23 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void enforceInjury()
     {
+        StartCoroutine(Blink(5, 0.2f, 0.4f));
         isHurt = true;
         lives -= 1;
         checkIfPlayerDied();
+    }
+
+    IEnumerator Blink(int nTimes, float timeOn, float timeOff)
+    {
+        while (nTimes > 0)
+        {
+            GetComponent<SpriteRenderer>().enabled = true;
+            yield return new WaitForSeconds(timeOn);
+            GetComponent<SpriteRenderer>().enabled = false;
+            yield return new WaitForSeconds(timeOff);
+            nTimes--;
+        }
+        GetComponent<SpriteRenderer>().enabled = true;
     }
 
     private void checkIfPlayerDied()
