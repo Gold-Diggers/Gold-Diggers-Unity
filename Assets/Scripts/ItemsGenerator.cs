@@ -8,6 +8,8 @@ public class ItemsGenerator : MonoBehaviour
     public GameObject trap;
     public GameObject treasureChest;
     public GameObject specialChest;
+    public GameObject bat;
+    public GameObject mole;
 
     private Collider2D[] allPlatforms;
     // Handle the bounds of the map / background

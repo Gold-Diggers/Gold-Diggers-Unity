@@ -174,7 +174,7 @@ public class PlayerCollisionController : MonoBehaviour {
         }
         else if (ToSpawnMonster(option))
         {
-            int randSpawn = Random.Range(0, 1);
+            int randSpawn = Random.Range(0, 2);
             if (randSpawn == MONSTER_ONE)
             {
                 spawnObject(spawnedMonsterType1, coll);
