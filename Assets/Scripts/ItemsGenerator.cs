@@ -170,7 +170,7 @@ public class ItemsGenerator : MonoBehaviour
         }
         
         // Spawn spike
-        Instantiate(trap, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
+        Instantiate(trap, new Vector3(randX, randY + 0.1f, 0), Quaternion.identity);
     }
 
     private void generateChest()
@@ -367,7 +367,7 @@ public class ItemsGenerator : MonoBehaviour
             tempY += SPACING_VERTICAL_SPIKE;
         }
         // Spawn spike
-        Instantiate(trap, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
+        Instantiate(trap, new Vector3(randX, randY + 0.1f, 0), Quaternion.identity);
         randY += SPACING_VERTICAL_SPIKE;
         // Spawn all diamonds
         for (int i = 0; i < NUM_IN_VERTICAL_SPIKE; i++)
