@@ -137,7 +137,8 @@ public class MonsterBehaviour : MonoBehaviour {
         {
             checkMovementLimits();
         }
-        
+
+        checkCollisionWithWall();
         Move(IsFacingLeft, IsFacingUp);
     }
 
@@ -203,15 +204,49 @@ public class MonsterBehaviour : MonoBehaviour {
         }
     }
 
+    private void checkCollisionWithWall()
+    {
+        Vector3 diff = monsterBound.max - monsterBound.min;
+        if (IsFacingLeft)
+        {            
+            float leftBoundAX = transform.position.x - 1f * diff.x - EDGE_DETECTION_THRESHOLD;
+            float leftBoundAY = transform.position.y - 0.1f * diff.y;
+            float leftBoundBX = transform.position.x - EDGE_DETECTION_THRESHOLD;
+            float leftBoundBY = transform.position.y;
+
+            int leftIntersections = Physics2D.OverlapAreaAll(new Vector2(leftBoundAX, leftBoundAY), new Vector2(leftBoundBX, leftBoundBY), 1 << 8).Length;
+            if (leftIntersections != 0)
+            {
+                IsFacingLeft = false;
+                flipMob(IsFacingLeft);
+            }
+        }
+        else
+        {
+            float rightBoundAX = transform.position.x + 1f * diff.x - EDGE_DETECTION_THRESHOLD;
+            float rightBoundAY = transform.position.y - 0.1f * diff.y;
+            float rightBoundBX = transform.position.x - EDGE_DETECTION_THRESHOLD;
+            float rightBoundBY = transform.position.y;
+
+            int rightIntersections = Physics2D.OverlapAreaAll(new Vector2(rightBoundAX, rightBoundAY), new Vector2(rightBoundBX, rightBoundBY), 1 << 8).Length;
+            if (rightIntersections != 0)
+            {
+                IsFacingLeft = true;
+                flipMob(IsFacingLeft);
+            }
+        }
+    }
+
     public virtual void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.gameObject.CompareTag("BackgroundBoundary"))
         {
             handleHorizontalMovements();
-        } else if (coll.gameObject.CompareTag("Platform"))
+        } /*else if (coll.gameObject.CompareTag("Platform"))
         {
+            print("platform");
              handleHorizontalMovements();
-        }
+        }*/
     }
 
     private void handleHorizontalMovements()
