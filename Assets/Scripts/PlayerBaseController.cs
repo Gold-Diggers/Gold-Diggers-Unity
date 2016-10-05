@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using System;
+using System.Collections;
 
 public class PlayerBaseController : MonoBehaviour {
 
@@ -28,12 +29,31 @@ public class PlayerBaseController : MonoBehaviour {
     private bool toFlip;
     private SpriteRenderer playerSpriteRend;
 
+    private bool isRepelled;
+
     // Boolean constant to change for testing/production purposes
     private const bool IS_TESTING = true;
+
+    // Used by collision controller to update whether player is hurt.
+    public void updateRepelled()
+    {
+        StartCoroutine("disableMove");
+    }
+
+    // a coroutine function must always return an IEnumerator
+    // to run the coroutine function, use StartCoroutine(<coroutine_function>(args))
+    IEnumerator disableMove()
+    {
+        isRepelled = true;
+        // needed to make the script "pause" for a specified amount of time
+        yield return new WaitForSeconds(0.5F);
+        isRepelled = false;
+    }
 
     /* ================= Use this for initialization ================= */
     void Start()
     {
+        isRepelled = false;
         Assert.raiseExceptions = IS_TESTING;
         rb2d = GetComponent<Rigidbody2D>();
         yPos = transform.position.y;
@@ -88,7 +108,7 @@ public class PlayerBaseController : MonoBehaviour {
 
     void handleJump()
     {
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) && !isRepelled)
         {
             if (isCharacterOnPlatform()) // normal jump
             {
@@ -205,8 +225,9 @@ public class PlayerBaseController : MonoBehaviour {
             {
                 return;
             }
-            
-            if (Input.GetKey(KeyCode.D)) // Restricts movement if moving left or right will collide into wall/platform blocks.
+
+            // Restricts movement if moving left or right will collide into wall/platform blocks, or when repelling.
+            if (Input.GetKey(KeyCode.D) && !isRepelled) 
             {
                 flipPlayer(false);
                 Vector3 movement = Vector3.right * speed * Time.deltaTime;
@@ -217,7 +238,7 @@ public class PlayerBaseController : MonoBehaviour {
                     transform.position += movement;
                 }
             }
-            else if (Input.GetKey(KeyCode.A))
+            else if (Input.GetKey(KeyCode.A) && !isRepelled)
             {
                 flipPlayer(true);
                 Vector3 movement = Vector3.left * speed * Time.deltaTime;

@@ -6,15 +6,19 @@ using System.Collections;
 public class PlayerCollisionController : MonoBehaviour {
     // player constants for handling all types of collisions
     private const int NUM_LIVES_START = 300;
-    private const int INVINCIBILITY_FRAME = 100;
     private const float PLAYER_X_OFFSET = 0.10f;
     private const int NUM_DIAMONDS_START = 0;
     private const int NUM_SPECIAL_DIAMONDS_START = 0;
     private const int NUM_SPECIAL_DIAMONDS_MAX = 3;
+    private const int REPEL_PLAYER_FORCE = 600;
 
     // treasure chest constants
     private const int SPAWN_DIAMOND = 0;
     private const int SPAWN_MONSTER = 1;
+
+    // monster type constants
+    private const int MONSTER_ONE = 0;
+    private const int MONSTER_TWO = 1;
 
     // strings
     private const string TEN_DIAMOND_NAME = "Diamond10(Clone)";
@@ -27,7 +31,6 @@ public class PlayerCollisionController : MonoBehaviour {
     private const string SPECIAL_TREASURE_CHEST = "SpecialTreasureChest";
     private const string BG_BOUNDARY = "BackgroundBoundary";
     private const string ERROR_INVALID_LIVES_VALUE = "ERROR: 'lives' attribute cannot be < 0.";
-    private const string ERROR_INVALID_INVINCIBILITY_VALUE = "ERROR: 'invincibility' attribute cannot be < 0.";
     private const string ERROR_INVALID_SPECIAL_DIAMOND_VALUE = "ERROR: 'specialDiamonds' attribute cannot be > 3.";
     private const string ERROR_INVALID_RANDOM_VALUE = "ERROR: Random integer for treasure chest is not between [0, 1].";
     private const string ERROR_UNEXPECTED_COLLISION_EVENT = "ERROR: Unexpected collision event occurred.\n\n"
@@ -37,7 +40,6 @@ public class PlayerCollisionController : MonoBehaviour {
 
     // player attributes
     private bool isHurt;
-    private int invincibility;
     private Rigidbody2D rb2d;
 
     public int lives;
@@ -47,21 +49,21 @@ public class PlayerCollisionController : MonoBehaviour {
     // treasure chest asset attributes
     public GameObject spawnedDiamond;
     public GameObject spawnedSpecialDiamond;
-    public GameObject spawnedMonster;
+    public GameObject spawnedMonsterType1;
+    public GameObject spawnedMonsterType2;
 
     // Use this for initialization
     void Start () {
         rb2d = GetComponent<Rigidbody2D>();
         lives = NUM_LIVES_START;
         isHurt = false;
-        invincibility = 0;
         diamonds = NUM_DIAMONDS_START;
         specialDiamonds = NUM_SPECIAL_DIAMONDS_START;
     }
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        updateInvincibility();
+
     }
 
     // Handles collisions with diamonds
@@ -119,7 +121,7 @@ public class PlayerCollisionController : MonoBehaviour {
                 break;
 
             case TRAP:
-                triggerTrapInteraction();
+                triggerTrapInteraction(coll);
                 break;
 
             default:
@@ -131,13 +133,6 @@ public class PlayerCollisionController : MonoBehaviour {
     {
         int scene = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(scene, LoadSceneMode.Single);
-    }
-
-    void updateInvincibility()
-    {
-        Assert.IsTrue(invincibility >= 0, ERROR_INVALID_INVINCIBILITY_VALUE);
-        if (IsInvincible()) DecrementInvincibility();
-        else if (IsVulnerable()) isHurt = false;
     }
 
     private void triggerDiamondInteraction(Collider2D coll)
@@ -166,7 +161,9 @@ public class PlayerCollisionController : MonoBehaviour {
     // to run the coroutine function, use StartCoroutine(<coroutine_function>(args))
     IEnumerator triggerTreasureChestInteraction(Collision2D coll)
     {
-        coll.gameObject.SetActive(false);
+        //coll.gameObject.SetActive(false);
+        Destroy(coll.gameObject.GetComponent<BoxCollider2D>());
+        coll.gameObject.GetComponent<Animator>().Play("Chest Open");
         // needed to make the script "pause" for a specified amount of time
         yield return new WaitForSeconds(1F);
         int option = UnityEngine.Random.Range(SPAWN_DIAMOND, SPAWN_MONSTER + 1); // interval is [min, max), so we add 1 to 'max'
@@ -177,14 +174,23 @@ public class PlayerCollisionController : MonoBehaviour {
         }
         else if (ToSpawnMonster(option))
         {
-            spawnObject(spawnedMonster, coll);
+            int randSpawn = Random.Range(0, 2);
+            if (randSpawn == MONSTER_ONE)
+            {
+                spawnObject(spawnedMonsterType1, coll);
+            } else if (randSpawn == MONSTER_TWO)
+            {
+                spawnObject(spawnedMonsterType2, coll);
+            }        
         }
         Destroy(coll.gameObject);
     }
 
     IEnumerator triggerSpecialTreasureChestInteraction(Collision2D coll)
     {
-        coll.gameObject.SetActive(false);
+        //coll.gameObject.SetActive(false);
+        Destroy(coll.gameObject.GetComponent<BoxCollider2D>());
+        coll.gameObject.GetComponent<Animator>().Play("Chest Open");
         // needed to make the script "pause" for a specified amount of time
         yield return new WaitForSeconds(1F);
         spawnObject(spawnedSpecialDiamond, coll);
@@ -207,6 +213,7 @@ public class PlayerCollisionController : MonoBehaviour {
                 if (isHurt) return; // if player is already hurt, he/she is granted invincibility frames
                 print("Player has touched a monster.");
                 enforceInjury();
+                repelPlayer(coll);
             }
         }
         else
@@ -214,31 +221,26 @@ public class PlayerCollisionController : MonoBehaviour {
             if (isHurt) return; // if player is already hurt, he/she is granted invincibility frames
             print("Player has touched a monster.");
             enforceInjury();
+            repelPlayer(coll);
         }
     }
 
-    private void triggerTrapInteraction()
+    private void triggerTrapInteraction(Collision2D coll)
     {
         if (isHurt) return; // if player is already hurt, he/she is granted invincibility frames
         print("Player has touched a trap.");
         enforceInjury();
+        repelPlayer(coll);
+    }
+
+    private void repelPlayer(Collision2D coll)
+    {
+        //return;
+        rb2d.AddForce(new Vector2((transform.position.x - coll.gameObject.transform.position.x) * REPEL_PLAYER_FORCE,
+            (transform.position.y - coll.gameObject.transform.position.y) * (REPEL_PLAYER_FORCE/5)));
     }
 
     /* ======================================  PRIMITIVE METHODS ====================================== */
-    private bool IsVulnerable()
-    {
-        return invincibility == 0;
-    }
-
-    private bool IsInvincible()
-    {
-        return invincibility > 0;
-    }
-
-    private int DecrementInvincibility()
-    {
-        return invincibility--;
-    }
 
     private void IncrementDiamondCountByOne()
     {
@@ -252,7 +254,7 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void spawnObject(GameObject obj, Collision2D coll)
     {
-        Instantiate(obj, new Vector3(coll.gameObject.transform.position.x, coll.gameObject.transform.position.y, 0), Quaternion.identity);
+        Instantiate(obj, new Vector3(coll.gameObject.transform.position.x, coll.gameObject.transform.position.y - 0.2f, 0), Quaternion.identity);
     }
 
     private static bool ToSpawnMonster(int option)
@@ -296,9 +298,33 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void enforceInjury()
     {
-        isHurt = true;
+        StartCoroutine(Blink(3, 0.1f, 0.1f));
+        updateHurt(true);
         lives -= 1;
         checkIfPlayerDied();
+    }
+
+    IEnumerator Blink(int nTimes, float timeOn, float timeOff)
+    {
+        while (nTimes > 0)
+        {
+            GetComponent<SpriteRenderer>().enabled = true;
+            yield return new WaitForSeconds(timeOn);
+            GetComponent<SpriteRenderer>().enabled = false;
+            yield return new WaitForSeconds(timeOff);
+            nTimes--;
+        }
+        GetComponent<SpriteRenderer>().enabled = true;
+        updateHurt(false);
+    }
+
+    private void updateHurt(bool isPlayerHurt)
+    {
+        isHurt = isPlayerHurt;
+        if (isHurt)
+        {
+            GetComponent<PlayerBaseController>().updateRepelled();
+        }
     }
 
     private void checkIfPlayerDied()
@@ -312,7 +338,6 @@ public class PlayerCollisionController : MonoBehaviour {
         else if (IsAlive())
         {
             print("Player has lost 1 life with [" + lives + "] remaining.");
-            invincibility = INVINCIBILITY_FRAME;
         }
     }
 
