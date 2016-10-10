@@ -2,8 +2,12 @@
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerCollisionController : MonoBehaviour {
+    public Text livesText;
+    public Text diamondText;
+
     // player constants for handling all types of collisions
     private const int NUM_LIVES_START = 3;
     private const float PLAYER_X_OFFSET = 0.025f;
@@ -59,6 +63,8 @@ public class PlayerCollisionController : MonoBehaviour {
         isHurt = false;
         diamonds = NUM_DIAMONDS_START;
         specialDiamonds = NUM_SPECIAL_DIAMONDS_START;
+        livesText.text = "Lives left : " + lives;
+        diamondText.text = "Diamonds collected : " + diamonds;
     }
 	
 	// Update is called once per frame
@@ -256,11 +262,13 @@ public class PlayerCollisionController : MonoBehaviour {
     private void IncrementDiamondCountByOne()
     {
         diamonds++;
+        updateDiamond();
     }
 
     private void IncrementDiamondCountByTen()
     {
         diamonds += 10;
+        updateDiamond();
     }
 
     private void spawnObject(GameObject obj, Collision2D coll)
@@ -312,6 +320,7 @@ public class PlayerCollisionController : MonoBehaviour {
         StartCoroutine(Blink(5, 0.1f, 0.1f));
         updateHurt(true);
         lives -= 1;
+        updateLives();
         checkIfPlayerDied();
     }
 
@@ -336,6 +345,22 @@ public class PlayerCollisionController : MonoBehaviour {
         {
             GetComponent<PlayerBaseController>().updateRepelled();
         }
+    }
+
+    private void updateLives()
+    {
+        if (lives == 1)
+        {
+            livesText.text = "Life left : 1";
+        } else
+        {
+            livesText.text = "Lives left : " + lives;
+        }
+    }
+
+    private void updateDiamond()
+    {
+        diamondText.text = "Diamonds collected : " + diamonds;
     }
 
     private void checkIfPlayerDied()
