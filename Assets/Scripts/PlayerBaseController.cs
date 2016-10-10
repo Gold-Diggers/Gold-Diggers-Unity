@@ -145,6 +145,19 @@ public class PlayerBaseController : MonoBehaviour {
 
     private void updateDigging()
     {
+        if (!isDigging)
+        {
+            if (!GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("fly dig"))
+            {
+                // Play dig animation if not jump attacking.
+                GetComponent<Animator>().Play("dig");
+            }
+        }
+        updateDigParams();
+    }
+
+    private void updateDigParams()
+    {
         isDigging = true;
         diggingCounter = 5;
     }
@@ -162,34 +175,22 @@ public class PlayerBaseController : MonoBehaviour {
                 Vector2 ptA = new Vector2((float)(currX - DIG_X_OFFSET), (float)(currY - DIG_Y_OFFSET_TOP));
                 Vector2 ptB = new Vector2((float)(currX + DIG_X_OFFSET), currY - DIG_Y_OFFSET_BTM);
                 Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1<<8);
-                /*if (col.Length == 1)
-                {
-                    print("1");
-                    Destroy(col[0].gameObject);
-                } else if (col.Length == 2)
-                {
-                    print("2");
-                    float distA = Math.Abs(col[0].transform.position.x - currX);
-                    float distB = Math.Abs(col[1].transform.position.x - currX);
-                    if (distA < distB)
-                    {
-                        transform.position = transform.position - new Vector3(distA, 0);
-                        Destroy(col[0].gameObject);
-                    } else
-                    {
-                        transform.position = transform.position + new Vector3(distB, 0);
-                        Destroy(col[1].gameObject);
-                    }
-                } else
-                {
-                    // should not reach here.
-                    print("im here");
-                }*/
+                
                 foreach (Collider2D current in col)
                 {
                     if (current.transform.tag == "Platform")
                     {
                         Destroy(current.gameObject);
+                    }
+                }
+            } else
+            { // character is in flight
+                if (!isDigging)
+                {
+                    if (!GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("dig"))
+                    {
+                        // Play jump attack animation if not digging normally.
+                        GetComponent<Animator>().Play("fly dig");
                     }
                 }
             }
