@@ -4,7 +4,7 @@ using System.Collections;
 public class CameraController : MonoBehaviour {
     public GameObject player;
     private Vector3 cameraOffset;
-    private const float CAMERA_BOUNDS = 1.52f;
+    private const float CAMERA_BOUNDS = 1.82f; // 1.52
     
 	// Use this for initialization
 	void Start () {
