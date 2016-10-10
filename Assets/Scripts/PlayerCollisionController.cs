@@ -5,8 +5,8 @@ using System.Collections;
 
 public class PlayerCollisionController : MonoBehaviour {
     // player constants for handling all types of collisions
-    private const int NUM_LIVES_START = 300;
-    private const float PLAYER_X_OFFSET = 0.10f;
+    private const int NUM_LIVES_START = 3;
+    private const float PLAYER_X_OFFSET = 0.025f;
     private const int NUM_DIAMONDS_START = 0;
     private const int NUM_SPECIAL_DIAMONDS_START = 0;
     private const int NUM_SPECIAL_DIAMONDS_MAX = 3;

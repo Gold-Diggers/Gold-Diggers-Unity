@@ -210,9 +210,9 @@ public class MonsterBehaviour : MonoBehaviour {
         if (IsFacingLeft)
         {            
             float leftBoundAX = transform.position.x - 1f * diff.x - EDGE_DETECTION_THRESHOLD;
-            float leftBoundAY = transform.position.y - 0.1f * diff.y;
+            float leftBoundAY = transform.position.y - 0.4f * diff.y;
             float leftBoundBX = transform.position.x - EDGE_DETECTION_THRESHOLD;
-            float leftBoundBY = transform.position.y;
+            float leftBoundBY = transform.position.y + 0.4f * diff.y;
 
             int leftIntersections = Physics2D.OverlapAreaAll(new Vector2(leftBoundAX, leftBoundAY), new Vector2(leftBoundBX, leftBoundBY), 1 << 8).Length;
             if (leftIntersections != 0)
@@ -224,9 +224,9 @@ public class MonsterBehaviour : MonoBehaviour {
         else
         {
             float rightBoundAX = transform.position.x + 1f * diff.x - EDGE_DETECTION_THRESHOLD;
-            float rightBoundAY = transform.position.y - 0.1f * diff.y;
+            float rightBoundAY = transform.position.y - 0.4f * diff.y;
             float rightBoundBX = transform.position.x - EDGE_DETECTION_THRESHOLD;
-            float rightBoundBY = transform.position.y;
+            float rightBoundBY = transform.position.y + 0.4f * diff.y;
 
             int rightIntersections = Physics2D.OverlapAreaAll(new Vector2(rightBoundAX, rightBoundAY), new Vector2(rightBoundBX, rightBoundBY), 1 << 8).Length;
             if (rightIntersections != 0)
