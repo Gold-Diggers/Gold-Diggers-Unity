@@ -171,7 +171,7 @@ public class PlayerBaseController : MonoBehaviour {
     {
         if (Input.GetKey(KeyCode.S))
         {
-            if (isCharacterOnPlatform())
+            if (isCharacterOnPlatform() && !isDiggingAnim())
             {
                 updateDigging();
                 float currX = transform.GetComponent<Collider2D>().bounds.center.x;
@@ -190,11 +190,11 @@ public class PlayerBaseController : MonoBehaviour {
             } else
             { // character is in flight
 
-                if (!GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("dig") &&
-                    !GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("fly dig"))
+                if (!isDiggingAnim())
                 {
                     // Play jump attack animation if not digging normally.
                     GetComponent<Animator>().Play("fly dig");
+                    updateDigParams();
                     print("start jump attack");
                     StartCoroutine(jumpAttack());
                 }
@@ -314,6 +314,13 @@ public class PlayerBaseController : MonoBehaviour {
                 GetComponent<BoxCollider2D>().offset = new Vector3(collPos.x + AMT_COLLIDER_TRANSLATE_WHEN_FLIPPING, collPos.y, collPos.z);
             }
         }
+    }
+
+    private bool isDiggingAnim()
+    {
+        AnimatorStateInfo currState = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        return (currState.IsName("dig") || currState.IsName("fly dig"));
     }
 
     bool isColliding(Vector3 point)

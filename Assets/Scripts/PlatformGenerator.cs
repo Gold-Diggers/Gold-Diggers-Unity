@@ -22,7 +22,7 @@ public class PlatformGenerator : MonoBehaviour {
     {
         blockCollections = new Sprite[] {block1, block2, block3, block4, block5, block6, block7};
         int platformLength = Random.Range(PLATFORM_MIN_LENGTH, PLATFORM_MAX_LENGTH);
-        int startUpperLimit = Random.Range(platformLength + 3, PLATFORM_MAX_LENGTH + 5);
+        int startUpperLimit = Random.Range(platformLength + 5, PLATFORM_MAX_LENGTH + 6);
         for (int i=startUpperLimit; i>startUpperLimit-platformLength; i--)
         {
             createBlock(i, transform.position.y);
