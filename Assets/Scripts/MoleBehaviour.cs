@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class MoleBehaviour : MonsterBehaviour {
-    private const float MOLE_MOVE_X = -5f;
+    private const float MOLE_MOVE_X = -3f;
     private const float MOLE_MOVE_Y = 0;
     private const float MOLE_MOVE_Z = 0;
     private const bool MOLE_IS_FLYING = false;
