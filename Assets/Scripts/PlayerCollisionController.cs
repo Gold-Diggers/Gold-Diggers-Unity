@@ -5,8 +5,8 @@ using System.Collections;
 
 public class PlayerCollisionController : MonoBehaviour {
     // player constants for handling all types of collisions
-    private const int NUM_LIVES_START = 300;
-    private const float PLAYER_X_OFFSET = 0.10f;
+    private const int NUM_LIVES_START = 3;
+    private const float PLAYER_X_OFFSET = 0.025f;
     private const int NUM_DIAMONDS_START = 0;
     private const int NUM_SPECIAL_DIAMONDS_START = 0;
     private const int NUM_SPECIAL_DIAMONDS_MAX = 3;
@@ -206,7 +206,8 @@ public class PlayerCollisionController : MonoBehaviour {
             if (isMonsterHitFromTop(coll))
             {
                 print("Player has killed the monster.");
-                Destroy(coll.gameObject);
+                StartCoroutine(monsterDead(coll));
+                // Destroy(coll.gameObject);
             }
             else
             {
@@ -223,6 +224,16 @@ public class PlayerCollisionController : MonoBehaviour {
             enforceInjury();
             repelPlayer(coll);
         }
+    }
+
+    IEnumerator monsterDead(Collision2D coll)
+    {
+        GameObject toDie = coll.gameObject;
+        Destroy(coll.gameObject.GetComponent<BoxCollider2D>());
+        coll.gameObject.GetComponent<Animator>().Play("monster dead");
+        // needed to make the script "pause" for a specified amount of time
+        yield return new WaitForSeconds(0.7F);
+        Destroy(toDie);
     }
 
     private void triggerTrapInteraction(Collision2D coll)

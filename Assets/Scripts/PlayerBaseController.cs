@@ -10,6 +10,9 @@ public class PlayerBaseController : MonoBehaviour {
     private const double Y_VELOCITY_THRESHOLD = -2.0;
     private const float HORIZONTAL_COLLISION_THRESHOLD_ENEMIES = 0.1f;
     private const float HORIZONTAL_COLLISION_THRESHOLD_PLATFORM = 0.3f;
+    private const float JUMP_FORCE = 100f;
+    private const float HOVER_FORCE = 3.5f;
+    private const float CHAR_ON_PLATFORM_Y_DIFF_THRESHOLD = 0.001f;
 
     /* ================= Player physics attributes ================= */
     public float speed;
@@ -22,14 +25,19 @@ public class PlayerBaseController : MonoBehaviour {
     // For handling period when player is digging
     private bool isDigging;
     private int diggingCounter;
+    private const float DIG_X_OFFSET = 0.27f;
+    private const float DIG_Y_OFFSET_TOP = 0.95f;
+    private const float DIG_Y_OFFSET_BTM = 1f;
 
     /* ================= Player animations ================= */
     private bool isRunning;
     private Animator anim;
     private bool toFlip;
     private SpriteRenderer playerSpriteRend;
+    private const float X_DIFF_ANIMATE_THRESHOLD = 0.00005f;
 
     private bool isRepelled;
+    private const float AMT_COLLIDER_TRANSLATE_WHEN_FLIPPING = 2.7f;
 
     // Boolean constant to change for testing/production purposes
     private const bool IS_TESTING = true;
@@ -84,7 +92,7 @@ public class PlayerBaseController : MonoBehaviour {
     }
 
     void handleAnimation() {
-    	if (Math.Abs(transform.position.x - xPos) >= 0.00005) {
+    	if (Math.Abs(transform.position.x - xPos) >= X_DIFF_ANIMATE_THRESHOLD) {
     		if (isRunning) {
 
 			} else {
@@ -112,12 +120,12 @@ public class PlayerBaseController : MonoBehaviour {
         {
             if (isCharacterOnPlatform()) // normal jump
             {
-                rb2d.AddForce(new Vector2(0, 100) * jumpHeight);
+                rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight);
             } else if (isCharacterFalling()) // hover
             {
                 if (rb2d.velocity.y < Y_VELOCITY_THRESHOLD)
                 {
-                    rb2d.AddForce(new Vector2(0, 3.5f) * jumpHeight);
+                    rb2d.AddForce(new Vector2(0, HOVER_FORCE) * jumpHeight);
                 }
             }
         }
@@ -137,6 +145,19 @@ public class PlayerBaseController : MonoBehaviour {
 
     private void updateDigging()
     {
+        if (!isDigging)
+        {
+            if (!GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("fly dig"))
+            {
+                // Play dig animation if not jump attacking.
+                GetComponent<Animator>().Play("dig");
+            }
+        }
+        updateDigParams();
+    }
+
+    private void updateDigParams()
+    {
         isDigging = true;
         diggingCounter = 5;
     }
@@ -151,37 +172,25 @@ public class PlayerBaseController : MonoBehaviour {
                 updateDigging();
                 float currX = transform.GetComponent<Collider2D>().bounds.center.x;
                 float currY = transform.GetComponent<Collider2D>().bounds.center.y;
-                Vector2 ptA = new Vector2((float)(currX - 0.27), (float)(currY - 0.95));
-                Vector2 ptB = new Vector2((float)(currX + 0.27), currY - 1);
+                Vector2 ptA = new Vector2((float)(currX - DIG_X_OFFSET), (float)(currY - DIG_Y_OFFSET_TOP));
+                Vector2 ptB = new Vector2((float)(currX + DIG_X_OFFSET), currY - DIG_Y_OFFSET_BTM);
                 Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1<<8);
-                /*if (col.Length == 1)
-                {
-                    print("1");
-                    Destroy(col[0].gameObject);
-                } else if (col.Length == 2)
-                {
-                    print("2");
-                    float distA = Math.Abs(col[0].transform.position.x - currX);
-                    float distB = Math.Abs(col[1].transform.position.x - currX);
-                    if (distA < distB)
-                    {
-                        transform.position = transform.position - new Vector3(distA, 0);
-                        Destroy(col[0].gameObject);
-                    } else
-                    {
-                        transform.position = transform.position + new Vector3(distB, 0);
-                        Destroy(col[1].gameObject);
-                    }
-                } else
-                {
-                    // should not reach here.
-                    print("im here");
-                }*/
+                
                 foreach (Collider2D current in col)
                 {
                     if (current.transform.tag == "Platform")
                     {
                         Destroy(current.gameObject);
+                    }
+                }
+            } else
+            { // character is in flight
+                if (!isDigging)
+                {
+                    if (!GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("dig"))
+                    {
+                        // Play jump attack animation if not digging normally.
+                        GetComponent<Animator>().Play("fly dig");
                     }
                 }
             }
@@ -191,7 +200,7 @@ public class PlayerBaseController : MonoBehaviour {
     bool isCharacterOnPlatform()
     {
         //if (transform.position.y == yPos)
-        if (Math.Abs(transform.position.y - yPos) < 0.001)
+        if (Math.Abs(transform.position.y - yPos) < CHAR_ON_PLATFORM_Y_DIFF_THRESHOLD)
             {
             return true;
         } else
@@ -258,6 +267,16 @@ public class PlayerBaseController : MonoBehaviour {
         {
             toFlip = !toFlip;
             playerSpriteRend.flipX = toFlip;
+            if (!playerSpriteRend.flipX)
+            {
+                Vector3 collPos = GetComponent<BoxCollider2D>().offset;
+                GetComponent<BoxCollider2D>().offset = new Vector3(collPos.x - AMT_COLLIDER_TRANSLATE_WHEN_FLIPPING, collPos.y, collPos.z);
+            }
+            else
+            {
+                Vector3 collPos = GetComponent<BoxCollider2D>().offset;
+                GetComponent<BoxCollider2D>().offset = new Vector3(collPos.x + AMT_COLLIDER_TRANSLATE_WHEN_FLIPPING, collPos.y, collPos.z);
+            }
         }
     }
 

@@ -14,7 +14,7 @@ public class PlatformGenerator : MonoBehaviour {
     public Sprite block7;
     private Sprite[] blockCollections;
 
-    private const int PLATFORM_MIN_LENGTH = 8;
+    private const int PLATFORM_MIN_LENGTH = 10;
     private const int PLATFORM_MAX_LENGTH = 12;
 
     // Use this for initialization
