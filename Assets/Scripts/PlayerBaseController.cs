@@ -29,6 +29,10 @@ public class PlayerBaseController : MonoBehaviour {
     private const float DIG_Y_OFFSET_TOP = 0.95f;
     private const float DIG_Y_OFFSET_BTM = 1f;
 
+    private const float JUMP_ATK_X_OFFSET = 0.4f;
+    private const float JUMP_ATK_Y_OFFSET_TOP = 0.1f;
+    private const float JUMP_ATK_Y_OFFSET_BTM = 2.5f;
+
     /* ================= Player animations ================= */
     private bool isRunning;
     private Animator anim;
@@ -167,7 +171,7 @@ public class PlayerBaseController : MonoBehaviour {
     {
         if (Input.GetKey(KeyCode.S))
         {
-            if (isCharacterOnPlatform())
+            if (isCharacterOnPlatform() && !isDiggingAnim())
             {
                 updateDigging();
                 float currX = transform.GetComponent<Collider2D>().bounds.center.x;
@@ -185,16 +189,48 @@ public class PlayerBaseController : MonoBehaviour {
                 }
             } else
             { // character is in flight
-                if (!isDigging)
+
+                if (!isDiggingAnim())
                 {
-                    if (!GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("dig"))
-                    {
-                        // Play jump attack animation if not digging normally.
-                        GetComponent<Animator>().Play("fly dig");
-                    }
+                    // Play jump attack animation if not digging normally.
+                    GetComponent<Animator>().Play("fly dig");
+                    updateDigParams();
+                    print("start jump attack");
+                    StartCoroutine(jumpAttack());
                 }
+                
             }
         }
+    }
+
+    IEnumerator jumpAttack()
+    {
+        yield return new WaitForSeconds(0.15F);
+        print("attack!!");
+        float currX = transform.GetComponent<Collider2D>().bounds.center.x;
+        float currY = transform.GetComponent<Collider2D>().bounds.center.y;
+        Vector2 ptA = new Vector2((float)(currX - JUMP_ATK_X_OFFSET), (float)(currY - JUMP_ATK_Y_OFFSET_TOP));
+        Vector2 ptB = new Vector2((float)(currX + JUMP_ATK_X_OFFSET), currY - JUMP_ATK_Y_OFFSET_BTM);
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 10); // monsters layer
+
+        foreach (Collider2D current in col)
+        {
+            if (current.transform.tag == "Monster")
+            {
+                StartCoroutine(monsterDead(current));
+            }
+        }
+
+    }
+
+    IEnumerator monsterDead(Collider2D coll)
+    {
+        GameObject toDie = coll.gameObject;
+        Destroy(coll.gameObject.GetComponent<BoxCollider2D>());
+        coll.gameObject.GetComponent<Animator>().Play("monster dead");
+        // needed to make the script "pause" for a specified amount of time
+        yield return new WaitForSeconds(0.7F);
+        Destroy(toDie);
     }
 
     bool isCharacterOnPlatform()
@@ -278,6 +314,13 @@ public class PlayerBaseController : MonoBehaviour {
                 GetComponent<BoxCollider2D>().offset = new Vector3(collPos.x + AMT_COLLIDER_TRANSLATE_WHEN_FLIPPING, collPos.y, collPos.z);
             }
         }
+    }
+
+    private bool isDiggingAnim()
+    {
+        AnimatorStateInfo currState = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        return (currState.IsName("dig") || currState.IsName("fly dig"));
     }
 
     bool isColliding(Vector3 point)
