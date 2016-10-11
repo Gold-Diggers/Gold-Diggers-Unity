@@ -135,10 +135,9 @@ public class PlayerCollisionController : MonoBehaviour {
         }
     }
 
-    void restartLevel()
+    void showDeathScreen()
     {
-        int scene = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(scene, LoadSceneMode.Single);
+        SceneManager.LoadScene("DeathMenu", LoadSceneMode.Single);
     }
 
     private void triggerDiamondInteraction(Collider2D coll)
@@ -369,7 +368,7 @@ public class PlayerCollisionController : MonoBehaviour {
         if (IsDead())
         {
             print("Player has [" + lives + "] remaining and has died.");
-            restartLevel();
+            showDeathScreen();
         }
         else if (IsAlive())
         {
