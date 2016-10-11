@@ -10,7 +10,7 @@ public class PlayerCollisionController : MonoBehaviour {
     private const int NUM_DIAMONDS_START = 0;
     private const int NUM_SPECIAL_DIAMONDS_START = 0;
     private const int NUM_SPECIAL_DIAMONDS_MAX = 3;
-    private const int REPEL_PLAYER_FORCE = 600;
+    private const int REPEL_PLAYER_FORCE = 200;
 
     // treasure chest constants
     private const int SPAWN_DIAMOND = 0;
@@ -298,7 +298,7 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void enforceInjury()
     {
-        StartCoroutine(Blink(3, 0.1f, 0.1f));
+        StartCoroutine(Blink(5, 0.1f, 0.1f));
         updateHurt(true);
         lives -= 1;
         checkIfPlayerDied();
