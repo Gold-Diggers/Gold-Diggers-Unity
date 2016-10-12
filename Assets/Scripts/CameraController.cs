@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour {
         //transform.position = player.transform.position + cameraOffset;
     }*/
     public GameObject player;
-    private Vector3 cameraOffset;
+    // private Vector3 cameraOffset;
 
     private float left = -0.2F; 
     private float right = 0.2F;
@@ -30,7 +30,7 @@ public class CameraController : MonoBehaviour {
     private float bottom = -0.25F; // -0.15
     void Start()
     {
-        cameraOffset = player.transform.position;
+       // cameraOffset = player.transform.position;
     }
     void LateUpdate()
     {
