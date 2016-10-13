@@ -116,6 +116,21 @@ public class PlayerBaseController : MonoBehaviour {
 
 			}
     	}
+
+        // Handle falling
+        if (!isDiggingAnim())
+        {
+            if (isCharacterFalling())
+            {
+                anim.SetBool("isFalling", true);
+                anim.Play("Falling");
+            }
+            else
+            {
+                anim.SetBool("isFalling", false);
+            }
+        }
+       
     }
 
     void handleJump()
@@ -124,6 +139,7 @@ public class PlayerBaseController : MonoBehaviour {
         {
             if (isCharacterOnPlatform()) // normal jump
             {
+                StartCoroutine(jumpAnimate());
                 rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight);
             } else if (isCharacterFalling()) // hover
             {
@@ -133,6 +149,13 @@ public class PlayerBaseController : MonoBehaviour {
                 }
             }
         }
+    }
+
+    IEnumerator jumpAnimate()
+    {
+        anim.SetBool("isJumping", true);
+        yield return new WaitForSeconds(1f);
+        anim.SetBool("isJumping", false);
     }
 
     private void handleDigCooldown()

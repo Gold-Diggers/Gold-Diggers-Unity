@@ -178,13 +178,31 @@ public class ItemsGenerator : MonoBehaviour
         Vector2 ptA = new Vector2((float)(randX - 0.5), (float)(randY + 0.5));
         Vector2 ptB = new Vector2((float)(randX + 0.5), (float)(randY - 0.5));
         Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 262143);
-        if (col.Length > 0) // If collide with something else, spawn again.
+        if (col.Length > 0 ||  isCollideWithMonster(randX, randY)) // If collide with something else, spawn again.
         {
             spawnBat();
             return;
         }
         // Spawn bat
         Instantiate(bat, new Vector3(randX, randY, 0), Quaternion.identity);
+    }
+
+    private bool isCollideWithMonster(float x, float y)
+    {
+        Vector2 ptA = new Vector2((float)(x - 3), (float)(y + 3));
+        Vector2 ptB = new Vector2((float)(x + 3), (float)(y - 3));
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 10);
+
+        return (col.Length > 0);
+    }
+
+    private bool isCollideWithSpike(float x, float y)
+    {
+        Vector2 ptA = new Vector2((float)(x - 20), (float)(y + 3));
+        Vector2 ptB = new Vector2((float)(x + 20), (float)(y - 3));
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 11);
+
+        return (col.Length > 0);
     }
 
     private void spawnMole()
@@ -200,7 +218,7 @@ public class ItemsGenerator : MonoBehaviour
         Vector2 ptD = new Vector2((float)(randX + 0.5), (float)(randY - 0.5));
         Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);
 
-        if (coll.Length > 0) // If collide with something else, spawn again.
+        if (coll.Length > 0 || isCollideWithMonster(randX, randY)) // If collide with something else, spawn again.
         {
             spawnMole();
             return;
@@ -223,7 +241,7 @@ public class ItemsGenerator : MonoBehaviour
         Vector2 ptD = new Vector2((float)(randX + 0.5), (float)(randY - 0.5));
         Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);
 
-        if (coll.Length > 0) // If collide with something else, spawn again.
+        if (coll.Length > 0 || isCollideWithSpike(randX, randY)) // If collide with something else, spawn again.
         {
             generateSpike();
             return;
@@ -419,7 +437,7 @@ public class ItemsGenerator : MonoBehaviour
             Vector2 ptD = new Vector2((float)(tempX + 0.3), (float)(tempY - 0.3));
             Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);
 
-            if (coll.Length > 0) // If collide with something else, spawn again.
+            if (coll.Length > 0 || isCollideWithSpike(tempX, tempY)) // If collide with something else, spawn again.
             {
                 generateVerticalSpike();
                 return;
