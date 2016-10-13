@@ -238,33 +238,11 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void triggerMonsterInteraction(Collision2D coll)
     {
-        // Uncomment this print statement for fine-tuning the collision mechanism of player with monster.
-        //print(isMonsterHitFromTop(coll));
-        if (IsDigButtonPressed()) // if the player held the 'dig' button when coliding with monster
-        {
-            /*if (isMonsterHitFromTop(coll))
-            {
-                print("Player has killed the monster.");
-                StartCoroutine(monsterDead(coll));
-                // Destroy(coll.gameObject);
-            }
-            else
-            {*/
-                if (isHurt) return; // if player is already hurt, he/she is granted invincibility frames
-                print("Player has touched a monster.");
-                enforceInjury();
-                repelPlayer(coll);
-                anim.SetBool("isSusDig", false);
-            //}
-        }
-        else
-        {
-            if (isHurt) return; // if player is already hurt, he/she is granted invincibility frames
-            print("Player has touched a monster.");
-            enforceInjury();
-            repelPlayer(coll);
-            anim.SetBool("isSusDig", false);
-        }
+        if (isHurt) return; // if player is already hurt, he/she is granted invincibility frames
+        print("Player has touched a monster.");
+        enforceInjury();
+        repelPlayer(coll);
+        anim.SetBool("isSusDig", false);
     }
 
     IEnumerator monsterDead(Collision2D coll)
