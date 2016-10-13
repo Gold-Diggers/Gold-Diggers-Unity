@@ -64,7 +64,7 @@ public class PlayerCollisionController : MonoBehaviour {
         isHurt = false;
         diamonds = NUM_DIAMONDS_START;
         specialDiamonds = NUM_SPECIAL_DIAMONDS_START;
-        diamondText.text = "Diamonds collected : " + diamonds;
+        diamondText.text = diamonds.ToString();
     }
 	
 	// Update is called once per frame
@@ -355,7 +355,7 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void updateDiamond()
     {
-        diamondText.text = "Diamonds collected : " + diamonds;
+        diamondText.text = diamonds.ToString();
     }
 
     private void checkIfPlayerDied()
