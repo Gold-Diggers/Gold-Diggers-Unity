@@ -8,6 +8,8 @@ public class PlayerCollisionController : MonoBehaviour {
     public Canvas heartsCanvas;
     public Text diamondText;
     public Image specialDiamondImage;
+    // Canvas with text used to display + ? diamond
+    public Canvas diamondDisplay;
 
     // player constants for handling all types of collisions
     private const int NUM_LIVES_START = 3;
@@ -25,7 +27,16 @@ public class PlayerCollisionController : MonoBehaviour {
     private const int MONSTER_ONE = 0;
     private const int MONSTER_TWO = 1;
 
+    // display collect diamond UI constants
+    private const float DELAY_MOVE_TEXT = 0.05F;
+    private const float Y_OFFSET_MOVE_TEXT = 0.07F;
+    private const int TIMES_TO_MOVE_TEXT = 10;
+
     // strings
+    private const string DISPLAY_ONE_DIAMOND = "+1 diamond";
+    private const string DISPLAY_TEN_DIAMOND = "+10 diamond";
+    private const string DISPLAY_SPECIAL_DIAMOND = "Special Diamond Collected";
+
     private const string TEN_DIAMOND_NAME = "Diamond10(Clone)";
     private const string PLATFORM = "Platform";
     private const string MONSTER = "Monster";
@@ -144,20 +155,39 @@ public class PlayerCollisionController : MonoBehaviour {
     private void triggerDiamondInteraction(Collider2D coll)
     {
         if (Equals(coll.gameObject.name, TEN_DIAMOND_NAME)) {
-            print("Player has collected 10 diamonds.");
+            StartCoroutine(displayMovingUICollectDiamond(DISPLAY_TEN_DIAMOND));
+            //print("Player has collected 10 diamonds.");
             IncrementDiamondCountByTen();
             Destroy(coll.gameObject);
         } else
         {
-            print("Player has collected a diamond.");
+            StartCoroutine(displayMovingUICollectDiamond(DISPLAY_ONE_DIAMOND));
+            //print("Player has collected a diamond.");
             IncrementDiamondCountByOne();
             Destroy(coll.gameObject);
         }
     }
 
+    IEnumerator displayMovingUICollectDiamond(string text)
+    {
+        Canvas diamondDisplayCanvas = (Canvas)Instantiate(diamondDisplay, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+        diamondDisplayCanvas.transform.SetParent(gameObject.transform);
+
+        Text diamondDisplayText = diamondDisplayCanvas.GetComponentInChildren<Text>();
+        diamondDisplayText.text = text;
+        diamondDisplayText.transform.position = transform.position + new Vector3(0, 0.5f, 0);
+        for (int i = 0; i < TIMES_TO_MOVE_TEXT; i++)
+        {
+            yield return new WaitForSeconds(DELAY_MOVE_TEXT);
+            diamondDisplayText.transform.position = diamondDisplayText.transform.position + new Vector3(0, Y_OFFSET_MOVE_TEXT, 0);
+        }
+        Destroy(diamondDisplayCanvas.gameObject);
+    }
+
     private void triggerSpecialDiamondInteraction(Collider2D coll)
     {
-        print("Player has collected a special diamond.");
+        StartCoroutine(displayMovingUICollectDiamond(DISPLAY_SPECIAL_DIAMOND));
+        // print("Player has collected a special diamond.");
         IncrementSpecialDiamondCountByOne();
         Assert.IsTrue(specialDiamonds <= NUM_SPECIAL_DIAMONDS_MAX);
         Destroy(coll.gameObject);
