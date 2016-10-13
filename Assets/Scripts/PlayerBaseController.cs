@@ -253,6 +253,7 @@ public class PlayerBaseController : MonoBehaviour {
 
         if (col.Length != 0)
         {
+            rb2d.velocity = Vector3.zero; // reset forces before trigger jump
             rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight); // jump when hit monster
             anim.SetBool("isSusDig", false); // cancel dig
             foreach (Collider2D current in col)
