@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PlayerCollisionController : MonoBehaviour {
     public Canvas heartsCanvas;
     public Text diamondText;
+    public Image specialDiamondImage;
 
     // player constants for handling all types of collisions
     private const int NUM_LIVES_START = 3;
@@ -287,6 +288,7 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private int IncrementSpecialDiamondCountByOne()
     {
+        specialDiamondImage.enabled = true;
         return specialDiamonds++;
     }
 
