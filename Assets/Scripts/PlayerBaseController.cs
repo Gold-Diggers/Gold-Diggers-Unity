@@ -2,6 +2,7 @@
 using UnityEngine.Assertions;
 using System;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerBaseController : MonoBehaviour {
 
@@ -93,6 +94,15 @@ public class PlayerBaseController : MonoBehaviour {
         handleDigCooldown();
         handleAnimation();
         updatePos(); // must be last
+        handleWinningCondition();
+    }
+
+    void handleWinningCondition()
+    {
+        if (rb2d.position.y < -87) // hardcoded number to trigger winning condition, to change eventually
+        {
+            SceneManager.LoadScene("Level 1.5", LoadSceneMode.Single);
+        }
     }
 
     void handleAnimation() {
