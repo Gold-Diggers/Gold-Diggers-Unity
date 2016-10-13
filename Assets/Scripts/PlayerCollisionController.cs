@@ -63,6 +63,8 @@ public class PlayerCollisionController : MonoBehaviour {
     public int diamonds;
     public int specialDiamonds;
 
+    private Animator anim;
+
     // treasure chest asset attributes
     public GameObject spawnedDiamond;
     public GameObject spawnedSpecialDiamond;
@@ -77,6 +79,7 @@ public class PlayerCollisionController : MonoBehaviour {
         diamonds = NUM_DIAMONDS_START;
         specialDiamonds = NUM_SPECIAL_DIAMONDS_START;
         diamondText.text = diamonds.ToString();
+        anim = GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
@@ -251,6 +254,7 @@ public class PlayerCollisionController : MonoBehaviour {
                 print("Player has touched a monster.");
                 enforceInjury();
                 repelPlayer(coll);
+                anim.SetBool("isSusDig", false);
             //}
         }
         else
@@ -259,6 +263,7 @@ public class PlayerCollisionController : MonoBehaviour {
             print("Player has touched a monster.");
             enforceInjury();
             repelPlayer(coll);
+            anim.SetBool("isSusDig", false);
         }
     }
 

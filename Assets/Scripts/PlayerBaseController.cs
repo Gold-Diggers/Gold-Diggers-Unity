@@ -26,6 +26,7 @@ public class PlayerBaseController : MonoBehaviour {
     // For handling period when player is digging
     private bool isDigging;
     private int diggingCounter;
+    private int diggingCooldown;
     private const float DIG_X_OFFSET = 0.27f;
     private const float DIG_Y_OFFSET_TOP = 0.95f;
     private const float DIG_Y_OFFSET_BTM = 1f;
@@ -73,6 +74,7 @@ public class PlayerBaseController : MonoBehaviour {
         xPos = transform.position.x;
         isDigging = false;
         diggingCounter = 0;
+        diggingCooldown = 0;
         isRunning = false;
         anim = GetComponent<Animator>();
         toFlip = false;
@@ -182,33 +184,45 @@ public class PlayerBaseController : MonoBehaviour {
 
     private void updateDigging()
     {
-        if (!isDigging)
-        {
+        //if (!isDigging)
+       // {
             if (!GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("fly dig"))
             {
                 // Play dig animation if not jump attacking.
                 GetComponent<Animator>().Play("dig");
-                anim.SetBool("isSusDig", true);
+                // anim.SetBool("isSusDig", true);
             }
-        }
-        updateDigParams();
+        //}
+       // updateDigParams();
     }
 
     private void updateDigParams()
     {
-        isDigging = true;
-        diggingCounter = 5;
+        //isDigging = true;
+        //diggingCounter = 5;
     }
 
     // Dig might dig 2 blocks instead of 1 in order to allow player to fall through.
     void handleDig()
     {
+        if (diggingCooldown > 0)
+        {
+            diggingCooldown--;
+            return;
+        }
         if (Input.GetKey(KeyCode.S))
         {
-            if (anim.GetBool("isSusDig"))
+            if (isDiggingAnim())
             {
+                diggingCounter--;
+                if (diggingCounter < 0)
+                {
+                    diggingCooldown = 10;
+                    anim.SetBool("isSusDig", false);
+                }
                 return;
             }
+            diggingCounter = 100;
             anim.SetBool("isSusDig", true);
             if (isCharacterOnPlatform() && !isDiggingAnim())
             {
@@ -232,7 +246,7 @@ public class PlayerBaseController : MonoBehaviour {
                 {
                     // Play jump attack animation if not digging normally.
                     GetComponent<Animator>().Play("fly dig");
-                    anim.SetBool("isSusDig", true);
+                    // anim.SetBool("isSusDig", true);
                     updateDigParams();
                     print("start jump attack");
                     jumpAttack();
@@ -256,6 +270,7 @@ public class PlayerBaseController : MonoBehaviour {
         if (col.Length != 0)
         {
             rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight); // jump when hit monster
+            anim.SetBool("isSusDig", false); // cancel dig
             foreach (Collider2D current in col)
             {
                 if (current.transform.tag == "Monster")
@@ -363,7 +378,7 @@ public class PlayerBaseController : MonoBehaviour {
     {
         AnimatorStateInfo currState = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
 
-        return (currState.IsName("dig") || currState.IsName("fly dig"));
+        return (currState.IsName("dig") || currState.IsName("fly dig") || currState.IsName("sustained dig"));
     }
 
     bool isColliding(Vector3 point)
