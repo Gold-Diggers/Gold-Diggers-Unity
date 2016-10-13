@@ -5,7 +5,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class PlayerCollisionController : MonoBehaviour {
-    public Text livesText;
+    public Canvas heartsCanvas;
     public Text diamondText;
 
     // player constants for handling all types of collisions
@@ -34,6 +34,7 @@ public class PlayerCollisionController : MonoBehaviour {
     private const string TREASURE_CHEST = "TreasureChest";
     private const string SPECIAL_TREASURE_CHEST = "SpecialTreasureChest";
     private const string BG_BOUNDARY = "BackgroundBoundary";
+    private const string ERROR_INVALID_LIVES_IMAGE = "ERROR: hearts index is out of range.";
     private const string ERROR_INVALID_LIVES_VALUE = "ERROR: 'lives' attribute cannot be < 0.";
     private const string ERROR_INVALID_SPECIAL_DIAMOND_VALUE = "ERROR: 'specialDiamonds' attribute cannot be > 3.";
     private const string ERROR_INVALID_RANDOM_VALUE = "ERROR: Random integer for treasure chest is not between [0, 1].";
@@ -63,7 +64,6 @@ public class PlayerCollisionController : MonoBehaviour {
         isHurt = false;
         diamonds = NUM_DIAMONDS_START;
         specialDiamonds = NUM_SPECIAL_DIAMONDS_START;
-        livesText.text = "Lives left : " + lives;
         diamondText.text = "Diamonds collected : " + diamonds;
     }
 	
@@ -348,13 +348,9 @@ public class PlayerCollisionController : MonoBehaviour {
 
     private void updateLives()
     {
-        if (lives == 1)
-        {
-            livesText.text = "Life left : 1";
-        } else
-        {
-            livesText.text = "Lives left : " + lives;
-        }
+        Image[] hearts = heartsCanvas.GetComponentsInChildren<Image>();
+        Assert.IsTrue(hearts.Length > lives, ERROR_INVALID_LIVES_IMAGE);
+        hearts[lives].enabled = false;
     }
 
     private void updateDiamond()
