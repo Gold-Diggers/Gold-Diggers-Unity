@@ -24,15 +24,18 @@ public class PlayerBaseController : MonoBehaviour {
 
     /* ================= Player control mechanic attributes ================= */
     // For handling period when player is digging
-    private bool isDigging;
     private int diggingCounter;
+    private int diggingCooldown;
+    private const int COOLDOWN_AFTER_SUSTAINED_DIG = 100; // in frames
+    private const int MAX_TIME_SUSTAINED_DIG = 50; // in frames
     private const float DIG_X_OFFSET = 0.27f;
     private const float DIG_Y_OFFSET_TOP = 0.95f;
     private const float DIG_Y_OFFSET_BTM = 1f;
 
-    private const float JUMP_ATK_X_OFFSET = 0.4f;
+    // For jumping
+    private const float JUMP_ATK_X_OFFSET = 0.3f;
     private const float JUMP_ATK_Y_OFFSET_TOP = 0.1f;
-    private const float JUMP_ATK_Y_OFFSET_BTM = 2.5f;
+    private const float JUMP_ATK_Y_OFFSET_BTM = 2.0f;
 
     /* ================= Player animations ================= */
     private bool isRunning;
@@ -71,8 +74,8 @@ public class PlayerBaseController : MonoBehaviour {
         rb2d = GetComponent<Rigidbody2D>();
         yPos = transform.position.y;
         xPos = transform.position.x;
-        isDigging = false;
         diggingCounter = 0;
+        diggingCooldown = 0;
         isRunning = false;
         anim = GetComponent<Animator>();
         toFlip = false;
@@ -91,7 +94,6 @@ public class PlayerBaseController : MonoBehaviour {
         handleHorizontalMovement();
         handleJump();
         handleDig();
-        handleDigCooldown();
         handleAnimation();
         updatePos(); // must be last
         handleWinningCondition();
@@ -168,92 +170,100 @@ public class PlayerBaseController : MonoBehaviour {
         anim.SetBool("isJumping", false);
     }
 
-    private void handleDigCooldown()
+    private void digPlatform()
     {
-        if (isDigging)
-        {
-            diggingCounter--;
-            if (diggingCounter == 0)
-            {
-                isDigging = false;
-            }
-        }
-    }
+        float currX = transform.GetComponent<Collider2D>().bounds.center.x;
+        float currY = transform.GetComponent<Collider2D>().bounds.center.y;
+        Vector2 ptA = new Vector2((float)(currX - DIG_X_OFFSET), (float)(currY - DIG_Y_OFFSET_TOP));
+        Vector2 ptB = new Vector2((float)(currX + DIG_X_OFFSET), currY - DIG_Y_OFFSET_BTM);
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8);
 
-    private void updateDigging()
-    {
-        if (!isDigging)
+        foreach (Collider2D current in col)
         {
-            if (!GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("fly dig"))
+            if (current.transform.tag == "Platform")
             {
-                // Play dig animation if not jump attacking.
-                GetComponent<Animator>().Play("dig");
+                Destroy(current.gameObject);
             }
-        }
-        updateDigParams();
-    }
-
-    private void updateDigParams()
-    {
-        isDigging = true;
-        diggingCounter = 5;
+        }    
     }
 
     // Dig might dig 2 blocks instead of 1 in order to allow player to fall through.
     void handleDig()
     {
+        // Check if dig is in cooldown.
+        if (diggingCooldown > 0)
+        {
+            diggingCooldown--;
+            return;
+        }
+
+        // player digs.
         if (Input.GetKey(KeyCode.S))
         {
-            if (isCharacterOnPlatform() && !isDiggingAnim())
-            {
-                updateDigging();
-                float currX = transform.GetComponent<Collider2D>().bounds.center.x;
-                float currY = transform.GetComponent<Collider2D>().bounds.center.y;
-                Vector2 ptA = new Vector2((float)(currX - DIG_X_OFFSET), (float)(currY - DIG_Y_OFFSET_TOP));
-                Vector2 ptB = new Vector2((float)(currX + DIG_X_OFFSET), currY - DIG_Y_OFFSET_BTM);
-                Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1<<8);
-                
-                foreach (Collider2D current in col)
+            if (isDiggingAnim())
+            { // sustained digging.
+                diggingCounter--;
+                if (diggingCounter < 0)
+                { // sustained digging for too long will trigger a cooldown.
+                    diggingCooldown = COOLDOWN_AFTER_SUSTAINED_DIG;
+                    anim.SetBool("isSusDig", false);
+                } else
                 {
-                    if (current.transform.tag == "Platform")
+                    digPlatform();
+                    jumpAttack();
+                }
+                return;
+            } else
+            { // start digging
+                diggingCounter = MAX_TIME_SUSTAINED_DIG;
+                anim.SetBool("isSusDig", true);
+                if (isCharacterOnPlatform() && !isDiggingAnim())
+                { // character on platform digging.
+                    GetComponent<Animator>().Play("dig");
+                    digPlatform();
+                    jumpAttack();
+                }
+                else
+                { // character is in flight
+                    if (!isDiggingAnim())
                     {
-                        Destroy(current.gameObject);
+                        GetComponent<Animator>().Play("fly dig");
+                        jumpAttack();
                     }
                 }
-            } else
-            { // character is in flight
-
-                if (!isDiggingAnim())
-                {
-                    // Play jump attack animation if not digging normally.
-                    GetComponent<Animator>().Play("fly dig");
-                    updateDigParams();
-                    print("start jump attack");
-                    StartCoroutine(jumpAttack());
-                }
-                
+            }
+        } else
+        { // player stop pressing dig
+            anim.SetBool("isSusDig", false);
+            if (isDiggingAnim()) // if dig animation still running even if player stop pressing dig
+            {
+                digPlatform();
+                jumpAttack();
             }
         }
     }
 
-    IEnumerator jumpAttack()
+    private void jumpAttack()
     {
-        yield return new WaitForSeconds(0.15F);
-        print("attack!!");
         float currX = transform.GetComponent<Collider2D>().bounds.center.x;
         float currY = transform.GetComponent<Collider2D>().bounds.center.y;
         Vector2 ptA = new Vector2((float)(currX - JUMP_ATK_X_OFFSET), (float)(currY - JUMP_ATK_Y_OFFSET_TOP));
         Vector2 ptB = new Vector2((float)(currX + JUMP_ATK_X_OFFSET), currY - JUMP_ATK_Y_OFFSET_BTM);
         Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 10); // monsters layer
 
-        foreach (Collider2D current in col)
+        if (col.Length != 0)
         {
-            if (current.transform.tag == "Monster")
+            rb2d.velocity = Vector3.zero; // reset forces before trigger jump
+            rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight); // jump when hit monster
+            anim.SetBool("isSusDig", false); // cancel dig
+            foreach (Collider2D current in col)
             {
-                StartCoroutine(monsterDead(current));
+                if (current.transform.tag == "Monster")
+                {
+                    StartCoroutine(monsterDead(current));
+                }
             }
         }
-
     }
 
     IEnumerator monsterDead(Collider2D coll)
@@ -297,7 +307,8 @@ public class PlayerBaseController : MonoBehaviour {
         Vector2 movement = new Vector2(moveHorizontal, 0);
         rb2d.AddForce(movement * speed);*/
 
-        if (!isDigging)
+        //if (!isDigging)
+        if (true)
         {
             if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.A)) // when pressing left and right keys together
             {
@@ -353,7 +364,7 @@ public class PlayerBaseController : MonoBehaviour {
     {
         AnimatorStateInfo currState = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
 
-        return (currState.IsName("dig") || currState.IsName("fly dig"));
+        return (currState.IsName("dig") || currState.IsName("fly dig") || currState.IsName("sustained dig"));
     }
 
     bool isColliding(Vector3 point)
