@@ -37,10 +37,10 @@ public class MainMenuButtonScript : MonoBehaviour {
 
     private void handleLoadOperation()
     {
-        if (loadOp != null)
+        /*if (loadOp != null)
         {
             if (loadOp.isDone) SceneManager.UnloadScene("MainMenu");
-        }
+        }*/
     }
 
     private void openTutorialOnEscapeKey()
