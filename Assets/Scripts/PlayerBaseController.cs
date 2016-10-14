@@ -30,12 +30,12 @@ public class PlayerBaseController : MonoBehaviour {
     private const int MAX_TIME_SUSTAINED_DIG = 50; // in frames
     private const float DIG_X_OFFSET = 0.27f;
     private const float DIG_Y_OFFSET_TOP = 0.95f;
-    private const float DIG_Y_OFFSET_BTM = 1f;
+    private const float DIG_Y_OFFSET_BTM = 0.75f;
 
     // For jumping
     private const float JUMP_ATK_X_OFFSET = 0.3f;
     private const float JUMP_ATK_Y_OFFSET_TOP = 0.1f;
-    private const float JUMP_ATK_Y_OFFSET_BTM = 2.0f;
+    private const float JUMP_ATK_Y_OFFSET_BTM = 0.75f;
 
     /* ================= Player animations ================= */
     private bool isRunning;

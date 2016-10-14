@@ -12,6 +12,12 @@ public class DeathMenuButtonScript : MonoBehaviour {
     public Sprite defaultScreen;
     public Sprite replayHoverScreen;
     public Sprite quitHoverScreen;
+    public Text loadingText;
+    private float originalRed;
+    private float originalGreen;
+    private float originalBlue;
+
+    private float speed = 2f;
 
     public int SavedLevel
     {
@@ -28,12 +34,21 @@ public class DeathMenuButtonScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         savedLevel = DEFAULT_SAVED_LEVEL;
-	}
+        loadingText.enabled = false;
+        originalRed = loadingText.color.r;
+        originalGreen = loadingText.color.g;
+        originalBlue = loadingText.color.b;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-	
+        triggerTextFadeEffect();
 	}
+
+    private void triggerTextFadeEffect()
+    {
+        loadingText.color = new Color(originalRed, originalGreen, originalBlue, (Mathf.Sin(Time.time * speed) + 1.0f) / 2.0f);
+    }
 
     public void OnReplayHover()
     {
@@ -54,7 +69,9 @@ public class DeathMenuButtonScript : MonoBehaviour {
     {
         string levelName = "Level " + SavedLevel;
         print("Loading " + levelName + " ...");
-        SceneManager.LoadScene(levelName, LoadSceneMode.Single);
+        loadingText.enabled = true;
+        AsyncOperation loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
+        loadOp.allowSceneActivation = true;
     }
 
     public void Quit()
