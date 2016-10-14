@@ -33,6 +33,8 @@ public class PlayerBaseController : MonoBehaviour {
     private const float DIG_Y_OFFSET_BTM = 0.75f;
 
     // For jumping
+    private int jumpCooldown;
+    private const int COOLDOWN_JUMP = 10; // in frames
     private const float JUMP_ATK_X_OFFSET = 0.3f;
     private const float JUMP_ATK_Y_OFFSET_TOP = 0.1f;
     private const float JUMP_ATK_Y_OFFSET_BTM = 0.75f;
@@ -76,6 +78,7 @@ public class PlayerBaseController : MonoBehaviour {
         xPos = transform.position.x;
         diggingCounter = 0;
         diggingCooldown = 0;
+        jumpCooldown = 0;
         isRunning = false;
         anim = GetComponent<Animator>();
         toFlip = false;
@@ -147,12 +150,17 @@ public class PlayerBaseController : MonoBehaviour {
 
     void handleJump()
     {
+        if (jumpCooldown > 0)
+        {
+            jumpCooldown--;
+        }
         if (Input.GetKey(KeyCode.W) && !isRepelled)
         {
             if (isCharacterOnPlatform()) // normal jump
             {
-                if (!anim.GetBool("isJumping"))
-                {
+                if (jumpCooldown <= 0)
+                {                
+                    jumpCooldown = COOLDOWN_JUMP;
                     StartCoroutine(jumpAnimate());
                     rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight);
                 }   
@@ -281,13 +289,21 @@ public class PlayerBaseController : MonoBehaviour {
 
     bool isCharacterOnPlatform()
     {
-        float currX = transform.GetComponent<Collider2D>().bounds.center.x;
+        /*float currX = transform.GetComponent<Collider2D>().bounds.center.x;
         float currY = transform.GetComponent<Collider2D>().bounds.center.y;
         Vector2 ptA = new Vector2((float)(currX - DIG_X_OFFSET), (float)(currY - 0.7f));
         Vector2 ptB = new Vector2((float)(currX + DIG_X_OFFSET), currY - 0.7f);
         Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8);
 
-        return col.Length > 0;
+        return col.Length > 0;*/
+
+        if (Math.Abs(transform.position.y - yPos) < CHAR_ON_PLATFORM_Y_DIFF_THRESHOLD)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
     }
 
     bool isCharacterFalling()
