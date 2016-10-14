@@ -151,8 +151,11 @@ public class PlayerBaseController : MonoBehaviour {
         {
             if (isCharacterOnPlatform()) // normal jump
             {
-                StartCoroutine(jumpAnimate());
-                rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight);
+                if (!anim.GetBool("isJumping"))
+                {
+                    StartCoroutine(jumpAnimate());
+                    rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight);
+                }   
             } else if (isCharacterFalling()) // hover
             {
                 if (rb2d.velocity.y < Y_VELOCITY_THRESHOLD)
@@ -278,14 +281,13 @@ public class PlayerBaseController : MonoBehaviour {
 
     bool isCharacterOnPlatform()
     {
-        //if (transform.position.y == yPos)
-        if (Math.Abs(transform.position.y - yPos) < CHAR_ON_PLATFORM_Y_DIFF_THRESHOLD)
-            {
-            return true;
-        } else
-        {
-            return false;
-        }
+        float currX = transform.GetComponent<Collider2D>().bounds.center.x;
+        float currY = transform.GetComponent<Collider2D>().bounds.center.y;
+        Vector2 ptA = new Vector2((float)(currX - DIG_X_OFFSET), (float)(currY - 0.7f));
+        Vector2 ptB = new Vector2((float)(currX + DIG_X_OFFSET), currY - 0.7f);
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8);
+
+        return col.Length > 0;
     }
 
     bool isCharacterFalling()
