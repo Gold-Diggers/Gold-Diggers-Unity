@@ -11,7 +11,7 @@ public class PlayerBaseController : MonoBehaviour {
     private const double Y_VELOCITY_THRESHOLD = -2.0;
     private const float HORIZONTAL_COLLISION_THRESHOLD_ENEMIES = 0.1f;
     private const float HORIZONTAL_COLLISION_THRESHOLD_PLATFORM = 0.3f;
-    private const float JUMP_FORCE = 100f;
+    private const float JUMP_FORCE = 65f;
     private const float HOVER_FORCE = 3.5f;
     private const float CHAR_ON_PLATFORM_Y_DIFF_THRESHOLD = 0.001f;
 
@@ -156,9 +156,10 @@ public class PlayerBaseController : MonoBehaviour {
         }
         if (Input.GetKey(KeyCode.W) && !isRepelled)
         {
+            print(rb2d.velocity.y);
             if (isCharacterOnPlatform()) // normal jump
             {
-                if (jumpCooldown <= 0)
+                if (jumpCooldown <= 0 && rb2d.velocity.y < 0.02)
                 {                
                     jumpCooldown = COOLDOWN_JUMP;
                     StartCoroutine(jumpAnimate());
@@ -166,6 +167,7 @@ public class PlayerBaseController : MonoBehaviour {
                 }   
             } else if (isCharacterFalling()) // hover
             {
+                
                 if (rb2d.velocity.y < Y_VELOCITY_THRESHOLD)
                 {
                     rb2d.AddForce(new Vector2(0, HOVER_FORCE) * jumpHeight);
