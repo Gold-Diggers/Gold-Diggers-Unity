@@ -12,7 +12,7 @@ public class PlayerBaseController : MonoBehaviour {
     private const float HORIZONTAL_COLLISION_THRESHOLD_ENEMIES = 0.1f;
     private const float HORIZONTAL_COLLISION_THRESHOLD_PLATFORM = 0.3f;
     private const float JUMP_FORCE = 67.5f;
-    private const float HOVER_FORCE = 2.0f; // for jetpack: 3.5f
+    private const float HOVER_FORCE = 1.75f; // for jetpack: 3.5f
     private const float CHAR_ON_PLATFORM_Y_DIFF_THRESHOLD = 0.001f;
 
     /* ================= Player physics attributes ================= */
