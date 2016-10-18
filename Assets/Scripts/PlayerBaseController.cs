@@ -99,7 +99,7 @@ public class PlayerBaseController : MonoBehaviour {
         handleDig();
         handleAnimation();
         updatePos(); // must be last
-        handleWinningCondition();
+        // handleWinningCondition();
     }
 
     void handleWinningCondition()
