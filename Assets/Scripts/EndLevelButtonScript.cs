@@ -15,12 +15,14 @@ public class EndLevelButtonScript : MonoBehaviour {
     private float posExitDoor;
 
     private bool isMoveTowardsAdvance;
+    private bool isMoveTowardsExit;
 
 	// Use this for initialization
 	void Start () {
         posAdvanceDoor = advanceDoor.transform.position.x;
         posExitDoor = exitDoor.transform.position.x;
         isMoveTowardsAdvance = false;
+        isMoveTowardsExit = false;
     }
 	
 	// Update is called once per frame
@@ -28,14 +30,18 @@ public class EndLevelButtonScript : MonoBehaviour {
         if (isMoveTowardsAdvance)
         {
             movePlayerToAdvance();
+        } else if (isMoveTowardsExit)
+        {
+            movePlayerToExit();
         }
     }
 
     public void clickExit()
     {
-        print("exit");
         disableButtons();
-
+        isMoveTowardsExit = true;
+        player.GetComponent<SpriteRenderer>().flipX = true;
+        player.GetComponent<Animator>().SetBool("isRunning", true);
     }
 
     public void clickAdvance()
@@ -72,6 +78,27 @@ public class EndLevelButtonScript : MonoBehaviour {
             { // after fading, go to transition
                 SceneManager.LoadScene("Level 1.5", LoadSceneMode.Single);
             } 
+        }
+    }
+
+    private void movePlayerToExit()
+    {
+        if (player.transform.position.x > posExitDoor)
+        {
+            player.transform.position = new Vector3(player.transform.position.x - 0.1f, player.transform.position.y);
+        }
+        else
+        { // fade effect
+            Color color = player.GetComponent<SpriteRenderer>().color;
+            if (color.a > 0)
+            {
+                color.a -= 0.1f;
+                player.GetComponent<SpriteRenderer>().color = color;
+            }
+            else
+            { // after fading, go to ending (main menu is a temp placeholder)
+                SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+            }
         }
     }
 
