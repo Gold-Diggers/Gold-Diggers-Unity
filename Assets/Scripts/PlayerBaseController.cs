@@ -133,7 +133,7 @@ public class PlayerBaseController : MonoBehaviour {
     	}
 
         // Handle falling
-        if (!isDiggingAnim())
+        if (!isDiggingAnim() && !isHoverAnim())
         {
             if (isCharacterFalling())
             {
@@ -156,7 +156,6 @@ public class PlayerBaseController : MonoBehaviour {
         }
         if (Input.GetKey(KeyCode.W) && !isRepelled)
         {
-            print(rb2d.velocity.y);
             if (isCharacterOnPlatform()) // normal jump
             {
                 if (jumpCooldown <= 0 && rb2d.velocity.y < 0.02)
@@ -167,13 +166,31 @@ public class PlayerBaseController : MonoBehaviour {
                 }   
             } else if (isCharacterFalling()) // hover
             {
+                if (!isHoverAnim())
+                {    
+                    anim.SetBool("isHover", true);
+                    anim.Play("hover");
+                }
                 
                 if (rb2d.velocity.y < Y_VELOCITY_THRESHOLD)
                 {
                     rb2d.AddForce(new Vector2(0, HOVER_FORCE) * jumpHeight);
                 }
+            } else
+            {
+                anim.SetBool("isHover", false);
             }
+        } else
+        {
+            anim.SetBool("isHover", false);
         }
+    }
+
+    private bool isHoverAnim()
+    {
+        AnimatorStateInfo currState = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        return (currState.IsName("hover"));
     }
 
     IEnumerator jumpAnimate()
