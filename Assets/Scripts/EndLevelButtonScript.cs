@@ -40,7 +40,7 @@ public class EndLevelButtonScript : MonoBehaviour {
 
     public void clickAdvance()
     {
-        print("advance");
+        player.GetComponent<PlayerCollisionController>().enforceDiamondPenalty();
         disableButtons();
         steve.GetComponent<Animator>().Play("steveopen");
         StartCoroutine(openAdvanceDoor()); 

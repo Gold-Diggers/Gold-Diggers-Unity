@@ -118,6 +118,13 @@ public class PlayerCollisionController : MonoBehaviour
 
     }
 
+    public void enforceDiamondPenalty()
+    {
+        int penalty = getDiamondPenalty();
+        diamonds -= penalty;
+        updateDiamond();
+    }
+
     // Handles collisions with diamonds or end level
     void OnTriggerEnter2D(Collider2D other)
     {
