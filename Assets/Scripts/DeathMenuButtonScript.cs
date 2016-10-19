@@ -16,6 +16,9 @@ public class DeathMenuButtonScript : MonoBehaviour {
     private float originalRed;
     private float originalGreen;
     private float originalBlue;
+    private string levelName;
+
+    private AsyncOperation loadOp;
 
     private float speed = 2f;
 
@@ -34,10 +37,14 @@ public class DeathMenuButtonScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         savedLevel = DEFAULT_SAVED_LEVEL;
+        SavedLevel = GlobalPlayerScript.Instance.level;
+        levelName = "Level " + SavedLevel;
         loadingText.enabled = false;
         originalRed = loadingText.color.r;
         originalGreen = loadingText.color.g;
         originalBlue = loadingText.color.b;
+        loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
+        loadOp.allowSceneActivation = false;
     }
 	
 	// Update is called once per frame
@@ -67,10 +74,8 @@ public class DeathMenuButtonScript : MonoBehaviour {
 
     public void Replay()
     {
-        string levelName = "Level " + SavedLevel;
         print("Loading " + levelName + " ...");
         loadingText.enabled = true;
-        AsyncOperation loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
         loadOp.allowSceneActivation = true;
     }
 

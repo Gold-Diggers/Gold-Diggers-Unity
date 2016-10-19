@@ -26,7 +26,9 @@ public class MainMenuButtonScript : MonoBehaviour {
         originalRed = prompt.color.r;
         originalGreen = prompt.color.g;
         originalBlue = prompt.color.b;
-	}
+        loadOp = SceneManager.LoadSceneAsync("Level 1", LoadSceneMode.Single);
+        loadOp.allowSceneActivation = false;
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -76,7 +78,6 @@ public class MainMenuButtonScript : MonoBehaviour {
     {
         loadPrompt.enabled = true;
         print("Loading Level 1...");
-        AsyncOperation loadOp = SceneManager.LoadSceneAsync("Level 1", LoadSceneMode.Single);
         loadOp.allowSceneActivation = true;
     }
 
