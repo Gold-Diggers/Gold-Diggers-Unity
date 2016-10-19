@@ -4,10 +4,38 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
 
-public class PlayerCollisionController : MonoBehaviour {
+public class PlayerCollisionController : MonoBehaviour
+{
     public Canvas heartsCanvas;
     public Text diamondText;
     public Image specialDiamondImage;
+
+    // dialogue use
+    public Text dialogue;
+    public Button yesButton;
+    public Button noButton;
+    private const string LEVEL_1_DIALOGUE_FRONT = "Hiya buddy! I’m tired of mining for diamonds but I found a key to this cool" +
+        " lookin’ diamond cave. Want in? Trade you ";
+    private const string LEVEL_1_DIALOGUE_BACK = " diamonds for it!";
+
+    // diamond penalty use
+    private const int DIAMOND_RANGE_1 = 5;
+    private const int DIAMOND_LOSE_RANGE_1 = 1; // value
+
+    private const int DIAMOND_RANGE_2 = 25;
+    private const float DIAMOND_LOSE_RANGE_2 = 0.5f; // percent 
+
+    private const int DIAMOND_RANGE_3 = 45;
+    private const float DIAMOND_LOSE_RANGE_3 = 0.55f; // percent 
+
+    private const int DIAMOND_RANGE_4 = 65;
+    private const float DIAMOND_LOSE_RANGE_4 = 0.6f; // percent 
+
+    private const int DIAMOND_RANGE_5 = 85;
+    private const float DIAMOND_LOSE_RANGE_5 = 0.65f; // percent 
+
+    private const float DIAMOND_LOSE_MAX = 0.70f; // percent
+
     // Canvas with text used to display + ? diamond
     public Canvas diamondDisplay;
 
@@ -46,6 +74,7 @@ public class PlayerCollisionController : MonoBehaviour {
     private const string TREASURE_CHEST = "TreasureChest";
     private const string SPECIAL_TREASURE_CHEST = "SpecialTreasureChest";
     private const string BG_BOUNDARY = "BackgroundBoundary";
+    private const string END_LEVEL = "EndLevel";
     private const string ERROR_INVALID_LIVES_IMAGE = "ERROR: hearts index is out of range.";
     private const string ERROR_INVALID_LIVES_VALUE = "ERROR: 'lives' attribute cannot be < 0.";
     private const string ERROR_INVALID_SPECIAL_DIAMOND_VALUE = "ERROR: 'specialDiamonds' attribute cannot be > 3.";
@@ -72,7 +101,8 @@ public class PlayerCollisionController : MonoBehaviour {
     public GameObject spawnedMonsterType2;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         rb2d = GetComponent<Rigidbody2D>();
         lives = NUM_LIVES_START;
         isHurt = false;
@@ -81,16 +111,18 @@ public class PlayerCollisionController : MonoBehaviour {
         diamondText.text = diamonds.ToString();
         anim = GetComponent<Animator>();
     }
-	
-	// Update is called once per frame
-	void FixedUpdate () {
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
 
     }
 
-    // Handles collisions with diamonds
+    // Handles collisions with diamonds or end level
     void OnTriggerEnter2D(Collider2D other)
     {
-        Assert.IsTrue(other.gameObject.CompareTag(DIAMOND) || other.gameObject.CompareTag(SPECIAL_DIAMOND));
+        Assert.IsTrue(other.gameObject.CompareTag(DIAMOND) || other.gameObject.CompareTag(SPECIAL_DIAMOND) ||
+            other.gameObject.CompareTag(END_LEVEL));
         if (other.gameObject.CompareTag(DIAMOND))
         {
             triggerDiamondInteraction(other);
@@ -98,6 +130,9 @@ public class PlayerCollisionController : MonoBehaviour {
         else if (other.gameObject.CompareTag(SPECIAL_DIAMOND))
         {
             triggerSpecialDiamondInteraction(other);
+        } else if (other.gameObject.CompareTag(END_LEVEL))
+        {
+            triggerEndLevel();
         }
     }
 
@@ -109,7 +144,7 @@ public class PlayerCollisionController : MonoBehaviour {
         // if (!Equals(collidedObject, PLATFORM)) print(collidedObject);
         Assert.IsTrue(Equals(collidedObject, PLATFORM) || Equals(collidedObject, DIAMOND) || Equals(collidedObject, SPECIAL_DIAMOND) ||
                       Equals(collidedObject, TREASURE_CHEST) || Equals(collidedObject, SPECIAL_TREASURE_CHEST) || Equals(collidedObject, MONSTER) ||
-                      Equals(collidedObject, TRAP) || Equals(collidedObject, BG_BOUNDARY), ERROR_UNEXPECTED_COLLISION_EVENT);
+                      Equals(collidedObject, TRAP) || Equals(collidedObject, BG_BOUNDARY) || Equals(collidedObject, END_LEVEL), ERROR_UNEXPECTED_COLLISION_EVENT);
 
         switch (collidedObject)
         {
@@ -145,6 +180,10 @@ public class PlayerCollisionController : MonoBehaviour {
                 triggerTrapInteraction(coll);
                 break;
 
+            case END_LEVEL:
+                // Action handled by OnTriggerEnter2D()
+                break;
+
             default:
                 break;
         }
@@ -155,14 +194,24 @@ public class PlayerCollisionController : MonoBehaviour {
         SceneManager.LoadScene("DeathMenu", LoadSceneMode.Single);
     }
 
+    private void triggerEndLevel()
+    {
+        GetComponent<PlayerBaseController>().setEndLevel(); // prevent movement by calling end level at base controller.
+        dialogue.text = LEVEL_1_DIALOGUE_FRONT + getDiamondPenalty() + LEVEL_1_DIALOGUE_BACK;
+        yesButton.gameObject.SetActive(true);
+        noButton.gameObject.SetActive(true);
+    }
+
     private void triggerDiamondInteraction(Collider2D coll)
     {
-        if (Equals(coll.gameObject.name, TEN_DIAMOND_NAME)) {
+        if (Equals(coll.gameObject.name, TEN_DIAMOND_NAME))
+        {
             StartCoroutine(displayMovingUICollectDiamond(DISPLAY_TEN_DIAMOND));
             //print("Player has collected 10 diamonds.");
             IncrementDiamondCountByTen();
             Destroy(coll.gameObject);
-        } else
+        }
+        else
         {
             StartCoroutine(displayMovingUICollectDiamond(DISPLAY_ONE_DIAMOND));
             //print("Player has collected a diamond.");
@@ -217,10 +266,11 @@ public class PlayerCollisionController : MonoBehaviour {
             if (randSpawn == MONSTER_ONE)
             {
                 spawnObject(spawnedMonsterType1, coll);
-            } else if (randSpawn == MONSTER_TWO)
+            }
+            else if (randSpawn == MONSTER_TWO)
             {
                 spawnObject(spawnedMonsterType2, coll);
-            }        
+            }
         }
         Destroy(coll.gameObject);
     }
@@ -267,10 +317,39 @@ public class PlayerCollisionController : MonoBehaviour {
     {
         //return;
         rb2d.AddForce(new Vector2((transform.position.x - coll.gameObject.transform.position.x) * REPEL_PLAYER_FORCE,
-            (transform.position.y - coll.gameObject.transform.position.y) * (REPEL_PLAYER_FORCE/5)));
+            (transform.position.y - coll.gameObject.transform.position.y) * (REPEL_PLAYER_FORCE / 5)));
     }
 
     /* ======================================  PRIMITIVE METHODS ====================================== */
+
+    private int getDiamondPenalty()
+    {
+        if (diamonds == 0) return 0;
+        if (diamonds <= DIAMOND_RANGE_1)
+        {
+            return DIAMOND_LOSE_RANGE_1;
+        }
+        else if (diamonds <= DIAMOND_RANGE_2)
+        {
+            return (int)(DIAMOND_LOSE_RANGE_2 * diamonds);
+        }
+        else if (diamonds <= DIAMOND_RANGE_3)
+        {
+            return (int)(DIAMOND_LOSE_RANGE_3 * diamonds);
+        }
+        else if (diamonds <= DIAMOND_RANGE_4)
+        {
+            return (int)(DIAMOND_LOSE_RANGE_4 * diamonds);
+        }
+        else if (diamonds <= DIAMOND_RANGE_5)
+        {
+            return (int)(DIAMOND_LOSE_RANGE_5 * diamonds);
+        }
+        else
+        {
+            return (int)(DIAMOND_LOSE_MAX * diamonds);
+        }
+    }
 
     private void IncrementDiamondCountByOne()
     {

@@ -22,6 +22,8 @@ public class PlayerBaseController : MonoBehaviour {
     private float yPos;
     private float xPos;
 
+    public bool isLevelEnd = false;
+
     /* ================= Player control mechanic attributes ================= */
     // For handling period when player is digging
     private int diggingCounter;
@@ -51,6 +53,13 @@ public class PlayerBaseController : MonoBehaviour {
 
     // Boolean constant to change for testing/production purposes
     private const bool IS_TESTING = true;
+
+    public void setEndLevel()
+    {
+        isLevelEnd = true;
+        anim.Play("idle");
+        anim.SetBool("isRunning", false);
+    }
 
     // Used by collision controller to update whether player is hurt.
     public void updateRepelled()
@@ -94,12 +103,15 @@ public class PlayerBaseController : MonoBehaviour {
 
     void FixedUpdate()
     {
-        handleHorizontalMovement();
-        handleJump();
-        handleDig();
-        handleAnimation();
+        if (!isLevelEnd)
+        {
+            handleHorizontalMovement();
+            handleJump();
+            handleDig();
+            handleAnimation();
+            // handleWinningCondition();
+        }
         updatePos(); // must be last
-        // handleWinningCondition();
     }
 
     void handleWinningCondition()
