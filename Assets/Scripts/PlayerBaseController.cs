@@ -109,27 +109,8 @@ public class PlayerBaseController : MonoBehaviour {
             handleJump();
             handleDig();
             handleAnimation();
-            // handleWinningCondition();
         }
         updatePos(); // must be last
-    }
-
-    void handleWinningCondition()
-    {
-        if (rb2d.position.y < -87) // hardcoded number to trigger winning condition, to change eventually
-        {
-            PlayerCollisionController player = FindObjectOfType<PlayerCollisionController>();
-            savePlayerState(player);
-            SceneManager.LoadScene("Level 1.5", LoadSceneMode.Single);
-        }
-    }
-
-    private static void savePlayerState(PlayerCollisionController player)
-    {
-        GlobalPlayerScript.Instance.lives = player.lives;
-        GlobalPlayerScript.Instance.diamonds = player.diamonds;
-        GlobalPlayerScript.Instance.specialDiamonds = player.specialDiamonds;
-        GlobalPlayerScript.Instance.level = 2;
     }
 
     void handleAnimation() {
