@@ -69,7 +69,9 @@
     <Compile Include="Assets\Scripts\BatBehaviour.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\DeathMenuButtonScript.cs" />
+    <Compile Include="Assets\Scripts\GlobalPlayerScript.cs" />
     <Compile Include="Assets\Scripts\ItemsGenerator.cs" />
+    <Compile Include="Assets\Scripts\LevelTransitionScript.cs" />
     <Compile Include="Assets\Scripts\MainMenuButtonScript.cs" />
     <Compile Include="Assets\Scripts\MoleBehaviour.cs" />
     <Compile Include="Assets\Scripts\MonsterBehaviour.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="Assets\Scripts\PlayerBaseController.cs" />
     <Compile Include="Assets\Scripts\PlayerCollisionController.cs" />
     <Compile Include="Assets\Scripts\TransitionControllerScript.cs" />
+    <Compile Include="Assets\Scripts\VendingMachineScript.cs" />
     <Compile Include="Assets\Scripts\WormBehaviour.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
