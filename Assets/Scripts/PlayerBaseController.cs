@@ -117,7 +117,7 @@ public class PlayerBaseController : MonoBehaviour {
         GlobalPlayerScript.Instance.lives = player.lives;
         GlobalPlayerScript.Instance.diamonds = player.diamonds;
         GlobalPlayerScript.Instance.specialDiamonds = player.specialDiamonds;
-        GlobalPlayerScript.Instance.level++;
+        GlobalPlayerScript.Instance.level = 2;
     }
 
     void handleAnimation() {
