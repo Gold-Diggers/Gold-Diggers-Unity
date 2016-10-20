@@ -28,6 +28,10 @@ public class CameraController : MonoBehaviour {
     private float right = 0.2F;
     private float top = 0.05F;
     private float bottom = -0.25F; // -0.15
+
+    private const float CAM_Y_CANNOT_FALL_BEYOND = -85f;
+    private const float CAM_Y_UPPER_BOUND = 999999f; // arbitrary large value.
+
     void Start()
     {
        // cameraOffset = player.transform.position;
@@ -37,7 +41,8 @@ public class CameraController : MonoBehaviour {
         Camera cam = Camera.main;
         Matrix4x4 m = PerspectiveOffCenter(left, right, bottom, top, cam.nearClipPlane, cam.farClipPlane);
         cam.projectionMatrix = m;
-        cam.transform.position = new Vector3(cam.transform.position.x, player.transform.position.y, cam.transform.position.z);
+        float yPos = Mathf.Clamp(player.transform.position.y, CAM_Y_CANNOT_FALL_BEYOND, CAM_Y_UPPER_BOUND);
+        cam.transform.position = new Vector3(cam.transform.position.x, yPos, cam.transform.position.z);
     }
     Matrix4x4 PerspectiveOffCenter(float left, float right, float bottom, float top, float near, float far)
     {
