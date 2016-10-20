@@ -109,17 +109,8 @@ public class PlayerBaseController : MonoBehaviour {
             handleJump();
             handleDig();
             handleAnimation();
-            // handleWinningCondition();
         }
         updatePos(); // must be last
-    }
-
-    void handleWinningCondition()
-    {
-        if (rb2d.position.y < -87) // hardcoded number to trigger winning condition, to change eventually
-        {
-            SceneManager.LoadScene("Level 1.5", LoadSceneMode.Single);
-        }
     }
 
     void handleAnimation() {

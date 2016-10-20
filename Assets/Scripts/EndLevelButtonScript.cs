@@ -11,6 +11,7 @@ public class EndLevelButtonScript : MonoBehaviour {
     public Button yesButton;
     public Button noButton;
 
+    private PlayerCollisionController playerAttr;
     private float posAdvanceDoor;
     private float posExitDoor;
 
@@ -23,6 +24,7 @@ public class EndLevelButtonScript : MonoBehaviour {
         posExitDoor = exitDoor.transform.position.x;
         isMoveTowardsAdvance = false;
         isMoveTowardsExit = false;
+        playerAttr = FindObjectOfType<PlayerCollisionController>();
     }
 	
 	// Update is called once per frame
@@ -76,9 +78,18 @@ public class EndLevelButtonScript : MonoBehaviour {
                 player.GetComponent<SpriteRenderer>().color = color;
             } else
             { // after fading, go to transition
+                savePlayerState(playerAttr);
                 SceneManager.LoadScene("Level 1.5", LoadSceneMode.Single);
             } 
         }
+    }
+
+    private static void savePlayerState(PlayerCollisionController player)
+    {
+        GlobalPlayerScript.Instance.lives = player.lives;
+        GlobalPlayerScript.Instance.diamonds = player.diamonds;
+        GlobalPlayerScript.Instance.specialDiamonds = player.specialDiamonds;
+        GlobalPlayerScript.Instance.level = 2;
     }
 
     private void movePlayerToExit()

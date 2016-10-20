@@ -74,6 +74,7 @@ public class PlayerCollisionController : MonoBehaviour
     private const string TREASURE_CHEST = "TreasureChest";
     private const string SPECIAL_TREASURE_CHEST = "SpecialTreasureChest";
     private const string BG_BOUNDARY = "BackgroundBoundary";
+    private const string VENDING_MACHINE = "VendingMachine";
     private const string END_LEVEL = "EndLevel";
     private const string ERROR_INVALID_LIVES_IMAGE = "ERROR: hearts index is out of range.";
     private const string ERROR_INVALID_LIVES_VALUE = "ERROR: 'lives' attribute cannot be < 0.";
@@ -129,7 +130,8 @@ public class PlayerCollisionController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         Assert.IsTrue(other.gameObject.CompareTag(DIAMOND) || other.gameObject.CompareTag(SPECIAL_DIAMOND) ||
-            other.gameObject.CompareTag(END_LEVEL));
+            other.gameObject.CompareTag(END_LEVEL) || other.gameObject.CompareTag(VENDING_MACHINE));
+
         if (other.gameObject.CompareTag(DIAMOND))
         {
             triggerDiamondInteraction(other);
@@ -151,7 +153,8 @@ public class PlayerCollisionController : MonoBehaviour
         // if (!Equals(collidedObject, PLATFORM)) print(collidedObject);
         Assert.IsTrue(Equals(collidedObject, PLATFORM) || Equals(collidedObject, DIAMOND) || Equals(collidedObject, SPECIAL_DIAMOND) ||
                       Equals(collidedObject, TREASURE_CHEST) || Equals(collidedObject, SPECIAL_TREASURE_CHEST) || Equals(collidedObject, MONSTER) ||
-                      Equals(collidedObject, TRAP) || Equals(collidedObject, BG_BOUNDARY) || Equals(collidedObject, END_LEVEL), ERROR_UNEXPECTED_COLLISION_EVENT);
+                      Equals(collidedObject, TRAP) || Equals(collidedObject, BG_BOUNDARY) || Equals(collidedObject, VENDING_MACHINE) ||
+                      Equals(collidedObject, END_LEVEL), ERROR_UNEXPECTED_COLLISION_EVENT);
 
         switch (collidedObject)
         {
