@@ -63,8 +63,11 @@ public class VendingMachineScript : MonoBehaviour {
     void showAllButtons()
     {
         livesPurchase.gameObject.SetActive(true);
+        if (player.diamonds < PRICE_LIFE_UPGRADE) livesPurchase.interactable = false;
         jetpackPurchase.gameObject.SetActive(true);
+        if (player.diamonds < PRICE_JETPACK_UPGRADE) jetpackPurchase.interactable = false;
         shovelPurchase.gameObject.SetActive(true);
+        if (player.specialDiamonds < PRICE_SHOVEL_UPGRADE) shovelPurchase.interactable = false;
     }
 
     void triggerOpenShopInterface()
@@ -95,15 +98,11 @@ public class VendingMachineScript : MonoBehaviour {
     {
         if (player.diamonds < PRICE_LIFE_UPGRADE)
         {
-            ColorBlock cb = livesPurchase.colors;
-            cb.highlightedColor = new Color(1, 0, 0, 70f / 255);
-            livesPurchase.colors = cb;
+            livesPurchase.interactable = false;
         }
         else
         {
-            ColorBlock cb = livesPurchase.colors;
-            cb.highlightedColor = new Color(1, 1, 0, 200f / 255);
-            livesPurchase.colors = cb;
+            livesPurchase.interactable = true;
         }
     }
 
@@ -127,15 +126,11 @@ public class VendingMachineScript : MonoBehaviour {
     {
         if (player.diamonds < PRICE_JETPACK_UPGRADE)
         {
-            ColorBlock cb = jetpackPurchase.colors;
-            cb.highlightedColor = new Color(1, 0, 0, 70f / 255);
-            jetpackPurchase.colors = cb;
+            jetpackPurchase.interactable = false;
         }
         else
         {
-            ColorBlock cb = jetpackPurchase.colors;
-            cb.highlightedColor = new Color(1, 1, 0, 200f / 255);
-            jetpackPurchase.colors = cb;
+            jetpackPurchase.interactable = true;
         }
     }
 
@@ -160,15 +155,11 @@ public class VendingMachineScript : MonoBehaviour {
     {
         if (player.specialDiamonds < PRICE_SHOVEL_UPGRADE)
         {
-            ColorBlock cb = shovelPurchase.colors;
-            cb.highlightedColor = new Color(1, 0, 0, 70f / 255);
-            shovelPurchase.colors = cb;
+            shovelPurchase.interactable = false;
         }
         else
         {
-            ColorBlock cb = shovelPurchase.colors;
-            cb.highlightedColor = new Color(1, 1, 0, 200f / 255);
-            shovelPurchase.colors = cb;
+            shovelPurchase.interactable = true;
         }
     }
 
