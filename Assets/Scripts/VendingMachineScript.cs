@@ -38,6 +38,7 @@ public class VendingMachineScript : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        updateButtonStates();
         triggerOpenShopInterface();
 	}
 
@@ -63,10 +64,14 @@ public class VendingMachineScript : MonoBehaviour {
     void showAllButtons()
     {
         livesPurchase.gameObject.SetActive(true);
-        if (player.diamonds < PRICE_LIFE_UPGRADE) livesPurchase.interactable = false;
         jetpackPurchase.gameObject.SetActive(true);
-        if (player.diamonds < PRICE_JETPACK_UPGRADE) jetpackPurchase.interactable = false;
         shovelPurchase.gameObject.SetActive(true);
+    }
+
+    void updateButtonStates()
+    {
+        if (player.diamonds < PRICE_LIFE_UPGRADE) livesPurchase.interactable = false;
+        if (player.diamonds < PRICE_JETPACK_UPGRADE) jetpackPurchase.interactable = false;
         if (player.specialDiamonds < PRICE_SHOVEL_UPGRADE) shovelPurchase.interactable = false;
     }
 
