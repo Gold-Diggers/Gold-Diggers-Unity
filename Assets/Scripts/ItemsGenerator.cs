@@ -12,6 +12,7 @@ public class ItemsGenerator : MonoBehaviour
     public GameObject bat2;
     public GameObject mole;
     public GameObject mole2;
+    public GameObject worm2;
 
     private int level;
 
@@ -61,7 +62,10 @@ public class ItemsGenerator : MonoBehaviour
     private const int NUM_BATS_LEVEL_2 = 8;
     private const int NUM_MOLES = 10;
     private const int NUM_MOLES_LEVEL_2 = 12;
+    private const int NUM_WORMS = 0;
+    private const int NUM_WORMS_LEVEL_2 = 2;
     private const float SPACING_OFF_GROUND_MOLES = 1f;
+    private const float SPACING_OFF_GROUND_WORMS = 1.3f;
 
     void Start()
     {
@@ -98,6 +102,7 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateMonsters()
     {
+        // Bats
         int numBats = 0;
         if (level == 1)
         {
@@ -106,6 +111,8 @@ public class ItemsGenerator : MonoBehaviour
         {
             numBats = NUM_BATS_LEVEL_2;
         }
+
+        // Moles
         int numMoles = 0;
         if (level == 1)
         {
@@ -116,6 +123,17 @@ public class ItemsGenerator : MonoBehaviour
             numMoles = NUM_MOLES_LEVEL_2;
         }
 
+        // Worms
+        int numWorms = 0;
+        if (level == 1)
+        {
+            numWorms = NUM_WORMS;
+        }
+        else if (level == 2)
+        {
+            numWorms = NUM_WORMS_LEVEL_2;
+        }
+
         for (int i = 0; i < numBats; i++)
         {
             spawnBat();
@@ -123,6 +141,10 @@ public class ItemsGenerator : MonoBehaviour
         for (int i = 0; i < numMoles; i++)
         {
             spawnMole();
+        }
+        for (int i = 0; i < numWorms; i++)
+        {
+            spawnWorm();
         }
     }
 
@@ -266,6 +288,38 @@ public class ItemsGenerator : MonoBehaviour
             Instantiate(mole2, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
         }
         
+    }
+
+    private void spawnWorm()
+    {
+        int choiceOfPlatform = Random.Range(0, allPlatforms.Length - 1);
+        Collider2D chosenPlatform = allPlatforms[choiceOfPlatform];
+
+        float randX = chosenPlatform.transform.position.x;
+        float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_WORMS;
+
+        // Check if spawning worm will collide
+        Vector2 ptC = new Vector2((float)(randX - 0.5), (float)(randY + 0.5));
+        Vector2 ptD = new Vector2((float)(randX + 0.5), (float)(randY - 0.5));
+        Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);
+
+        if (coll.Length > 0 || isCollideWithMonster(randX, randY)) // If collide with something else, spawn again.
+        {
+            spawnWorm();
+            return;
+        }
+
+        // Spawn worm
+        if (level == 1)
+        {
+            // level 1 has no worm.
+            print("Error in spawn worm for level 1");
+        }
+        else if (level == 2)
+        {
+            Instantiate(worm2, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
+        }
+
     }
 
     private void generateSpike()

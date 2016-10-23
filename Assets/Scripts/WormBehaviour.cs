@@ -3,7 +3,7 @@ using System.Collections;
 
 public class WormBehaviour : MonsterBehaviour {
 
-    private const float WORM_MOVE_X = -5f;
+    private const float WORM2_MOVE_X = 0;
     private const float WORM_MOVE_Y = 0;
     private const float WORM_MOVE_Z = 0;
     private const bool WORM_IS_FLYING = false;
@@ -21,7 +21,11 @@ public class WormBehaviour : MonsterBehaviour {
     // Use this for initialization
     public override void Start()
     {
-        this.MoveX = WORM_MOVE_X;
+        if (gameObject.name == "Worm2(Clone)")
+        {
+            this.MoveX = WORM2_MOVE_X;
+        }
+
         this.MoveY = WORM_MOVE_Y;
         this.MoveZ = WORM_MOVE_Z;
         this.IsFlying = WORM_IS_FLYING;
