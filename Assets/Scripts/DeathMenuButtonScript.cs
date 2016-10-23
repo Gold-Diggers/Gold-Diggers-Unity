@@ -11,11 +11,15 @@ public class DeathMenuButtonScript : MonoBehaviour {
     public Image screenImage;
     public Sprite defaultScreen;
     public Sprite replayHoverScreen;
-    public Sprite quitHoverScreen;
-    public Text loadingText;
+    public Sprite mainMenuHoverScreen;
+    public Sprite quitGameHoverScreen;
+    public Canvas loadingCanvas;
     private float originalRed;
     private float originalGreen;
     private float originalBlue;
+    private string levelName;
+
+    private AsyncOperation loadOp;
 
     private float speed = 2f;
 
@@ -34,30 +38,29 @@ public class DeathMenuButtonScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         savedLevel = DEFAULT_SAVED_LEVEL;
-        loadingText.enabled = false;
-        originalRed = loadingText.color.r;
-        originalGreen = loadingText.color.g;
-        originalBlue = loadingText.color.b;
+        SavedLevel = GlobalPlayerScript.Instance.level;
+        levelName = "Level " + SavedLevel;
+        loadingCanvas.enabled = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        triggerTextFadeEffect();
+        
 	}
-
-    private void triggerTextFadeEffect()
-    {
-        loadingText.color = new Color(originalRed, originalGreen, originalBlue, (Mathf.Sin(Time.time * speed) + 1.0f) / 2.0f);
-    }
 
     public void OnReplayHover()
     {
         screenImage.sprite = replayHoverScreen;
     }
 
+    public void OnMainMenuHover()
+    {
+        screenImage.sprite = mainMenuHoverScreen;
+    }
+
     public void OnQuitHover()
     {
-        screenImage.sprite = quitHoverScreen;
+        screenImage.sprite = quitGameHoverScreen;
     }
 
     public void OnHoverLeave()
@@ -67,16 +70,20 @@ public class DeathMenuButtonScript : MonoBehaviour {
 
     public void Replay()
     {
-        string levelName = "Level " + SavedLevel;
         print("Loading " + levelName + " ...");
-        loadingText.enabled = true;
-        AsyncOperation loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
+        loadingCanvas.enabled = true;
+        loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
         loadOp.allowSceneActivation = true;
+    }
+
+    public void NavigateToMainMenu()
+    {
+        print("Leaving to main menu...");
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
     public void Quit()
     {
-        print("Leaving to main menu...");
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        Application.Quit();
     }
 }

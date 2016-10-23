@@ -11,8 +11,8 @@ public class PlayerBaseController : MonoBehaviour {
     private const double Y_VELOCITY_THRESHOLD = -2.0;
     private const float HORIZONTAL_COLLISION_THRESHOLD_ENEMIES = 0.1f;
     private const float HORIZONTAL_COLLISION_THRESHOLD_PLATFORM = 0.3f;
-    private const float JUMP_FORCE = 100f;
-    private const float HOVER_FORCE = 3.5f;
+    private const float JUMP_FORCE = 67.5f;
+    private const float HOVER_FORCE = 1.75f; // for jetpack: 3.5f
     private const float CHAR_ON_PLATFORM_Y_DIFF_THRESHOLD = 0.001f;
 
     /* ================= Player physics attributes ================= */
@@ -21,6 +21,8 @@ public class PlayerBaseController : MonoBehaviour {
     private Rigidbody2D rb2d;
     private float yPos;
     private float xPos;
+
+    public bool isLevelEnd = false;
 
     /* ================= Player control mechanic attributes ================= */
     // For handling period when player is digging
@@ -33,6 +35,8 @@ public class PlayerBaseController : MonoBehaviour {
     private const float DIG_Y_OFFSET_BTM = 0.75f;
 
     // For jumping
+    private int jumpCooldown;
+    private const int COOLDOWN_JUMP = 10; // in frames
     private const float JUMP_ATK_X_OFFSET = 0.3f;
     private const float JUMP_ATK_Y_OFFSET_TOP = 0.1f;
     private const float JUMP_ATK_Y_OFFSET_BTM = 0.75f;
@@ -49,6 +53,13 @@ public class PlayerBaseController : MonoBehaviour {
 
     // Boolean constant to change for testing/production purposes
     private const bool IS_TESTING = true;
+
+    public void setEndLevel()
+    {
+        isLevelEnd = true;
+        anim.Play("idle");
+        anim.SetBool("isRunning", false);
+    }
 
     // Used by collision controller to update whether player is hurt.
     public void updateRepelled()
@@ -76,6 +87,7 @@ public class PlayerBaseController : MonoBehaviour {
         xPos = transform.position.x;
         diggingCounter = 0;
         diggingCooldown = 0;
+        jumpCooldown = 0;
         isRunning = false;
         anim = GetComponent<Animator>();
         toFlip = false;
@@ -91,20 +103,14 @@ public class PlayerBaseController : MonoBehaviour {
 
     void FixedUpdate()
     {
-        handleHorizontalMovement();
-        handleJump();
-        handleDig();
-        handleAnimation();
-        updatePos(); // must be last
-        handleWinningCondition();
-    }
-
-    void handleWinningCondition()
-    {
-        if (rb2d.position.y < -87) // hardcoded number to trigger winning condition, to change eventually
+        if (!isLevelEnd)
         {
-            SceneManager.LoadScene("Level 1.5", LoadSceneMode.Single);
+            handleHorizontalMovement();
+            handleJump();
+            handleDig();
+            handleAnimation();
         }
+        updatePos(); // must be last
     }
 
     void handleAnimation() {
@@ -130,7 +136,7 @@ public class PlayerBaseController : MonoBehaviour {
     	}
 
         // Handle falling
-        if (!isDiggingAnim())
+        if (!isDiggingAnim() && !isHoverAnim())
         {
             if (isCharacterFalling())
             {
@@ -147,20 +153,47 @@ public class PlayerBaseController : MonoBehaviour {
 
     void handleJump()
     {
+        if (jumpCooldown > 0)
+        {
+            jumpCooldown--;
+        }
         if (Input.GetKey(KeyCode.W) && !isRepelled)
         {
             if (isCharacterOnPlatform()) // normal jump
             {
-                StartCoroutine(jumpAnimate());
-                rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight);
+                if (jumpCooldown <= 0 && rb2d.velocity.y < 0.02)
+                {                
+                    jumpCooldown = COOLDOWN_JUMP;
+                    StartCoroutine(jumpAnimate());
+                    rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight);
+                }   
             } else if (isCharacterFalling()) // hover
             {
+                if (!isHoverAnim())
+                {    
+                    anim.SetBool("isHover", true);
+                    anim.Play("hover");
+                }
+                
                 if (rb2d.velocity.y < Y_VELOCITY_THRESHOLD)
                 {
                     rb2d.AddForce(new Vector2(0, HOVER_FORCE) * jumpHeight);
                 }
+            } else
+            {
+                anim.SetBool("isHover", false);
             }
+        } else
+        {
+            anim.SetBool("isHover", false);
         }
+    }
+
+    private bool isHoverAnim()
+    {
+        AnimatorStateInfo currState = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        return (currState.IsName("hover"));
     }
 
     IEnumerator jumpAnimate()
@@ -278,9 +311,16 @@ public class PlayerBaseController : MonoBehaviour {
 
     bool isCharacterOnPlatform()
     {
-        //if (transform.position.y == yPos)
+        /*float currX = transform.GetComponent<Collider2D>().bounds.center.x;
+        float currY = transform.GetComponent<Collider2D>().bounds.center.y;
+        Vector2 ptA = new Vector2((float)(currX - DIG_X_OFFSET), (float)(currY - 0.7f));
+        Vector2 ptB = new Vector2((float)(currX + DIG_X_OFFSET), currY - 0.7f);
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8);
+
+        return col.Length > 0;*/
+
         if (Math.Abs(transform.position.y - yPos) < CHAR_ON_PLATFORM_Y_DIFF_THRESHOLD)
-            {
+        {
             return true;
         } else
         {
