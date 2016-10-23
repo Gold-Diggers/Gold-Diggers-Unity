@@ -157,9 +157,9 @@ public class PlayerBaseController : MonoBehaviour {
         {
             jumpCooldown--;
         }
-        if (Input.GetKey(KeyCode.W) && !isRepelled)
+        if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.O)) && !isRepelled)
         {
-            if (isCharacterOnPlatform()) // normal jump
+            if ((Input.GetKey(KeyCode.W) && isCharacterOnPlatform())) // normal jump
             {
                 if (jumpCooldown <= 0 && rb2d.velocity.y < 0.02)
                 {                
@@ -167,8 +167,13 @@ public class PlayerBaseController : MonoBehaviour {
                     StartCoroutine(jumpAnimate());
                     rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight);
                 }   
-            } else if (isCharacterFalling()) // hover
+            } else if ((Input.GetKey(KeyCode.O) && isCharacterFalling())) // hover
             {
+                if (isDiggingAnim())
+                {
+                    anim.SetBool("isHover", false);
+                    return;
+                }
                 if (!isHoverAnim())
                 {    
                     anim.SetBool("isHover", true);
