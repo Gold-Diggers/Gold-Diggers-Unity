@@ -9,9 +9,10 @@ public class MainMenuButtonScript : MonoBehaviour {
     public Sprite defaultScreen;
     public Sprite startHoverScreen;
     public Sprite tutorialHoverScreen;
+    public Sprite quitGameHoverScreen;
     public Canvas tutorialCanvas;
+    public Canvas loadingCanvas;
     public Text prompt;
-    public Text loadPrompt;
     private float originalRed;
     private float originalGreen;
     private float originalBlue;
@@ -22,12 +23,10 @@ public class MainMenuButtonScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         tutorialCanvas.enabled = false;
-        loadPrompt.enabled = false;
+        loadingCanvas.enabled = false;
         originalRed = prompt.color.r;
         originalGreen = prompt.color.g;
         originalBlue = prompt.color.b;
-        loadOp = SceneManager.LoadSceneAsync("Level 1", LoadSceneMode.Single);
-        loadOp.allowSceneActivation = false;
     }
 	
 	// Update is called once per frame
@@ -35,14 +34,6 @@ public class MainMenuButtonScript : MonoBehaviour {
     {
         openTutorialOnEscapeKey();
         triggerTextFadeEffect();
-    }
-
-    private void handleLoadOperation()
-    {
-        /*if (loadOp != null)
-        {
-            if (loadOp.isDone) SceneManager.UnloadScene("MainMenu");
-        }*/
     }
 
     private void openTutorialOnEscapeKey()
@@ -56,7 +47,6 @@ public class MainMenuButtonScript : MonoBehaviour {
     private void triggerTextFadeEffect()
     {
         prompt.color = new Color(originalRed, originalGreen, originalBlue, (Mathf.Sin(Time.time * speed) + 1.0f) / 2.0f);
-        loadPrompt.color = new Color(originalRed, originalGreen, originalBlue, (Mathf.Sin(Time.time * speed) + 1.0f) / 2.0f);
     }
 
     public void OnStartHover()
@@ -69,6 +59,11 @@ public class MainMenuButtonScript : MonoBehaviour {
         screenImage.sprite = tutorialHoverScreen;
     }
 
+    public void OnQuitHover()
+    {
+        screenImage.sprite = quitGameHoverScreen;
+    }
+
     public void OnHoverLeave()
     {
         screenImage.sprite = defaultScreen;
@@ -76,8 +71,9 @@ public class MainMenuButtonScript : MonoBehaviour {
 
     public void Play()
     {
-        loadPrompt.enabled = true;
+        loadingCanvas.enabled = true;
         print("Loading Level 1...");
+        loadOp = SceneManager.LoadSceneAsync("Level 1", LoadSceneMode.Single);
         loadOp.allowSceneActivation = true;
     }
 
@@ -85,5 +81,10 @@ public class MainMenuButtonScript : MonoBehaviour {
     {
         //print("Opening tutorial screen...");
         tutorialCanvas.enabled = true;
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }
