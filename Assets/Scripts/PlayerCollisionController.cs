@@ -91,6 +91,7 @@ public class PlayerCollisionController : MonoBehaviour
     public int lives;
     public int diamonds;
     public int specialDiamonds;
+    public int level;
 
     private Animator anim;
 
@@ -104,11 +105,13 @@ public class PlayerCollisionController : MonoBehaviour
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        lives = NUM_LIVES_START;
+        lives = GlobalPlayerScript.Instance.lives;
         isHurt = false;
-        diamonds = NUM_DIAMONDS_START;
-        specialDiamonds = NUM_SPECIAL_DIAMONDS_START;
+        diamonds = GlobalPlayerScript.Instance.diamonds;
+        specialDiamonds = GlobalPlayerScript.Instance.specialDiamonds;
         anim = GetComponent<Animator>();
+        level = GlobalPlayerScript.Instance.level;
+        
     }
 
     // Update is called once per frame
