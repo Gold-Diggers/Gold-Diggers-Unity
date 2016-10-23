@@ -11,8 +11,9 @@ public class DeathMenuButtonScript : MonoBehaviour {
     public Image screenImage;
     public Sprite defaultScreen;
     public Sprite replayHoverScreen;
-    public Sprite quitHoverScreen;
-    public Text loadingText;
+    public Sprite mainMenuHoverScreen;
+    public Sprite quitGameHoverScreen;
+    public Canvas loadingCanvas;
     private float originalRed;
     private float originalGreen;
     private float originalBlue;
@@ -39,32 +40,27 @@ public class DeathMenuButtonScript : MonoBehaviour {
         savedLevel = DEFAULT_SAVED_LEVEL;
         SavedLevel = GlobalPlayerScript.Instance.level;
         levelName = "Level " + SavedLevel;
-        loadingText.enabled = false;
-        originalRed = loadingText.color.r;
-        originalGreen = loadingText.color.g;
-        originalBlue = loadingText.color.b;
-        loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
-        loadOp.allowSceneActivation = false;
+        loadingCanvas.enabled = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        triggerTextFadeEffect();
+        
 	}
-
-    private void triggerTextFadeEffect()
-    {
-        loadingText.color = new Color(originalRed, originalGreen, originalBlue, (Mathf.Sin(Time.time * speed) + 1.0f) / 2.0f);
-    }
 
     public void OnReplayHover()
     {
         screenImage.sprite = replayHoverScreen;
     }
 
+    public void OnMainMenuHover()
+    {
+        screenImage.sprite = mainMenuHoverScreen;
+    }
+
     public void OnQuitHover()
     {
-        screenImage.sprite = quitHoverScreen;
+        screenImage.sprite = quitGameHoverScreen;
     }
 
     public void OnHoverLeave()
@@ -75,13 +71,19 @@ public class DeathMenuButtonScript : MonoBehaviour {
     public void Replay()
     {
         print("Loading " + levelName + " ...");
-        loadingText.enabled = true;
+        loadingCanvas.enabled = true;
+        loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
         loadOp.allowSceneActivation = true;
+    }
+
+    public void NavigateToMainMenu()
+    {
+        print("Leaving to main menu...");
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
     public void Quit()
     {
-        print("Leaving to main menu...");
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        Application.Quit();
     }
 }
