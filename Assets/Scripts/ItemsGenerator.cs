@@ -11,6 +11,7 @@ public class ItemsGenerator : MonoBehaviour
     public GameObject bat;
     public GameObject bat2;
     public GameObject mole;
+    public GameObject mole2;
 
     private int level;
 
@@ -59,6 +60,7 @@ public class ItemsGenerator : MonoBehaviour
     private const int NUM_BATS = 8;
     private const int NUM_BATS_LEVEL_2 = 8;
     private const int NUM_MOLES = 10;
+    private const int NUM_MOLES_LEVEL_2 = 12;
     private const float SPACING_OFF_GROUND_MOLES = 1f;
 
     void Start()
@@ -104,12 +106,21 @@ public class ItemsGenerator : MonoBehaviour
         {
             numBats = NUM_BATS_LEVEL_2;
         }
+        int numMoles = 0;
+        if (level == 1)
+        {
+            numMoles = NUM_MOLES;
+        }
+        else if (level == 2)
+        {
+            numMoles = NUM_MOLES_LEVEL_2;
+        }
 
         for (int i = 0; i < numBats; i++)
         {
             spawnBat();
         }
-        for (int i = 0; i < NUM_MOLES; i++)
+        for (int i = 0; i < numMoles; i++)
         {
             spawnMole();
         }
@@ -204,7 +215,6 @@ public class ItemsGenerator : MonoBehaviour
             Instantiate(bat, new Vector3(randX, randY, 0), Quaternion.identity);
         } else if (level == 2)
         {
-            print("spawn a bat");
             Instantiate(bat2, new Vector3(randX, randY, 0), Quaternion.identity);
         }
         
@@ -248,7 +258,14 @@ public class ItemsGenerator : MonoBehaviour
         }
 
         // Spawn mole
-        Instantiate(mole, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
+        if (level == 1)
+        {
+            Instantiate(mole, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
+        } else if (level == 2)
+        {
+            Instantiate(mole2, new Vector3(randX, randY - 0.1f, 0), Quaternion.identity);
+        }
+        
     }
 
     private void generateSpike()

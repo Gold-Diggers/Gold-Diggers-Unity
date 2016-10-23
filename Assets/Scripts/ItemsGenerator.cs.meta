@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 58c359980b3a27949a98ac14a49c12e1
-timeCreated: 1477223937
+timeCreated: 1477226316
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
@@ -15,6 +15,7 @@ MonoImporter:
   - bat: {fileID: 1000013193330540, guid: 9ecdead2dcffea449a92cd8216004b8e, type: 2}
   - bat2: {fileID: 1000013193330540, guid: 8ffbb1e82a33a4447b41199d2d106ce4, type: 2}
   - mole: {fileID: 1000013193330540, guid: ea92025a85d698642a066c164760ee3a, type: 2}
+  - mole2: {fileID: 1000013193330540, guid: 4469479e7294e9e41813eaa82fc6d7bd, type: 2}
   executionOrder: 400
   icon: {instanceID: 0}
   userData: 
