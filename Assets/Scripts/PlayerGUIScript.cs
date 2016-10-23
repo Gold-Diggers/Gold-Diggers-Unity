@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerGUIScript : MonoBehaviour {
 
@@ -19,16 +20,22 @@ public class PlayerGUIScript : MonoBehaviour {
     private Rigidbody2D playerBody;
     private Collider2D playerCollider;
     private Collider2D levelGroundCollider;
+    private bool isLevelScene;
     private float levelEndPos;
 
     // Use this for initialization
     void Start ()
     {
+        Scene currScene = SceneManager.GetActiveScene();
         player = FindObjectOfType<PlayerCollisionController>();
         soulDiamond.enabled = false;
-        getLevelGroundCollider();
-        getPlayerBodyAndCollider();
-        initializeDepthMeter();
+        isLevelScene = (!Equals(currScene.name, "Level 1.5") && !Equals(currScene.name, "Level 2.5"));
+        if (isLevelScene)
+        {
+            getLevelGroundCollider();
+            getPlayerBodyAndCollider();
+            initializeDepthMeter();
+        }
     }
 
     private void initializeDepthMeter()
@@ -54,11 +61,11 @@ public class PlayerGUIScript : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        print(playerBody.position);
+        //print(playerBody.position);
         UpdateHeartDisplay(player.lives);
         UpdateDiamondCount(player.diamonds);
         UpdateSpecialDiamondDisplay(player.specialDiamonds);
-        UpdateDepthRemaining(playerBody.position.y);
+        if (isLevelScene) UpdateDepthRemaining(playerBody.position.y);
 	}
 
     void UpdateSpecialDiamondDisplay(int currSpecialDiamonds)
@@ -87,7 +94,7 @@ public class PlayerGUIScript : MonoBehaviour {
     {
         if (lives >= 6) heart3.sprite = armoredHeart;
         else if (lives >= 3) heart3.sprite = normalHeart;
-        else if (lives > 0) heart3.enabled = false;
+        else if (lives < 3) heart3.enabled = false;
         else print("Error: Invalid state reached.");
     }
 
@@ -95,7 +102,7 @@ public class PlayerGUIScript : MonoBehaviour {
     {
         if (lives >= 5) heart2.sprite = armoredHeart;
         else if (lives >= 2) heart2.sprite = normalHeart;
-        else if (lives > 0) heart2.enabled = false;
+        else if (lives < 2) heart2.enabled = false;
         else print("Error: Invalid state reached.");
     }
 
@@ -103,7 +110,7 @@ public class PlayerGUIScript : MonoBehaviour {
     {
         if (lives >= 4) heart1.sprite = armoredHeart;
         else if (lives >= 1) heart1.sprite = normalHeart;
-        else if (lives == 0) heart1.enabled = false;
+        else if (lives < 1) heart1.enabled = false;
         else print("Player has died and player should see death screen.");
     }
 }
