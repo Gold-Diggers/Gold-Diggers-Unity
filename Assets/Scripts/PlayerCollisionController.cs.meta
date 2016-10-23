@@ -1,17 +1,27 @@
 fileFormatVersion: 2
 guid: a89ee250f2d7dfc469b2daa569ef62c0
-timeCreated: 1475601329
+timeCreated: 1477231620
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
+  - heartsCanvas: {instanceID: 0}
+  - specialDiamondImage: {instanceID: 0}
+  - dialogue: {instanceID: 0}
+  - yesButton: {instanceID: 0}
+  - noButton: {instanceID: 0}
+  - diamondDisplay: {instanceID: 0}
   - spawnedDiamond: {fileID: 1000013033179666, guid: e25ded81971927044a00157ef817a8d4,
       type: 2}
   - spawnedSpecialDiamond: {fileID: 1000013555863600, guid: 097d7a7b758cc3b458a386aee2f643e9,
       type: 2}
   - spawnedMonsterType1: {fileID: 1000013193330540, guid: 9ecdead2dcffea449a92cd8216004b8e,
       type: 2}
+  - spawnedMonsterType1_level2: {fileID: 1000013193330540, guid: 8ffbb1e82a33a4447b41199d2d106ce4,
+      type: 2}
   - spawnedMonsterType2: {fileID: 1000013193330540, guid: ea92025a85d698642a066c164760ee3a,
+      type: 2}
+  - spawnedMonsterType2_level2: {fileID: 1000013193330540, guid: 4469479e7294e9e41813eaa82fc6d7bd,
       type: 2}
   executionOrder: 0
   icon: {instanceID: 0}

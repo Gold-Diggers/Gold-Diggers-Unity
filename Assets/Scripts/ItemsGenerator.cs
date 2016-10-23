@@ -6,6 +6,7 @@ public class ItemsGenerator : MonoBehaviour
     public GameObject background;
     public GameObject diamond;
     public GameObject trap;
+    public GameObject trap2;
     public GameObject treasureChest;
     public GameObject specialChest;
     public GameObject bat;
@@ -43,18 +44,25 @@ public class ItemsGenerator : MonoBehaviour
     // Lone diamond
     private const int NUM_LONE_DIAMOND_SET = 2;
     private const float SPACING_OFF_GROUND_LONE_DIAMOND = 1.25f;
+
     // Vertical diamond with spike
     private const int NUM_TOTAL_SPIKES = 8; // inclusive of those with diamonds
+    private const int NUM_TOTAL_SPIKES_LEVEL_TWO = 12;
     private const int NUM_VERTICAL_SPIKE = 3; // number of sets
+    private const int NUM_VERTICAL_SPIKE_LEVEL_TWO = 4;
     private const int NUM_IN_VERTICAL_SPIKE = 3; // 1 set consist of how many diamonds
     private const float SPACING_VERTICAL_SPIKE = 1.5f;
     private const float SPACING_OFF_GROUND_VERTICAL_SPIKE = 1.1f;
+
     // Horizontal diamond with chest
     private const int NUM_TOTAL_CHESTS = 3; // inclusive of those with diamonds
+    private const int NUM_TOTAL_CHESTS_LEVEL_TWO = 4;
     private const int NUM_HORIZONTAL_CHEST = 1; // number of sets
+    private const int NUM_HORIZONTAL_CHEST_LEVEL_TWO = 3;
     private const int NUM_IN_HORIZONTAL_CHEST = 3; // 1 set consist of how many diamonds
     private const float SPACING_HORIZONTAL_CHEST = 1.75f;
     private const float SPACING_OFF_GROUND_HORIZONTAL_CHEST = 1.1f;
+
     // special chest
     private const float SPACING_OFF_GROUND_CHEST = 1.1f;
     // Monsters
@@ -150,9 +158,27 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateSpikes()
     {
-        for (int i = 0; i < NUM_TOTAL_SPIKES; i++)
+        int numSpikes = 0;
+        if (level == 1)
         {
-            if (i < NUM_VERTICAL_SPIKE)
+            numSpikes = NUM_TOTAL_SPIKES;
+        } else if (level == 2)
+        {
+            numSpikes = NUM_TOTAL_SPIKES_LEVEL_TWO;
+        }
+
+        int numVerticalSpike = 0;
+        if (level == 1)
+        {
+            numVerticalSpike = NUM_VERTICAL_SPIKE;
+        } else if (level == 2)
+        {
+            numVerticalSpike = NUM_VERTICAL_SPIKE_LEVEL_TWO;
+        }
+
+        for (int i = 0; i < numSpikes; i++)
+        {
+            if (i < numVerticalSpike)
             {
                 generateVerticalSpike();
             } else
@@ -164,9 +190,29 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateChests()
     {
-        for (int i = 0; i < NUM_TOTAL_CHESTS; i++)
+        int numChests = 0;
+        if (level == 1)
         {
-            if (i < NUM_HORIZONTAL_CHEST)
+            numChests = NUM_TOTAL_CHESTS;
+        }
+        else if (level == 2)
+        {
+            numChests = NUM_TOTAL_CHESTS_LEVEL_TWO;
+        }
+
+        int numHorizontalChests = 0;
+        if (level == 1)
+        {
+            numHorizontalChests = NUM_HORIZONTAL_CHEST;
+        }
+        else if (level == 2)
+        {
+            numHorizontalChests = NUM_HORIZONTAL_CHEST_LEVEL_TWO;
+        }
+
+        for (int i = 0; i < numChests; i++)
+        {
+            if (i < numHorizontalChests)
             {
                 generateHorizontalChest();
             }
@@ -342,7 +388,14 @@ public class ItemsGenerator : MonoBehaviour
         }
         
         // Spawn spike
-        Instantiate(trap, new Vector3(randX, randY + 0.1f, 0), Quaternion.identity);
+        if (level == 1)
+        {
+            Instantiate(trap, new Vector3(randX, randY + 0.1f, 0), Quaternion.identity);
+        } else if (level == 2)
+        {
+            Instantiate(trap2, new Vector3(randX, randY + 0.1f, 0), Quaternion.identity);
+        }
+        
     }
 
     private void generateChest()
@@ -539,7 +592,14 @@ public class ItemsGenerator : MonoBehaviour
             tempY += SPACING_VERTICAL_SPIKE;
         }
         // Spawn spike
-        Instantiate(trap, new Vector3(randX, randY + 0.1f, 0), Quaternion.identity);
+        if (level == 1)
+        {
+            Instantiate(trap, new Vector3(randX, randY + 0.1f, 0), Quaternion.identity);
+        } else if (level == 2)
+        {
+            Instantiate(trap2, new Vector3(randX, randY + 0.1f, 0), Quaternion.identity);
+        }
+        
         randY += SPACING_VERTICAL_SPIKE;
         // Spawn all diamonds
         for (int i = 0; i < NUM_IN_VERTICAL_SPIKE; i++)

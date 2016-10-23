@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 58c359980b3a27949a98ac14a49c12e1
-timeCreated: 1477227893
+timeCreated: 1477230179
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
@@ -8,6 +8,7 @@ MonoImporter:
   - background: {instanceID: 0}
   - diamond: {fileID: 1000013033179666, guid: 8b2a150b2405e3842a7ec51c734839b4, type: 2}
   - trap: {fileID: 1000012504450544, guid: af2246348ce8b8a4ab04aabbc7c4ade9, type: 2}
+  - trap2: {fileID: 1000012504450544, guid: e3d41e2b4a5c8024f98b048a2102f9ff, type: 2}
   - treasureChest: {fileID: 1000014178776896, guid: e3b3c38b89df49a4b881c0944d0f3c4d,
       type: 2}
   - specialChest: {fileID: 1000010776458658, guid: 775cdf106cbf1c84dacad9c0c81ed0ca,
