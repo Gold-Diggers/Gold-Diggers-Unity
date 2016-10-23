@@ -80,6 +80,7 @@
     <Compile Include="Assets\Scripts\PlatformPlacer.cs" />
     <Compile Include="Assets\Scripts\PlayerBaseController.cs" />
     <Compile Include="Assets\Scripts\PlayerCollisionController.cs" />
+    <Compile Include="Assets\Scripts\PlayerGUIScript.cs" />
     <Compile Include="Assets\Scripts\TransitionControllerScript.cs" />
     <Compile Include="Assets\Scripts\VendingMachineScript.cs" />
     <Compile Include="Assets\Scripts\WormBehaviour.cs" />
