@@ -17,6 +17,7 @@ public class PlatformPlacer : MonoBehaviour {
     public Sprite block5;
     public Sprite block6;
     public Sprite block7;
+    public Sprite block_level2;
     private Sprite[] blockCollections;
 
     private const int PLATFORM_MIN_LENGTH = 3;
@@ -26,7 +27,19 @@ public class PlatformPlacer : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        blockCollections = new Sprite[] { block1, block2, block3, block4, block5, block6, block7 };
+        PlayerCollisionController player = FindObjectOfType<PlayerCollisionController>();
+        int level = player.level;
+        if (level == 1)
+        {
+            blockCollections = new Sprite[] { block1, block2, block3, block4, block5, block6, block7 };
+        } else if (level == 2)
+        {
+            blockCollections = new Sprite[] { block_level2 };
+        } else
+        {
+            print("Error in PlatformPlacer.cs for level checking.");
+        }
+        
 
         currPos = transform.position;
         float randY = currPos.y;
