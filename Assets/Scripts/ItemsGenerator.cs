@@ -26,23 +26,28 @@ public class ItemsGenerator : MonoBehaviour
     private const float DIST_NO_SPAWN_FROM_BTM = 40f;
     // Regular Vertical
     private const int NUM_REGULAR_VERTICAL_SET = 3; // number of sets
+    private const int NUM_REGULAR_VERTICAL_SET_LEVEL_2 = 4;
     private const int NUM_IN_REGULAR_VERTICAL = 3; // 1 set consist of how many diamonds
     private const float SPACING_REGULAR_VERTICAL = 1.75f;
     // Regular Horizontal
     private const int NUM_REGULAR_HORIZONTAL_SET = 3; // number of sets
+    private const int NUM_REGULAR_HORIZONTAL_SET_LEVEL_2 = 4;
     private const int NUM_IN_REGULAR_HORIZONTAL = 3; // 1 set consist of how many diamonds
     private const float SPACING_REGULAR_HORIZONTAL = 1.75f;
     private const float SPACING_OFF_GROUND_REGULAR_HORIZONTAL = 1.25f;
     // Regular diagonal right
     private const int NUM_REGULAR_DIAGONAL_R_SET = 3; // number of sets
+    private const int NUM_REGULAR_DIAGONAL_R_SET_LEVEL_2 = 4;
     private const int NUM_IN_REGULAR_DIAGONAL_R = 3; // 1 set consist of how many diamonds
     private const float SPACING_REGULAR_DIAGONAL_R = 1.25f;
     // Regular diagonal left
     private const int NUM_REGULAR_DIAGONAL_L_SET = 3; // number of sets
+    private const int NUM_REGULAR_DIAGONAL_L_SET_LEVEL_2 = 4;
     private const int NUM_IN_REGULAR_DIAGONAL_L = 3; // 1 set consist of how many diamonds
     private const float SPACING_REGULAR_DIAGONAL_L = 1.25f;
     // Lone diamond
     private const int NUM_LONE_DIAMOND_SET = 2;
+    private const int NUM_LONE_DIAMOND_SET_LEVEL_2 = 6;
     private const float SPACING_OFF_GROUND_LONE_DIAMOND = 1.25f;
 
     // Vertical diamond with spike
@@ -225,7 +230,16 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateLoneDiamondSet()
     {
-        for (int i = 0; i < NUM_LONE_DIAMOND_SET; i++)
+        int numLone = 0;
+        if (level == 1)
+        {
+            numLone = NUM_LONE_DIAMOND_SET;
+        } else if (level == 2)
+        {
+            numLone = NUM_LONE_DIAMOND_SET_LEVEL_2;
+        }
+
+        for (int i = 0; i < numLone; i++)
         {
             generateLoneDiamond();
         }
@@ -233,7 +247,16 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateDiagonalRightRegularSet()
     {
-        for (int i = 0; i < NUM_REGULAR_DIAGONAL_R_SET; i++)
+        int numRegDiagR = 0;
+        if (level == 1)
+        {
+            numRegDiagR = NUM_REGULAR_DIAGONAL_R_SET;
+        } else if (level == 2)
+        {
+            numRegDiagR = NUM_REGULAR_DIAGONAL_R_SET_LEVEL_2;
+        }
+
+        for (int i = 0; i < numRegDiagR; i++)
         {
             generateDiagonalRightRegular();
         }
@@ -241,7 +264,16 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateDiagonalLeftRegularSet()
     {
-        for (int i = 0; i < NUM_REGULAR_DIAGONAL_L_SET; i++)
+        int numRegDiagL = 0;
+        if (level == 1)
+        {
+            numRegDiagL = NUM_REGULAR_DIAGONAL_L_SET;
+        } else if (level == 2)
+        {
+            numRegDiagL = NUM_REGULAR_DIAGONAL_L_SET_LEVEL_2;
+        }
+
+        for (int i = 0; i < numRegDiagL; i++)
         {
             generateDiagonalLeftRegular();
         }
@@ -249,7 +281,16 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateVerticalRegularSet()
     {
-        for (int i = 0; i < NUM_REGULAR_VERTICAL_SET; i++)
+        int numRegVert = 0;
+        if (level == 1)
+        {
+            numRegVert = NUM_REGULAR_VERTICAL_SET;
+        } else if (level == 2)
+        {
+            numRegVert = NUM_REGULAR_VERTICAL_SET_LEVEL_2;
+        }
+
+        for (int i = 0; i < numRegVert; i++)
         {
             generateVerticalRegular();
         }
@@ -257,7 +298,16 @@ public class ItemsGenerator : MonoBehaviour
 
     private void generateHorizontalRegularSet()
     {
-        for (int i = 0; i < NUM_REGULAR_HORIZONTAL_SET; i++)
+        int numRegHori = 0;
+        if (level == 1)
+        {
+            numRegHori = NUM_REGULAR_HORIZONTAL_SET;
+        } else if (level == 2)
+        {
+            numRegHori = NUM_REGULAR_HORIZONTAL_SET_LEVEL_2;
+        }
+
+        for (int i = 0; i < numRegHori; i++)
         {
             generateHorizontalRegular();
         }
