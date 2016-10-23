@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class PlayerCollisionController : MonoBehaviour
 {
     public Canvas heartsCanvas;
-    public Text diamondText;
     public Image specialDiamondImage;
 
     // dialogue use
@@ -109,7 +108,6 @@ public class PlayerCollisionController : MonoBehaviour
         isHurt = false;
         diamonds = NUM_DIAMONDS_START;
         specialDiamonds = NUM_SPECIAL_DIAMONDS_START;
-        diamondText.text = diamonds.ToString();
         anim = GetComponent<Animator>();
     }
 
@@ -123,7 +121,6 @@ public class PlayerCollisionController : MonoBehaviour
     {
         int penalty = getDiamondPenalty();
         diamonds -= penalty;
-        updateDiamond();
     }
 
     // Handles collisions with diamonds or end level
@@ -364,13 +361,11 @@ public class PlayerCollisionController : MonoBehaviour
     private void IncrementDiamondCountByOne()
     {
         diamonds++;
-        updateDiamond();
     }
 
     private void IncrementDiamondCountByTen()
     {
         diamonds += 10;
-        updateDiamond();
     }
 
     private void spawnObject(GameObject obj, Collision2D coll)
@@ -455,11 +450,6 @@ public class PlayerCollisionController : MonoBehaviour
         Image[] hearts = heartsCanvas.GetComponentsInChildren<Image>();
         Assert.IsTrue(hearts.Length > lives, ERROR_INVALID_LIVES_IMAGE);
         hearts[lives].enabled = false;
-    }
-
-    private void updateDiamond()
-    {
-        diamondText.text = diamonds.ToString();
     }
 
     private void checkIfPlayerDied()
