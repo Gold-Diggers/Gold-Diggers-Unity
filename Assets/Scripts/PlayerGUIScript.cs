@@ -94,7 +94,7 @@ public class PlayerGUIScript : MonoBehaviour {
 
     void UpdateDepthRemaining(float depthValue)
     {
-        depthRemaining.text = (Mathf.Floor((depthValue - playerCollider.bounds.extents.y) * 10 - levelEndPos * 10).ToString() + "m\nleft");
+        depthRemaining.text = (Mathf.Floor(depthValue - playerCollider.bounds.extents.y) * 10 - Mathf.Floor(levelEndPos) * 10).ToString() + "m\nleft";
     }
 
     void UpdateDiamondCount(int currentDiamonds)

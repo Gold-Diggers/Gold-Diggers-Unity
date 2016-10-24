@@ -71,6 +71,7 @@ public class DeathMenuButtonScript : MonoBehaviour {
     public void Replay()
     {
         print("Loading " + levelName + " ...");
+        GlobalPlayerScript.Instance.lives = 3;
         loadingCanvas.enabled = true;
         loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
         loadOp.allowSceneActivation = true;
