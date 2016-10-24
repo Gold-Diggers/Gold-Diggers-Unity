@@ -12,7 +12,8 @@ public class PlayerBaseController : MonoBehaviour {
     private const float HORIZONTAL_COLLISION_THRESHOLD_ENEMIES = 0.1f;
     private const float HORIZONTAL_COLLISION_THRESHOLD_PLATFORM = 0.3f;
     private const float JUMP_FORCE = 67.5f;
-    private const float HOVER_FORCE = 1.75f; // for jetpack: 3.5f
+    private const float HOVER_FORCE = 1.75f;
+    private const float HOVER_JETPACK_FORCE = 3.5f;
     private const float CHAR_ON_PLATFORM_Y_DIFF_THRESHOLD = 0.001f;
 
     /* ================= Player physics attributes ================= */
@@ -23,6 +24,10 @@ public class PlayerBaseController : MonoBehaviour {
     private float xPos;
 
     public bool isLevelEnd = false;
+
+    /* ================= Player upgrades ============================*/
+    public bool hasJetpackUpgrade;
+    public bool hasShovelUpgrade;
 
     /* ================= Player control mechanic attributes ================= */
     // For handling period when player is digging
@@ -92,7 +97,10 @@ public class PlayerBaseController : MonoBehaviour {
         anim = GetComponent<Animator>();
         toFlip = false;
         playerSpriteRend = GetComponent<SpriteRenderer>();
-    }
+
+        hasJetpackUpgrade = GlobalPlayerScript.Instance.hasJetpackUpgrade;
+        hasShovelUpgrade = GlobalPlayerScript.Instance.hasShovelUpgrade;
+}
 
     /* --------------------------------- START PLAYER CONTROL FUNCTIONS --------------------------------- */
     void updatePos()
@@ -182,7 +190,14 @@ public class PlayerBaseController : MonoBehaviour {
                 
                 if (rb2d.velocity.y < Y_VELOCITY_THRESHOLD)
                 {
-                    rb2d.AddForce(new Vector2(0, HOVER_FORCE) * jumpHeight);
+                    if (hasJetpackUpgrade)
+                    {
+                        rb2d.AddForce(new Vector2(0, HOVER_JETPACK_FORCE) * jumpHeight);
+                    } else
+                    {
+                        rb2d.AddForce(new Vector2(0, HOVER_FORCE) * jumpHeight);
+                    }
+                    
                 }
             } else
             {
