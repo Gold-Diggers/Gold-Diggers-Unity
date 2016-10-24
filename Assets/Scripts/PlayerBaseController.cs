@@ -177,11 +177,6 @@ public class PlayerBaseController : MonoBehaviour {
                 }   
             } else if ((Input.GetKey(KeyCode.O) && isCharacterFalling())) // hover
             {
-                if (isDiggingAnim())
-                {
-                    anim.SetBool("isHover", false);
-                    return;
-                }
                 if (!isHoverAnim())
                 {    
                     anim.SetBool("isHover", true);
@@ -247,6 +242,11 @@ public class PlayerBaseController : MonoBehaviour {
         if (diggingCooldown > 0)
         {
             diggingCooldown--;
+            return;
+        }
+
+        if (isHoverAnim())
+        {
             return;
         }
 
