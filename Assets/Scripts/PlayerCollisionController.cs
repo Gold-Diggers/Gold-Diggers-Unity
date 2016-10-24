@@ -98,6 +98,8 @@ public class PlayerCollisionController : MonoBehaviour
 
     private Animator anim;
 
+    private bool isPenaltyInvoked;
+
     // treasure chest asset attributes
     public GameObject spawnedDiamond;
     public GameObject spawnedSpecialDiamond;
@@ -116,7 +118,7 @@ public class PlayerCollisionController : MonoBehaviour
         specialDiamonds = GlobalPlayerScript.Instance.specialDiamonds;
         anim = GetComponent<Animator>();
         level = GlobalPlayerScript.Instance.level;
-        
+        isPenaltyInvoked = false;
     }
 
     // Update is called once per frame
@@ -200,7 +202,7 @@ public class PlayerCollisionController : MonoBehaviour
                 break;
 
             case END_LEVEL_TWO:
-                triggerEndLevelTwo();
+                if (!isPenaltyInvoked) triggerEndLevelTwo();
                 break;
 
             default:
@@ -226,6 +228,7 @@ public class PlayerCollisionController : MonoBehaviour
         GetComponent<PlayerBaseController>().setEndLevel(); // prevent movement by calling end level at base controller.
         int penalty = getDiamondPenalty();
         enforceDiamondPenalty();
+        isPenaltyInvoked = true;
         dialogue.text = LEVEL_2_DIALOGUE_FRONT + penalty + LEVEL_2_DIALOGUE_BACK;
         yesButton.gameObject.SetActive(true);
         noButton.gameObject.SetActive(true);
