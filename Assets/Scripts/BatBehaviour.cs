@@ -4,6 +4,7 @@ using System.Collections;
 public class BatBehaviour : MonsterBehaviour {
 
     private const float BAT_MOVE_X = -2.5f;
+    private const float BAT2_MOVE_X = -3f;
     private const float BAT_MOVE_Y = 0;
     private const float BAT_MOVE_Z = 0;
     private const bool BAT_IS_FLYING = true;
@@ -21,7 +22,14 @@ public class BatBehaviour : MonsterBehaviour {
     // Use this for initialization
     public override void Start()
     {
-        this.MoveX = BAT_MOVE_X;
+        if (gameObject.name == "Bat(Clone)")
+        {
+            this.MoveX = BAT_MOVE_X;
+        } else if (gameObject.name == "Bat2(Clone)")
+        {
+            this.MoveX = BAT2_MOVE_X;
+        }
+        
         this.MoveY = BAT_MOVE_Y;
         this.MoveZ = BAT_MOVE_Z;
         this.IsFlying = BAT_IS_FLYING;

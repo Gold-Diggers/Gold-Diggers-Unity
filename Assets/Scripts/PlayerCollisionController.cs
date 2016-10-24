@@ -91,6 +91,7 @@ public class PlayerCollisionController : MonoBehaviour
     public int lives;
     public int diamonds;
     public int specialDiamonds;
+    public int level;
 
     private Animator anim;
 
@@ -98,17 +99,21 @@ public class PlayerCollisionController : MonoBehaviour
     public GameObject spawnedDiamond;
     public GameObject spawnedSpecialDiamond;
     public GameObject spawnedMonsterType1;
+    public GameObject spawnedMonsterType1_level2;
     public GameObject spawnedMonsterType2;
+    public GameObject spawnedMonsterType2_level2;
 
     // Use this for initialization
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        lives = NUM_LIVES_START;
+        lives = GlobalPlayerScript.Instance.lives;
         isHurt = false;
-        diamonds = NUM_DIAMONDS_START;
-        specialDiamonds = NUM_SPECIAL_DIAMONDS_START;
+        diamonds = GlobalPlayerScript.Instance.diamonds;
+        specialDiamonds = GlobalPlayerScript.Instance.specialDiamonds;
         anim = GetComponent<Animator>();
+        level = GlobalPlayerScript.Instance.level;
+        
     }
 
     // Update is called once per frame
@@ -272,11 +277,25 @@ public class PlayerCollisionController : MonoBehaviour
             int randSpawn = Random.Range(0, 2);
             if (randSpawn == MONSTER_ONE)
             {
-                spawnObject(spawnedMonsterType1, coll);
+                if (level == 1)
+                {
+                    spawnObject(spawnedMonsterType1, coll);
+                } else if (level == 2)
+                {
+                    spawnObject(spawnedMonsterType1_level2, coll);
+                }
+                
             }
             else if (randSpawn == MONSTER_TWO)
             {
-                spawnObject(spawnedMonsterType2, coll);
+                if (level == 1)
+                {
+                    spawnObject(spawnedMonsterType2, coll);
+                }
+                else if (level == 2)
+                {
+                    spawnObject(spawnedMonsterType2_level2, coll);
+                }
             }
         }
         Destroy(coll.gameObject);
