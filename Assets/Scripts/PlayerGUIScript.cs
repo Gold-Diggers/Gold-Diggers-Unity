@@ -6,11 +6,14 @@ using UnityEngine.SceneManagement;
 public class PlayerGUIScript : MonoBehaviour {
 
     public PlayerCollisionController player;
+    public PlayerBaseController player_upgrades;
     public Image heart1;
     public Image heart2;
     public Image heart3;
     public Sprite normalHeart;
     public Sprite armoredHeart;
+    public Image jetpackFlag;
+    public Image shovelFlag;
 
     public Text diamondCount;
     public Image soulDiamond;
@@ -29,8 +32,11 @@ public class PlayerGUIScript : MonoBehaviour {
     {
         Scene currScene = SceneManager.GetActiveScene();
         player = FindObjectOfType<PlayerCollisionController>();
+        player_upgrades = FindObjectOfType<PlayerBaseController>();
         soulDiamond.enabled = false;
         soulDiamondCount.enabled = false;
+        jetpackFlag.enabled = player_upgrades.hasJetpackUpgrade;
+        shovelFlag.enabled = player_upgrades.hasShovelUpgrade;
         isLevelScene = (!Equals(currScene.name, "Level 1.5") && !Equals(currScene.name, "Level 2.5"));
         if (isLevelScene)
         {
@@ -67,6 +73,7 @@ public class PlayerGUIScript : MonoBehaviour {
         UpdateHeartDisplay(player.lives);
         UpdateDiamondCount(player.diamonds);
         UpdateSpecialDiamondDisplay(player.specialDiamonds);
+        UpdateUpgradeFlags();
         if (isLevelScene) UpdateDepthRemaining(playerBody.position.y);
 	}
 
@@ -148,5 +155,11 @@ public class PlayerGUIScript : MonoBehaviour {
         }
         else if (lives < 1) heart1.enabled = false;
         else print("Player has died and player should see death screen.");
+    }
+
+    void UpdateUpgradeFlags()
+    {
+        jetpackFlag.enabled = player_upgrades.hasJetpackUpgrade;
+        shovelFlag.enabled = player_upgrades.hasShovelUpgrade;
     }
 }
