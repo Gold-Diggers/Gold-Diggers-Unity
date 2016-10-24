@@ -11,6 +11,7 @@ public class LevelTransitionScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         player = FindObjectOfType<PlayerCollisionController>();
+        player_upgrades = FindObjectOfType<PlayerBaseController>();
         string levelName = "Level " + GlobalPlayerScript.Instance.level;
         print("Loading " + levelName);
         loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
