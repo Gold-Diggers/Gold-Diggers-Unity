@@ -16,6 +16,8 @@ public class PlayerCollisionController : MonoBehaviour
     private const string LEVEL_1_DIALOGUE_FRONT = "Hiya buddy! I’m tired of mining for diamonds but I found a key to this cool" +
         " lookin’ diamond cave. Want in? Trade you ";
     private const string LEVEL_1_DIALOGUE_BACK = " diamonds for it!";
+    private const string LEVEL_2_DIALOGUE_FRONT = "Greetings, Helmeted One. Let me relieve you of your burdens - ";
+    private const string LEVEL_2_DIALOGUE_BACK = " diamonds, and your soul. Feel a little lighter? Go forth to retrieve your soul, if you wish. Otherwise, you may leave with what you have left… without your soul.";
 
     // diamond penalty use
     private const int DIAMOND_RANGE_1 = 5;
@@ -75,6 +77,7 @@ public class PlayerCollisionController : MonoBehaviour
     private const string BG_BOUNDARY = "BackgroundBoundary";
     private const string VENDING_MACHINE = "VendingMachine";
     private const string END_LEVEL = "EndLevel";
+    private const string END_LEVEL_TWO = "EndLevel2";
     private const string ERROR_INVALID_LIVES_IMAGE = "ERROR: hearts index is out of range.";
     private const string ERROR_INVALID_LIVES_VALUE = "ERROR: 'lives' attribute cannot be < 0.";
     private const string ERROR_INVALID_SPECIAL_DIAMOND_VALUE = "ERROR: 'specialDiamonds' attribute cannot be > 3.";
@@ -156,7 +159,7 @@ public class PlayerCollisionController : MonoBehaviour
         Assert.IsTrue(Equals(collidedObject, PLATFORM) || Equals(collidedObject, DIAMOND) || Equals(collidedObject, SPECIAL_DIAMOND) ||
                       Equals(collidedObject, TREASURE_CHEST) || Equals(collidedObject, SPECIAL_TREASURE_CHEST) || Equals(collidedObject, MONSTER) ||
                       Equals(collidedObject, TRAP) || Equals(collidedObject, BG_BOUNDARY) || Equals(collidedObject, VENDING_MACHINE) ||
-                      Equals(collidedObject, END_LEVEL), ERROR_UNEXPECTED_COLLISION_EVENT);
+                      Equals(collidedObject, END_LEVEL) || Equals(collidedObject, END_LEVEL_TWO), ERROR_UNEXPECTED_COLLISION_EVENT);
 
         switch (collidedObject)
         {
@@ -196,6 +199,10 @@ public class PlayerCollisionController : MonoBehaviour
                 // Action handled by OnTriggerEnter2D()
                 break;
 
+            case END_LEVEL_TWO:
+                triggerEndLevelTwo();
+                break;
+
             default:
                 break;
         }
@@ -210,6 +217,16 @@ public class PlayerCollisionController : MonoBehaviour
     {
         GetComponent<PlayerBaseController>().setEndLevel(); // prevent movement by calling end level at base controller.
         dialogue.text = LEVEL_1_DIALOGUE_FRONT + getDiamondPenalty() + LEVEL_1_DIALOGUE_BACK;
+        yesButton.gameObject.SetActive(true);
+        noButton.gameObject.SetActive(true);
+    }
+
+    private void triggerEndLevelTwo()
+    {
+        GetComponent<PlayerBaseController>().setEndLevel(); // prevent movement by calling end level at base controller.
+        int penalty = getDiamondPenalty();
+        enforceDiamondPenalty();
+        dialogue.text = LEVEL_2_DIALOGUE_FRONT + penalty + LEVEL_2_DIALOGUE_BACK;
         yesButton.gameObject.SetActive(true);
         noButton.gameObject.SetActive(true);
     }
@@ -348,7 +365,7 @@ public class PlayerCollisionController : MonoBehaviour
 
     /* ======================================  PRIMITIVE METHODS ====================================== */
 
-    private int getDiamondPenalty()
+    public int getDiamondPenalty()
     {
         if (diamonds == 0) return 0;
         if (diamonds <= DIAMOND_RANGE_1)
