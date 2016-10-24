@@ -12,6 +12,7 @@ public class EndLevelButtonScript : MonoBehaviour {
     public Button noButton;
 
     private PlayerCollisionController playerAttr;
+    private PlayerBaseController playerBaseController;
     private float posAdvanceDoor;
     private float posExitDoor;
 
@@ -25,6 +26,7 @@ public class EndLevelButtonScript : MonoBehaviour {
         isMoveTowardsAdvance = false;
         isMoveTowardsExit = false;
         playerAttr = FindObjectOfType<PlayerCollisionController>();
+        playerBaseController = FindObjectOfType<PlayerBaseController>();
     }
 	
 	// Update is called once per frame
@@ -78,17 +80,19 @@ public class EndLevelButtonScript : MonoBehaviour {
                 player.GetComponent<SpriteRenderer>().color = color;
             } else
             { // after fading, go to transition
-                savePlayerState(playerAttr);
+                savePlayerState(playerAttr, playerBaseController);
                 SceneManager.LoadScene("Level 1.5", LoadSceneMode.Single);
             } 
         }
     }
 
-    private static void savePlayerState(PlayerCollisionController player)
+    private static void savePlayerState(PlayerCollisionController player, PlayerBaseController playerBaseController)
     {
         GlobalPlayerScript.Instance.lives = player.lives;
         GlobalPlayerScript.Instance.diamonds = player.diamonds;
         GlobalPlayerScript.Instance.specialDiamonds = player.specialDiamonds;
+        GlobalPlayerScript.Instance.hasJetpackUpgrade = playerBaseController.hasJetpackUpgrade;
+        GlobalPlayerScript.Instance.hasShovelUpgrade = playerBaseController.hasShovelUpgrade;
         GlobalPlayerScript.Instance.level = 2;
     }
 
@@ -107,8 +111,8 @@ public class EndLevelButtonScript : MonoBehaviour {
                 player.GetComponent<SpriteRenderer>().color = color;
             }
             else
-            { // after fading, go to ending (main menu is a temp placeholder)
-                SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+            { // after fading, go to ending
+                SceneManager.LoadScene("Ending 1", LoadSceneMode.Single);
             }
         }
     }
