@@ -7,10 +7,13 @@ public class VendingMachineScript : MonoBehaviour {
     public Text hoverText;
     public GameObject vendingMachine;
     public Image vendingMachineInterface;
+    public Image jetpackSoldout;
+    public Image shovelSoldout;
     public Button livesPurchase;
     public Button jetpackPurchase;
     public Button shovelPurchase;
     public PlayerCollisionController player;
+    public PlayerBaseController player_upgrades;
 
     private const int PRICE_LIFE_UPGRADE = 25;
     private const int PRICE_JETPACK_UPGRADE = 50;
@@ -22,6 +25,7 @@ public class VendingMachineScript : MonoBehaviour {
 	void Start ()
     {
         player = FindObjectOfType<PlayerCollisionController>();
+        player_upgrades = FindObjectOfType<PlayerBaseController>();
         loadPlayerState();
         hoverText.enabled = false;
         isShopOpen = false;
@@ -34,6 +38,8 @@ public class VendingMachineScript : MonoBehaviour {
         player.lives = GlobalPlayerScript.Instance.lives;
         player.diamonds = GlobalPlayerScript.Instance.diamonds;
         player.specialDiamonds = GlobalPlayerScript.Instance.specialDiamonds;
+        player_upgrades.hasJetpackUpgrade = GlobalPlayerScript.Instance.hasJetpackUpgrade;
+        player_upgrades.hasShovelUpgrade = GlobalPlayerScript.Instance.hasShovelUpgrade;
     }
 
     // Update is called once per frame
@@ -70,9 +76,30 @@ public class VendingMachineScript : MonoBehaviour {
 
     void updateButtonStates()
     {
-        if (player.diamonds < PRICE_LIFE_UPGRADE) livesPurchase.interactable = false;
-        if (player.diamonds < PRICE_JETPACK_UPGRADE) jetpackPurchase.interactable = false;
-        if (player.specialDiamonds < PRICE_SHOVEL_UPGRADE) shovelPurchase.interactable = false;
+        if (player.diamonds < PRICE_LIFE_UPGRADE)
+        {
+            livesPurchase.interactable = false;
+        }
+        else
+        {
+            livesPurchase.interactable = true;
+        }
+        if (player.diamonds < PRICE_JETPACK_UPGRADE)
+        {
+            jetpackPurchase.interactable = false;
+        }
+        else
+        {
+            jetpackPurchase.interactable = true;
+        }
+        if (player.specialDiamonds < PRICE_SHOVEL_UPGRADE)
+        {
+            shovelPurchase.interactable = false;
+        }
+        else
+        {
+            shovelPurchase.interactable = true;
+        }
     }
 
     void triggerOpenShopInterface()
