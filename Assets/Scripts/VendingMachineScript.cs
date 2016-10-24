@@ -44,6 +44,7 @@ public class VendingMachineScript : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        updateUpgradesState();
         updateButtonStates();
         triggerOpenShopInterface();
 	}
@@ -84,7 +85,7 @@ public class VendingMachineScript : MonoBehaviour {
         {
             livesPurchase.interactable = true;
         }
-        if (player.diamonds < PRICE_JETPACK_UPGRADE)
+        if (player.diamonds < PRICE_JETPACK_UPGRADE || player_upgrades.hasJetpackUpgrade)
         {
             jetpackPurchase.interactable = false;
         }
@@ -92,13 +93,33 @@ public class VendingMachineScript : MonoBehaviour {
         {
             jetpackPurchase.interactable = true;
         }
-        if (player.specialDiamonds < PRICE_SHOVEL_UPGRADE)
+        if (player.specialDiamonds < PRICE_SHOVEL_UPGRADE || player_upgrades.hasShovelUpgrade)
         {
             shovelPurchase.interactable = false;
         }
         else
         {
             shovelPurchase.interactable = true;
+        }
+    }
+
+    void updateUpgradesState()
+    {
+        if (player_upgrades.hasJetpackUpgrade && vendingMachineInterface.isActiveAndEnabled)
+        {
+            jetpackSoldout.enabled = true;
+        }
+        else
+        {
+            jetpackSoldout.enabled = false;
+        }
+        if (player_upgrades.hasShovelUpgrade && vendingMachineInterface.isActiveAndEnabled)
+        {
+            shovelSoldout.enabled = true;
+        }
+        else
+        {
+            shovelSoldout.enabled = false;
         }
     }
 
@@ -156,7 +177,7 @@ public class VendingMachineScript : MonoBehaviour {
 
     public void onJetpackPurchaseButtonHover()
     {
-        if (player.diamonds < PRICE_JETPACK_UPGRADE)
+        if (player.diamonds < PRICE_JETPACK_UPGRADE || player_upgrades.hasJetpackUpgrade)
         {
             jetpackPurchase.interactable = false;
         }
@@ -168,7 +189,7 @@ public class VendingMachineScript : MonoBehaviour {
 
     public void onJetpackPurchase()
     {
-        if (player.diamonds < PRICE_JETPACK_UPGRADE)
+        if (player.diamonds < PRICE_JETPACK_UPGRADE || player_upgrades.hasJetpackUpgrade)
         {
             // do nothing
         }
@@ -176,6 +197,7 @@ public class VendingMachineScript : MonoBehaviour {
         {
             print("Player successfully purchased jetpack upgrade.");
             player.diamonds -= PRICE_JETPACK_UPGRADE;
+            player_upgrades.hasJetpackUpgrade = true;
             print(player.diamonds);
             // 1. add jetpack upgrade to player
             // 2. superimpose 'SOLD OUT' over jetpack
@@ -185,7 +207,7 @@ public class VendingMachineScript : MonoBehaviour {
 
     public void onShovelPurchaseButtonHover()
     {
-        if (player.specialDiamonds < PRICE_SHOVEL_UPGRADE)
+        if (player.specialDiamonds < PRICE_SHOVEL_UPGRADE || player_upgrades.hasShovelUpgrade)
         {
             shovelPurchase.interactable = false;
         }
@@ -197,7 +219,7 @@ public class VendingMachineScript : MonoBehaviour {
 
     public void onShovelPurchase()
     {
-        if (player.specialDiamonds < PRICE_SHOVEL_UPGRADE)
+        if (player.specialDiamonds < PRICE_SHOVEL_UPGRADE || player_upgrades.hasShovelUpgrade)
         {
             // do nothing
         }
@@ -205,6 +227,7 @@ public class VendingMachineScript : MonoBehaviour {
         {
             print("Player successfully purchased shovel upgrade.");
             player.specialDiamonds--;
+            player_upgrades.hasShovelUpgrade = true;
             print(player.specialDiamonds);
             // 1. add shovel upgrade to player
             // 2. superimpose 'SOLD OUT' over shovel
