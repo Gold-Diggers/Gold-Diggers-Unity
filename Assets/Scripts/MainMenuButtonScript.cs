@@ -73,8 +73,8 @@ public class MainMenuButtonScript : MonoBehaviour {
     {
         loadingCanvas.enabled = true;
         print("Loading Level 1...");
-        loadOp = SceneManager.LoadSceneAsync("Level 1", LoadSceneMode.Single);
         GlobalPlayerScript.Instance.reinitialiseValues();
+        loadOp = SceneManager.LoadSceneAsync("Level 1", LoadSceneMode.Single);
         loadOp.allowSceneActivation = true;
     }
 
