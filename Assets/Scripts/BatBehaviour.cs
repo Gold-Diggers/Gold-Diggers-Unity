@@ -3,8 +3,8 @@ using System.Collections;
 
 public class BatBehaviour : MonsterBehaviour {
 
-    private const float BAT_MOVE_X = -2.5f;
-    private const float BAT2_MOVE_X = -3f;
+    private const float BAT_MOVE_X = -2.25f;
+    private const float BAT2_MOVE_X = -2.75f;
     private const float BAT_MOVE_Y = 0;
     private const float BAT_MOVE_Z = 0;
     private const bool BAT_IS_FLYING = true;
