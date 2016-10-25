@@ -233,7 +233,7 @@ public class PlayerCollisionController : MonoBehaviour
         yesButton.gameObject.SetActive(true);
         noButton.gameObject.SetActive(true);
     }
-
+ 
     private void triggerDiamondInteraction(Collider2D coll)
     {
         if (Equals(coll.gameObject.name, TEN_DIAMOND_NAME))
@@ -339,16 +339,6 @@ public class PlayerCollisionController : MonoBehaviour
         enforceInjury();
         repelPlayer(coll);
         anim.SetBool("isSusDig", false);
-    }
-
-    IEnumerator monsterDead(Collision2D coll)
-    {
-        GameObject toDie = coll.gameObject;
-        Destroy(coll.gameObject.GetComponent<BoxCollider2D>());
-        coll.gameObject.GetComponent<Animator>().Play("monster dead");
-        // needed to make the script "pause" for a specified amount of time
-        yield return new WaitForSeconds(0.7F);
-        Destroy(toDie);
     }
 
     private void triggerTrapInteraction(Collision2D coll)

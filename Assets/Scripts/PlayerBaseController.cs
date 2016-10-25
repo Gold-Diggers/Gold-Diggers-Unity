@@ -313,20 +313,10 @@ public class PlayerBaseController : MonoBehaviour {
             {
                 if (current.transform.tag == "Monster")
                 {
-                    StartCoroutine(monsterDead(current));
+                    current.gameObject.GetComponent<MonsterBehaviour>().kill();
                 }
             }
         }
-    }
-
-    IEnumerator monsterDead(Collider2D coll)
-    {
-        GameObject toDie = coll.gameObject;
-        Destroy(coll.gameObject.GetComponent<BoxCollider2D>());
-        coll.gameObject.GetComponent<Animator>().Play("monster dead");
-        // needed to make the script "pause" for a specified amount of time
-        yield return new WaitForSeconds(0.7F);
-        Destroy(toDie);
     }
 
     bool isCharacterOnPlatform()
