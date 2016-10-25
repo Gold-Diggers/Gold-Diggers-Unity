@@ -39,6 +39,14 @@ public class PlayerBaseController : MonoBehaviour {
     private const float DIG_Y_OFFSET_TOP = 0.95f;
     private const float DIG_Y_OFFSET_BTM = 0.75f;
 
+    // For side attack
+    private const float SIDEATTACK_X_OFFSET_LEFT = 0f;
+    private const float SIDEATTACK_X_OFFSET_RIGHT = 0.75f;
+    private const float SIDEATTACK_Y_OFFSET_TOP = 0.25f;
+    private const float SIDEATTACK_Y_OFFSET_BTM = 0.25f;
+    private const float AMT_PLAYER_TRANSLATE_WHEN_SATT = 0.2f;
+    private bool isSideAttack;
+
     // For jumping
     private int jumpCooldown;
     private const int COOLDOWN_JUMP = 10; // in frames
@@ -97,6 +105,7 @@ public class PlayerBaseController : MonoBehaviour {
         anim = GetComponent<Animator>();
         toFlip = false;
         playerSpriteRend = GetComponent<SpriteRenderer>();
+        isSideAttack = false;
 
         hasJetpackUpgrade = GlobalPlayerScript.Instance.hasJetpackUpgrade;
         hasShovelUpgrade = GlobalPlayerScript.Instance.hasShovelUpgrade;
@@ -116,6 +125,7 @@ public class PlayerBaseController : MonoBehaviour {
             handleHorizontalMovement();
             handleJump();
             handleDig();
+            handleSideAttack();
             handleAnimation();
         }
         updatePos(); // must be last
@@ -157,6 +167,127 @@ public class PlayerBaseController : MonoBehaviour {
             }
         }
        
+    }
+
+    void handleSideAttack()
+    {
+        // only allow side attack if shovel upgrade is purchased
+        if (hasShovelUpgrade)
+        {
+            if (Input.GetKey(KeyCode.O) && isCharacterOnPlatform())
+            {
+                if (!isSideAttackAnim())
+                {
+                    anim.Play("sideattack");
+                   // Vector3 currPos = transform.position;
+                    //currPos.x += AMT_PLAYER_TRANSLATE_WHEN_SATT;
+                    //transform.position = currPos;
+                    isSideAttack = true;
+                    return;
+                }
+            }
+
+            if (isSideAttackHappening())
+            {
+                sideAttack();
+            } else if (isSideAttack && !isSideAttackAnim())
+            {
+                isSideAttack = false;
+               // Vector3 currPos = transform.position;
+               // currPos.x -= AMT_PLAYER_TRANSLATE_WHEN_SATT;
+               // transform.position = currPos;
+            }
+        }
+    }
+
+    void sideAttack()
+    {
+        // Destroy platform
+        float currX = transform.GetComponent<Collider2D>().bounds.center.x;
+        float currY = transform.GetComponent<Collider2D>().bounds.center.y;
+        Vector2 ptA = new Vector2((float)(currX + SIDEATTACK_X_OFFSET_LEFT), (float)(currY + SIDEATTACK_Y_OFFSET_TOP));
+
+        float xOfPtB;
+        if (GetComponent<SpriteRenderer>().flipX == true)
+        { // If facing left side.
+            xOfPtB = currX - SIDEATTACK_X_OFFSET_RIGHT;
+        } else
+        { // If facing right side.
+            xOfPtB = currX + SIDEATTACK_X_OFFSET_RIGHT;
+        }
+        Vector2 ptB = new Vector2(xOfPtB, currY - SIDEATTACK_Y_OFFSET_BTM);
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8);
+
+        foreach (Collider2D current in col)
+        {
+            if (current.transform.tag == "Platform")
+            {
+                handleFallingObjects(current.gameObject);
+                Destroy(current.gameObject);
+            }
+        }
+
+        // Destroy monsters
+        col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 10); // monsters layer
+
+        if (col.Length != 0)
+        {
+            foreach (Collider2D current in col)
+            {
+                if (current.transform.tag == "Monster")
+                {
+                    current.gameObject.GetComponent<MonsterBehaviour>().kill();
+                }
+            }
+        }
+    }
+
+    void handleFallingObjects(GameObject platformDestroyed)
+    {
+        float currX = platformDestroyed.transform.GetComponent<Collider2D>().bounds.center.x;
+        float currY = platformDestroyed.transform.GetComponent<Collider2D>().bounds.center.y;
+
+        Vector2 ptA = new Vector2(currX, currY + 0.7f);
+        Vector2 ptB = new Vector2(currX, currY + 0.2f);
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 10 | 1 << 11); // monsters and traps
+
+        foreach (Collider2D current in col)
+        {
+            if (current.transform.tag == "Trap")
+            {
+                makeObjectFall(current.gameObject);
+            } else if (current.transform.tag == "Monster")
+            {
+                current.gameObject.GetComponent<MonsterBehaviour>().kill();
+            }
+        }
+
+    }
+
+    void makeObjectFall(GameObject fallingObj)
+    {
+        StartCoroutine(fall(fallingObj));
+    }
+
+    IEnumerator fall(GameObject obj)
+    {
+        Vector3 pos = obj.transform.position;
+        
+        Vector2 ptA = new Vector2(pos.x, pos.y);
+        Vector2 ptB = new Vector2(pos.x, pos.y - 0.655f);
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8);
+
+        if (col.Length != 0)
+        {
+            yield return new WaitForSeconds(0.1f);
+        } else
+        {
+            pos.y -= 0.1f;
+            obj.transform.position = pos;
+            yield return new WaitForSeconds(0.1f);
+            StartCoroutine(fall(obj));
+        }
+
     }
 
     void handleJump()
@@ -202,6 +333,20 @@ public class PlayerBaseController : MonoBehaviour {
         {
             anim.SetBool("isHover", false);
         }
+    }
+
+    private bool isSideAttackHappening()
+    {
+        AnimatorStateInfo currState = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        return (currState.IsName("sideattack"));
+    }
+
+    private bool isSideAttackAnim()
+    {
+        AnimatorStateInfo currState = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+        return (currState.IsName("sideattack") || currState.IsName("sideattackfinish"));
     }
 
     private bool isHoverAnim()
