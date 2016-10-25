@@ -20,22 +20,22 @@ public class PlayerCollisionController : MonoBehaviour
     private const string LEVEL_2_DIALOGUE_BACK = " diamonds, and your soul. Feel a little lighter? Go forth to retrieve your soul, if you wish. Otherwise, you may leave with what you have left… without your soul.";
 
     // diamond penalty use
-    private const int DIAMOND_RANGE_1 = 5;
-    private const int DIAMOND_LOSE_RANGE_1 = 1; // value
+    private const int DIAMOND_RANGE_1 = 25;
+    private const int DIAMOND_LOSE_RANGE_1 = 1;
 
-    private const int DIAMOND_RANGE_2 = 25;
-    private const float DIAMOND_LOSE_RANGE_2 = 0.5f; // percent 
+    private const int DIAMOND_RANGE_2 = 34;
+    private const int DIAMOND_LOSE_RANGE_2 = 5;
 
     private const int DIAMOND_RANGE_3 = 45;
-    private const float DIAMOND_LOSE_RANGE_3 = 0.55f; // percent 
+    private const int DIAMOND_LOSE_RANGE_3 = 10;
 
     private const int DIAMOND_RANGE_4 = 65;
-    private const float DIAMOND_LOSE_RANGE_4 = 0.6f; // percent 
+    private const int DIAMOND_LOSE_RANGE_4 = 15;
 
-    private const int DIAMOND_RANGE_5 = 85;
-    private const float DIAMOND_LOSE_RANGE_5 = 0.65f; // percent 
+    private const int DIAMOND_RANGE_5 = 90;
+    private const int DIAMOND_LOSE_RANGE_5 = 20;
 
-    private const float DIAMOND_LOSE_MAX = 0.70f; // percent
+    private const int DIAMOND_LOSE_MAX = 25;
 
     // Canvas with text used to display + ? diamond
     public Canvas diamondDisplay;
@@ -367,23 +367,23 @@ public class PlayerCollisionController : MonoBehaviour
         }
         else if (diamonds <= DIAMOND_RANGE_2)
         {
-            return (int)(DIAMOND_LOSE_RANGE_2 * diamonds);
+            return DIAMOND_LOSE_RANGE_2;
         }
         else if (diamonds <= DIAMOND_RANGE_3)
         {
-            return (int)(DIAMOND_LOSE_RANGE_3 * diamonds);
+            return DIAMOND_LOSE_RANGE_3;
         }
         else if (diamonds <= DIAMOND_RANGE_4)
         {
-            return (int)(DIAMOND_LOSE_RANGE_4 * diamonds);
+            return DIAMOND_LOSE_RANGE_4;
         }
         else if (diamonds <= DIAMOND_RANGE_5)
         {
-            return (int)(DIAMOND_LOSE_RANGE_5 * diamonds);
+            return DIAMOND_LOSE_RANGE_5;
         }
         else
         {
-            return (int)(DIAMOND_LOSE_MAX * diamonds);
+            return DIAMOND_LOSE_MAX;
         }
     }
 
