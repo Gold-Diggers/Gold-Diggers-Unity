@@ -23,7 +23,7 @@ public class ItemsGenerator : MonoBehaviour
     private Vector3 btmRight;
 
     // constants
-    private const float DIST_NO_SPAWN_FROM_BTM = 40f;
+    private const float DIST_NO_SPAWN_FROM_BTM = 30f;
     // Regular Vertical
     private const int NUM_REGULAR_VERTICAL_SET = 3; // number of sets
     private const int NUM_REGULAR_VERTICAL_SET_LEVEL_2 = 4;
