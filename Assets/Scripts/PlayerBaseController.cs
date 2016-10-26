@@ -311,7 +311,14 @@ public class PlayerBaseController : MonoBehaviour {
                 if (!isHoverAnim())
                 {    
                     anim.SetBool("isHover", true);
-                    anim.Play("hover");
+                    if (hasJetpackUpgrade)
+                    {
+                        anim.Play("jetpack");
+                    } else
+                    {
+                        anim.Play("hover");
+                    }
+                    
                 }
                 
                 if (rb2d.velocity.y < Y_VELOCITY_THRESHOLD)
@@ -353,7 +360,7 @@ public class PlayerBaseController : MonoBehaviour {
     {
         AnimatorStateInfo currState = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
 
-        return (currState.IsName("hover"));
+        return (currState.IsName("hover") || currState.IsName("jetpack"));
     }
 
     IEnumerator jumpAnimate()
