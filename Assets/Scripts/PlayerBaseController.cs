@@ -216,7 +216,7 @@ public class PlayerBaseController : MonoBehaviour {
             xOfPtB = currX + SIDEATTACK_X_OFFSET_RIGHT;
         }
         Vector2 ptB = new Vector2(xOfPtB, currY - SIDEATTACK_Y_OFFSET_BTM);
-        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8);
+        /*Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8);
 
         foreach (Collider2D current in col)
         {
@@ -225,10 +225,10 @@ public class PlayerBaseController : MonoBehaviour {
                 // handleFallingObjects(current.gameObject);
                 Destroy(current.gameObject);
             }
-        }
+        }*/
 
         // Destroy monsters
-        col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 10); // monsters layer
+        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 10); // monsters layer
 
         if (col.Length != 0)
         {
