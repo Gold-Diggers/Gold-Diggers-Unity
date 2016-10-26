@@ -41,7 +41,7 @@ public class PlayerBaseController : MonoBehaviour {
 
     // For side attack
     private const float SIDEATTACK_X_OFFSET_LEFT = 0f;
-    private const float SIDEATTACK_X_OFFSET_RIGHT = 0.75f;
+    private const float SIDEATTACK_X_OFFSET_RIGHT = 1f; // 0.75
     private const float SIDEATTACK_Y_OFFSET_TOP = 0.25f;
     private const float SIDEATTACK_Y_OFFSET_BTM = 0.25f;
     private const float AMT_PLAYER_TRANSLATE_WHEN_SATT = 0.2f;
