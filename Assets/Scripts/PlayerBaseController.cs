@@ -202,7 +202,6 @@ public class PlayerBaseController : MonoBehaviour {
 
     void sideAttack()
     {
-        // Destroy platform
         float currX = transform.GetComponent<Collider2D>().bounds.center.x;
         float currY = transform.GetComponent<Collider2D>().bounds.center.y;
         Vector2 ptA = new Vector2((float)(currX + SIDEATTACK_X_OFFSET_LEFT), (float)(currY + SIDEATTACK_Y_OFFSET_TOP));
