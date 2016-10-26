@@ -222,7 +222,7 @@ public class PlayerBaseController : MonoBehaviour {
         {
             if (current.transform.tag == "Platform")
             {
-                handleFallingObjects(current.gameObject);
+                // handleFallingObjects(current.gameObject);
                 Destroy(current.gameObject);
             }
         }
