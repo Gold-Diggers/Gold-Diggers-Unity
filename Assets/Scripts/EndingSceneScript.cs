@@ -85,6 +85,7 @@ public class EndingSceneScript : MonoBehaviour {
                 pos.y -= 0.1f;
                 layers[currentFrame].transform.position = pos;
                 specialFrameCounter++;
+                return;
             }
         }
 
