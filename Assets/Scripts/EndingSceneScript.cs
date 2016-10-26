@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 public class EndingSceneScript : MonoBehaviour {
     private GameObject[] layers;
     private int frameCounter;
+    private int specialFrameCounter;
+    private int specialFrameCounter2;
     private int currentFrame;
     private bool isFading;
     private bool isFadingIn;
@@ -15,6 +17,8 @@ public class EndingSceneScript : MonoBehaviour {
 	// Use this for initialization
     
 	void Start () {
+        specialFrameCounter = 0;
+        specialFrameCounter2 = 0;
         frameCounter = 0;
         isFading = false;
         isFadingIn = false;
@@ -69,10 +73,32 @@ public class EndingSceneScript : MonoBehaviour {
                 frameCounter = 0;
                 isFading = true;
             }
-
             return;
         }
-        
+
+        // Move for this specific frame.
+        if (layers[currentFrame].name == "Ending2_3")
+        {
+            if (specialFrameCounter < FRAME_STAY_DELAY)
+            {
+                Vector3 pos = layers[currentFrame].transform.position;
+                pos.y -= 0.1f;
+                layers[currentFrame].transform.position = pos;
+                specialFrameCounter++;
+                return;
+            }
+        }
+
+        // Extra delay for this frame.
+        if (layers[currentFrame].name == "Ending2_3")
+        {
+            specialFrameCounter2++;
+            if (specialFrameCounter2 < FRAME_STAY_DELAY)
+            {
+                return;
+            }
+        }
+
         // Fading effect
         Color color = layers[currentFrame].GetComponent<SpriteRenderer>().color;
         if (color.a <= 0)

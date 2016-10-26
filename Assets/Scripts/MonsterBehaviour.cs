@@ -131,6 +131,21 @@ public class MonsterBehaviour : MonoBehaviour {
         movements = new Vector3(moveX, moveY, moveZ);
     }
 
+    public virtual void kill()
+    {
+        Destroy(GetComponent<BoxCollider2D>());
+        GetComponent<Animator>().Play("monster dead");
+        MoveX = 0;
+        movements = new Vector3(moveX, moveY, moveZ);
+        StartCoroutine(monsterDead());
+    }
+
+    private IEnumerator monsterDead()
+    {
+        yield return new WaitForSeconds(0.7F);
+        Destroy(gameObject);
+    }
+
     public virtual void FixedUpdate()
     {
         if (!isFlying)
