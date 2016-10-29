@@ -88,4 +88,9 @@ public class MainMenuButtonScript : MonoBehaviour {
     {
         Application.Quit();
     }
+
+    public void OpenTutorialScene()
+    {
+        SceneManager.LoadScene("TutorialLevel", LoadSceneMode.Single);
+    }
 }
