@@ -172,7 +172,7 @@ public class ItemsGenerator : MonoBehaviour
         {
             numWorms = NUM_WORMS_LEVEL_2;
         }
-        else if (level == 2)
+        else if (level == 3)
         {
             numWorms = NUM_WORMS_LEVEL_3;
         }

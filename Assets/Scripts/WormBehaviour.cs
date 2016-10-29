@@ -39,6 +39,11 @@ public class WormBehaviour : MonsterBehaviour {
         base.Start();
     }
 
+    public override void Attack()
+    {
+        base.Attack();
+    }
+
     // Update is called once per frame
     public override void FixedUpdate()
     {
