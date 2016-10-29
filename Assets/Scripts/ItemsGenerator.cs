@@ -30,7 +30,7 @@ public class ItemsGenerator : MonoBehaviour
     private Vector3 btmRight;
 
     // constants
-    private const float DIST_NO_SPAWN_FROM_BTM = 30f;
+    private const float DIST_NO_SPAWN_FROM_BTM = 20f;
     // Regular Vertical
     private const int NUM_REGULAR_VERTICAL_SET = 3; // number of sets
     private const int NUM_REGULAR_VERTICAL_SET_LEVEL_2 = 4;
@@ -460,9 +460,9 @@ public class ItemsGenerator : MonoBehaviour
         float randY = chosenPlatform.transform.position.y + SPACING_OFF_GROUND_WORMS;
 
         // Check if spawning worm will collide
-        Vector2 ptC = new Vector2((float)(randX - 0.5), (float)(randY + 0.5));
-        Vector2 ptD = new Vector2((float)(randX + 0.5), (float)(randY - 0.5));
-        Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, 262143);
+        Vector2 ptC = new Vector2((float)(randX - 0.5), (float)(randY + 0.3));
+        Vector2 ptD = new Vector2((float)(randX + 0.5), (float)(randY - 0.3));
+        Collider2D[] coll = Physics2D.OverlapAreaAll(ptC, ptD, (1<<8)|(1<<10)|(1<<11)|(1<<12)|(1<<13));
 
         if (coll.Length > 0 || isCollideWithMonster(randX, randY)) // If collide with something else, spawn again.
         {

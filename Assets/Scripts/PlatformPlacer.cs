@@ -25,7 +25,7 @@ public class PlatformPlacer : MonoBehaviour {
     public Sprite block_level3_5;
     private Sprite[] blockCollections;
 
-    private const int PLATFORM_MIN_LENGTH = 3;
+    private const int PLATFORM_MIN_LENGTH = 4;
     private const int PLATFORM_MAX_LENGTH = 12;
     private const float CHANCE_FOR_HOLE_IN_PLATFORM = 0.1f;
 

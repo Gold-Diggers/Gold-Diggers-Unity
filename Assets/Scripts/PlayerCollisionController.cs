@@ -132,6 +132,11 @@ public class PlayerCollisionController : MonoBehaviour
 
     }
 
+    public bool getHurt()
+    {
+        return isHurt;
+    }
+
     public void enforceDiamondPenalty()
     {
         int penalty = getDiamondPenalty();
@@ -481,7 +486,7 @@ public class PlayerCollisionController : MonoBehaviour
         return Input.GetKey(KeyCode.S);
     }
 
-    private void enforceInjury()
+    public void enforceInjury()
     {
         StartCoroutine(Blink(5, 0.1f, 0.1f));
         updateHurt(true);
