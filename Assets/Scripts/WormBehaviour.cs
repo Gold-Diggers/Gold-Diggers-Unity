@@ -4,6 +4,7 @@ using System.Collections;
 public class WormBehaviour : MonsterBehaviour {
 
     private const float WORM2_MOVE_X = 0;
+    private const float WORM3_MOVE_X = 0;
     private const float WORM_MOVE_Y = 0;
     private const float WORM_MOVE_Z = 0;
     private const bool WORM_IS_FLYING = false;
@@ -24,6 +25,10 @@ public class WormBehaviour : MonsterBehaviour {
         if (gameObject.name == "Worm2(Clone)")
         {
             this.MoveX = WORM2_MOVE_X;
+        }
+        else if (gameObject.name == "Worm3(Clone)")
+        {
+            this.MoveX = WORM3_MOVE_X;
         }
 
         this.MoveY = WORM_MOVE_Y;

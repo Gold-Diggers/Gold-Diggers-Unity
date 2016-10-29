@@ -5,6 +5,7 @@ public class BatBehaviour : MonsterBehaviour {
 
     private const float BAT_MOVE_X = -2.25f;
     private const float BAT2_MOVE_X = -2.75f;
+    private const float BAT3_MOVE_X = -3f;
     private const float BAT_MOVE_Y = 0;
     private const float BAT_MOVE_Z = 0;
     private const bool BAT_IS_FLYING = true;
@@ -28,8 +29,11 @@ public class BatBehaviour : MonsterBehaviour {
         } else if (gameObject.name == "Bat2(Clone)")
         {
             this.MoveX = BAT2_MOVE_X;
+        } else if (gameObject.name == "Bat3(Clone)")
+        {
+            this.MoveX = BAT3_MOVE_X;
         }
-        
+
         this.MoveY = BAT_MOVE_Y;
         this.MoveZ = BAT_MOVE_Z;
         this.IsFlying = BAT_IS_FLYING;

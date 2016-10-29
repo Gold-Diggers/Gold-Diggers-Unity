@@ -108,8 +108,10 @@ public class PlayerCollisionController : MonoBehaviour
     public GameObject spawnedSpecialDiamond;
     public GameObject spawnedMonsterType1;
     public GameObject spawnedMonsterType1_level2;
+    public GameObject spawnedMonsterType1_level3;
     public GameObject spawnedMonsterType2;
     public GameObject spawnedMonsterType2_level2;
+    public GameObject spawnedMonsterType2_level3;
 
     // Use this for initialization
     void Start()
@@ -330,6 +332,10 @@ public class PlayerCollisionController : MonoBehaviour
                 {
                     spawnObject(spawnedMonsterType1_level2, coll);
                 }
+                else if (level == 3)
+                {
+                    spawnObject(spawnedMonsterType1_level3, coll);
+                }
                 else if (SceneManager.GetActiveScene().name == "TutorialLevel")
                 {
                     spawnObject(spawnedMonsterType1, coll);
@@ -345,6 +351,10 @@ public class PlayerCollisionController : MonoBehaviour
                 else if (level == 2)
                 {
                     spawnObject(spawnedMonsterType2_level2, coll);
+                }
+                else if (level == 3)
+                {
+                    spawnObject(spawnedMonsterType2_level3, coll);
                 }
                 else if (SceneManager.GetActiveScene().name == "TutorialLevel")
                 {

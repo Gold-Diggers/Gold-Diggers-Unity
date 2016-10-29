@@ -18,6 +18,11 @@ public class PlatformPlacer : MonoBehaviour {
     public Sprite block6;
     public Sprite block7;
     public Sprite block_level2;
+    public Sprite block_level3_1;
+    public Sprite block_level3_2;
+    public Sprite block_level3_3;
+    public Sprite block_level3_4;
+    public Sprite block_level3_5;
     private Sprite[] blockCollections;
 
     private const int PLATFORM_MIN_LENGTH = 3;
@@ -35,6 +40,9 @@ public class PlatformPlacer : MonoBehaviour {
         } else if (level == 2)
         {
             blockCollections = new Sprite[] { block_level2 };
+        } else if (level == 3)
+        {
+            blockCollections = new Sprite[] { block_level3_1, block_level3_2, block_level3_3, block_level3_4, block_level3_5 };
         } else
         {
             print("Error in PlatformPlacer.cs for level checking.");
