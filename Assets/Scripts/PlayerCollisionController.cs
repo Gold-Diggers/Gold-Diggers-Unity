@@ -63,9 +63,11 @@ public class PlayerCollisionController : MonoBehaviour
 
     // strings
     private const string DISPLAY_ONE_DIAMOND = "+1 diamond";
-    private const string DISPLAY_TEN_DIAMOND = "+10 diamond";
+    private const string DISPLAY_FIVE_DIAMOND = "+5 diamonds";
+    private const string DISPLAY_TEN_DIAMOND = "+10 diamonds";
     private const string DISPLAY_SPECIAL_DIAMOND = "Special Diamond Collected";
 
+    private const string FIVE_DIAMOND_NAME = "Diamond5(Clone)";
     private const string TEN_DIAMOND_NAME = "Diamond10(Clone)";
     private const string PLATFORM = "Platform";
     private const string MONSTER = "Monster";
@@ -259,15 +261,18 @@ public class PlayerCollisionController : MonoBehaviour
         if (Equals(coll.gameObject.name, TEN_DIAMOND_NAME))
         {
             StartCoroutine(displayMovingUICollectDiamond(DISPLAY_TEN_DIAMOND));
-            //print("Player has collected 10 diamonds.");
-            IncrementDiamondCountByTen();
+            IncrementDiamondCount(10);
+            Destroy(coll.gameObject);
+        } else if (Equals(coll.gameObject.name, FIVE_DIAMOND_NAME))
+        {
+            StartCoroutine(displayMovingUICollectDiamond(DISPLAY_FIVE_DIAMOND));
+            IncrementDiamondCount(5);
             Destroy(coll.gameObject);
         }
         else
         {
             StartCoroutine(displayMovingUICollectDiamond(DISPLAY_ONE_DIAMOND));
-            //print("Player has collected a diamond.");
-            IncrementDiamondCountByOne();
+            IncrementDiamondCount(1);
             Destroy(coll.gameObject);
         }
     }
@@ -416,14 +421,9 @@ public class PlayerCollisionController : MonoBehaviour
         }
     }
 
-    private void IncrementDiamondCountByOne()
+    private void IncrementDiamondCount(int numToAdd)
     {
-        diamonds++;
-    }
-
-    private void IncrementDiamondCountByTen()
-    {
-        diamonds += 10;
+        diamonds += numToAdd;
     }
 
     private void spawnObject(GameObject obj, Collision2D coll)

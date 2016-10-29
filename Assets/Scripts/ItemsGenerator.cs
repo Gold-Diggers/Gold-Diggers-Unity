@@ -5,6 +5,7 @@ public class ItemsGenerator : MonoBehaviour
 {
     public GameObject background;
     public GameObject diamond;
+    public GameObject diamond2;
     public GameObject trap;
     public GameObject trap2;
     public GameObject treasureChest;
@@ -16,6 +17,8 @@ public class ItemsGenerator : MonoBehaviour
     public GameObject worm2;
 
     private int level;
+
+    private const float CHANCE_SPAWN_BETTER_DIAMOND = 0.05f;
 
     private Collider2D[] allPlatforms;
     // Handle the bounds of the map / background
@@ -517,7 +520,7 @@ public class ItemsGenerator : MonoBehaviour
         // Spawn all diamonds
         for (int i = 0; i < NUM_IN_REGULAR_DIAGONAL_L; i++)
         {
-            Instantiate(diamond, new Vector3(randX, randY, 0), Quaternion.identity);
+            spawnDiamond(randX, randY);
             randX -= SPACING_REGULAR_DIAGONAL_L;
             randY -= SPACING_REGULAR_DIAGONAL_L;
         }
@@ -546,7 +549,7 @@ public class ItemsGenerator : MonoBehaviour
         // Spawn all diamonds
         for (int i = 0; i < NUM_IN_REGULAR_DIAGONAL_R; i++)
         {
-            Instantiate(diamond, new Vector3(randX, randY, 0), Quaternion.identity);
+            spawnDiamond(randX, randY);
             randX += SPACING_REGULAR_DIAGONAL_R;
             randY -= SPACING_REGULAR_DIAGONAL_R;
         }
@@ -582,7 +585,7 @@ public class ItemsGenerator : MonoBehaviour
         // Spawn all diamonds
         for (int i = 0; i < NUM_IN_HORIZONTAL_CHEST; i++)
         {
-            Instantiate(diamond, new Vector3(randX, randY, 0), Quaternion.identity);
+            spawnDiamond(randX, randY);
             randX += SPACING_HORIZONTAL_CHEST;
         }
     }
@@ -613,7 +616,7 @@ public class ItemsGenerator : MonoBehaviour
         // Spawn all diamonds
         for (int i = 0; i < NUM_IN_REGULAR_HORIZONTAL; i++)
         {
-            Instantiate(diamond, new Vector3(randX, randY, 0), Quaternion.identity);
+            spawnDiamond(randX, randY);
             randX += SPACING_REGULAR_HORIZONTAL;
         }
     }
@@ -654,7 +657,7 @@ public class ItemsGenerator : MonoBehaviour
         // Spawn all diamonds
         for (int i = 0; i < NUM_IN_VERTICAL_SPIKE; i++)
         {
-            Instantiate(diamond, new Vector3(randX, randY, 0), Quaternion.identity);
+            spawnDiamond(randX, randY);
             randY += SPACING_VERTICAL_SPIKE;
         }
     }
@@ -681,7 +684,7 @@ public class ItemsGenerator : MonoBehaviour
         // Spawn all diamonds
         for (int i = 0; i < NUM_IN_REGULAR_VERTICAL; i++)
         {
-            Instantiate(diamond, new Vector3(randX, randY, 0), Quaternion.identity);
+            spawnDiamond(randX, randY);
             randY += SPACING_REGULAR_VERTICAL;
         }
     }
@@ -704,9 +707,20 @@ public class ItemsGenerator : MonoBehaviour
             generateLoneDiamond();
             return;
         }
-        
+
         // Spawn lone diamond
-        Instantiate(diamond, new Vector3(randX, randY, 0), Quaternion.identity);
+        spawnDiamond(randX, randY);
+    }
+
+    private void spawnDiamond(float x, float y)
+    {
+        if (Random.Range(0f, 1f) <= CHANCE_SPAWN_BETTER_DIAMOND)
+        {
+            Instantiate(diamond2, new Vector3(x, y, 0), Quaternion.identity);
+        } else
+        {
+            Instantiate(diamond, new Vector3(x, y, 0), Quaternion.identity);
+        }
     }
 }
 
