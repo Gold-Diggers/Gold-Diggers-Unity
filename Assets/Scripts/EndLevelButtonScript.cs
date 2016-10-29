@@ -23,8 +23,11 @@ public class EndLevelButtonScript : MonoBehaviour {
     private bool isDiamondPaid;
     private bool isPayingDiamond;
 
-	// Use this for initialization
-	void Start () {
+    private const float DIAMOND_ANIMATION_MOVE_X = 0.05f;
+    private const float DIAMOND_ANIMATION_MOVE_Y = 0.01f;
+
+    // Use this for initialization
+    void Start () {
         posAdvanceDoor = advanceDoor.transform.position.x;
         posExitDoor = exitDoor.transform.position.x;
         isMoveTowardsAdvance = false;
@@ -77,19 +80,19 @@ public class EndLevelButtonScript : MonoBehaviour {
         {
             Vector3 stevePos = steve.transform.position;
             Vector3 diamondPos = diamondObj.transform.position;
-            if (Mathf.Abs(stevePos.x - diamondPos.x) <= 0.05f)
+            if (Mathf.Abs(stevePos.x - diamondPos.x) <= DIAMOND_ANIMATION_MOVE_X)
             {
                 isPayingDiamond = false;
                 StartCoroutine(fadeDiamond());
             } else if (stevePos.x > diamondPos.x)
             {
-                diamondPos.x += 0.05f;
-                diamondPos.y += 0.01f;
+                diamondPos.x += DIAMOND_ANIMATION_MOVE_X;
+                diamondPos.y += DIAMOND_ANIMATION_MOVE_Y;
                 diamondObj.transform.position = diamondPos;
             } else
             { // steve < diamond pos
-                diamondPos.x -= 0.05f;
-                diamondPos.y += 0.01f;
+                diamondPos.x -= DIAMOND_ANIMATION_MOVE_X;
+                diamondPos.y += DIAMOND_ANIMATION_MOVE_Y;
                 diamondObj.transform.position = diamondPos;
             }
         }
