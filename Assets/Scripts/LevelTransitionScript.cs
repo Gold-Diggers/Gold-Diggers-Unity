@@ -1,21 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelTransitionScript : MonoBehaviour {
 
+    public Canvas loadingCanvas;
+    public Image loadingScreen;
     private PlayerCollisionController player;
     private PlayerBaseController player_upgrades;
     private AsyncOperation loadOp;
 
 	// Use this for initialization
 	void Start () {
+        loadingScreen.enabled = false;
         player = FindObjectOfType<PlayerCollisionController>();
         player_upgrades = FindObjectOfType<PlayerBaseController>();
-        string levelName = "Level " + GlobalPlayerScript.Instance.level;
-        print("Loading " + levelName);
-        loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
-        loadOp.allowSceneActivation = false;
 	}
 	
 	// Update is called once per frame
@@ -38,7 +38,10 @@ public class LevelTransitionScript : MonoBehaviour {
         if (coll.tag == "Player")
         {
             savePlayerState();
-            loadOp.allowSceneActivation = true;
+            loadingScreen.enabled = true;
+            string levelName = "Level " + GlobalPlayerScript.Instance.level;
+            print("Loading " + levelName);
+            loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
         }
     }
 }

@@ -11,6 +11,8 @@ public class EndingSceneScript : MonoBehaviour {
     private bool isFading;
     private bool isFadingIn;
 
+    public AudioSource endSound;
+
     private const int FRAME_STAY_DELAY = 100;
     private const int FRAMES_BEFORE_TRANSIT = 100;
 
@@ -36,6 +38,7 @@ public class EndingSceneScript : MonoBehaviour {
         if (!isFadingIn)
         { // First time running the fade in.
             isFadingIn = true;
+            endSound.Play();
             Color color2 = layers[currentFrame].GetComponent<SpriteRenderer>().color;
             color2.a = 0f; // change to transparent to start fading in
             layers[currentFrame].GetComponent<SpriteRenderer>().color = color2;
