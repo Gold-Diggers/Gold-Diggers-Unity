@@ -98,7 +98,8 @@ public class PlayerCollisionController : MonoBehaviour
 
     private Animator anim;
 
-    private bool isPenaltyInvoked;
+    private bool isLevelTwoEndingPlayed;
+    private int penalty;
 
     // treasure chest asset attributes
     public GameObject spawnedDiamond;
@@ -118,7 +119,7 @@ public class PlayerCollisionController : MonoBehaviour
         specialDiamonds = GlobalPlayerScript.Instance.specialDiamonds;
         anim = GetComponent<Animator>();
         level = GlobalPlayerScript.Instance.level;
-        isPenaltyInvoked = false;
+        isLevelTwoEndingPlayed = false;
     }
 
     // Update is called once per frame
@@ -202,7 +203,7 @@ public class PlayerCollisionController : MonoBehaviour
                 break;
 
             case END_LEVEL_TWO:
-                if (!isPenaltyInvoked) triggerEndLevelTwo();
+                if (!isLevelTwoEndingPlayed) triggerEndLevelTwo();
                 break;
 
             default:
@@ -225,15 +226,34 @@ public class PlayerCollisionController : MonoBehaviour
 
     private void triggerEndLevelTwo()
     {
+        isLevelTwoEndingPlayed = true;
         GetComponent<PlayerBaseController>().setEndLevel(); // prevent movement by calling end level at base controller.
-        int penalty = getDiamondPenalty();
+        GameObject depthMeter = GameObject.Find("Main Camera/PlayerGUICanvas/Panel/DepthMeter");
+        depthMeter.SetActive(false); // hide depth meter
+        StartCoroutine(spawnDevil());
+    }
+
+    private IEnumerator spawnDevil()
+    {
+        yield return new WaitForSeconds(1f);
+        GameObject endLvlBtnController = GameObject.Find("EndLevelButtonController");
+        endLvlBtnController.GetComponent<LevelTwoEndScript>().fadeInDevil(); // fade in devil.
+    }
+
+    // Called by LevelTwoEndScript when devil finishes fading in.
+    public void informDevilFadedIn()
+    {
+        penalty = getDiamondPenalty();
         enforceDiamondPenalty();
-        isPenaltyInvoked = true;
         dialogue.text = LEVEL_2_DIALOGUE_FRONT + penalty + LEVEL_2_DIALOGUE_BACK;
+    }
+
+    // Called by LevelTwoEndScript when devil steals diamond and soul.
+    public void informDiamondAndSoulStolen() {
         yesButton.gameObject.SetActive(true);
         noButton.gameObject.SetActive(true);
     }
- 
+
     private void triggerDiamondInteraction(Collider2D coll)
     {
         if (Equals(coll.gameObject.name, TEN_DIAMOND_NAME))
