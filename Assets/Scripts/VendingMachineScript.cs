@@ -14,6 +14,7 @@ public class VendingMachineScript : MonoBehaviour {
     public Button shovelPurchase;
     public PlayerCollisionController player;
     public PlayerBaseController player_upgrades;
+    public Canvas shopCanvas;
 
     private const int PRICE_LIFE_UPGRADE = 25;
     private const int PRICE_JETPACK_UPGRADE = 50;
@@ -129,12 +130,14 @@ public class VendingMachineScript : MonoBehaviour {
         {
             if (Input.GetKeyDown(KeyCode.O))
             {
+                shopCanvas.sortingOrder = 12;
                 vendingMachineInterface.enabled = true;
                 showAllButtons();
                 hoverText.enabled = false;
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
+                shopCanvas.sortingOrder = 2;
                 vendingMachineInterface.enabled = false;
                 hideAllButtons();
                 hoverText.enabled = true;
