@@ -300,9 +300,14 @@ public class PlayerCollisionController : MonoBehaviour
                 if (level == 1)
                 {
                     spawnObject(spawnedMonsterType1, coll);
-                } else if (level == 2)
+                }
+                else if (level == 2)
                 {
                     spawnObject(spawnedMonsterType1_level2, coll);
+                }
+                else if (SceneManager.GetActiveScene().name == "TutorialLevel")
+                {
+                    spawnObject(spawnedMonsterType1, coll);
                 }
                 
             }
@@ -315,6 +320,10 @@ public class PlayerCollisionController : MonoBehaviour
                 else if (level == 2)
                 {
                     spawnObject(spawnedMonsterType2_level2, coll);
+                }
+                else if (SceneManager.GetActiveScene().name == "TutorialLevel")
+                {
+                    spawnObject(spawnedMonsterType2, coll);
                 }
             }
         }
