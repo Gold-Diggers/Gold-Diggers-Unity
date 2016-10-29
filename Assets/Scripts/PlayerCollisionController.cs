@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class PlayerCollisionController : MonoBehaviour
 {
-    public Canvas heartsCanvas;
-    public Image specialDiamondImage;
-
     // dialogue use
     public Text dialogue;
     public Button yesButton;
@@ -458,7 +455,6 @@ public class PlayerCollisionController : MonoBehaviour
 
     private int IncrementSpecialDiamondCountByOne()
     {
-        specialDiamondImage.enabled = true;
         return specialDiamonds++;
     }
 
@@ -491,7 +487,6 @@ public class PlayerCollisionController : MonoBehaviour
         StartCoroutine(Blink(5, 0.1f, 0.1f));
         updateHurt(true);
         lives -= 1;
-        updateLives();
         checkIfPlayerDied();
     }
 
@@ -516,13 +511,6 @@ public class PlayerCollisionController : MonoBehaviour
         {
             GetComponent<PlayerBaseController>().updateRepelled();
         }
-    }
-
-    private void updateLives()
-    {
-        Image[] hearts = heartsCanvas.GetComponentsInChildren<Image>();
-        Assert.IsTrue(hearts.Length > lives, ERROR_INVALID_LIVES_IMAGE);
-        hearts[lives].enabled = false;
     }
 
     private void checkIfPlayerDied()
