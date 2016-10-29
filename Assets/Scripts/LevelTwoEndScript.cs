@@ -27,7 +27,6 @@ public class LevelTwoEndScript : MonoBehaviour {
         isMoveTowardsExit = false;
         playerAttr = FindObjectOfType<PlayerCollisionController>();
         playerUpgrades = FindObjectOfType<PlayerBaseController>();
-        player.GetComponent<PlayerCollisionController>().enforceDiamondPenalty();
     }
 
     // Update is called once per frame
