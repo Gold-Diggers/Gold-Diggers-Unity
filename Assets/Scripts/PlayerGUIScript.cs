@@ -25,24 +25,29 @@ public class PlayerGUIScript : MonoBehaviour {
     private Collider2D playerCollider;
     private Collider2D levelGroundCollider;
     private bool isLevelScene;
+    private bool isTutorialScene;
     private float levelEndPos;
 
     // Use this for initialization
     void Start ()
     {
         Scene currScene = SceneManager.GetActiveScene();
-        player = FindObjectOfType<PlayerCollisionController>();
-        player_upgrades = FindObjectOfType<PlayerBaseController>();
-        soulDiamond.enabled = false;
-        soulDiamondCount.enabled = false;
-        jetpackFlag.enabled = player_upgrades.hasJetpackUpgrade;
-        shovelFlag.enabled = player_upgrades.hasShovelUpgrade;
-        isLevelScene = (!Equals(currScene.name, "Level 1.5") && !Equals(currScene.name, "Level 2.5"));
-        if (isLevelScene)
+        isTutorialScene = Equals(currScene.name, "TutorialLevel");
+        if (!isTutorialScene)
         {
-            getLevelGroundCollider();
-            getPlayerBodyAndCollider();
-            initializeDepthMeter();
+            player = FindObjectOfType<PlayerCollisionController>();
+            player_upgrades = FindObjectOfType<PlayerBaseController>();
+            soulDiamond.enabled = false;
+            soulDiamondCount.enabled = false;
+            jetpackFlag.enabled = player_upgrades.hasJetpackUpgrade;
+            shovelFlag.enabled = player_upgrades.hasShovelUpgrade;
+            isLevelScene = (!Equals(currScene.name, "Level 1.5") && !Equals(currScene.name, "Level 2.5"));
+            if (isLevelScene)
+            {
+                getLevelGroundCollider();
+                getPlayerBodyAndCollider();
+                initializeDepthMeter();
+            }
         }
     }
 
@@ -70,11 +75,17 @@ public class PlayerGUIScript : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         //print(playerBody.position);
-        UpdateHeartDisplay(player.lives);
-        UpdateDiamondCount(player.diamonds);
-        UpdateSpecialDiamondDisplay(player.specialDiamonds);
-        UpdateUpgradeFlags();
-        if (isLevelScene) UpdateDepthRemaining(playerBody.position.y);
+        if (!isTutorialScene)
+        {
+            UpdateHeartDisplay(player.lives);
+            UpdateDiamondCount(player.diamonds);
+            UpdateSpecialDiamondDisplay(player.specialDiamonds);
+            if (isLevelScene)
+            {
+                UpdateUpgradeFlags();
+                UpdateDepthRemaining(playerBody.position.y);
+            }
+        }
 	}
 
     void UpdateSpecialDiamondDisplay(int currSpecialDiamonds)
