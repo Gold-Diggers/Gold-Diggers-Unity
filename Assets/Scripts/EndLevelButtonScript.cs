@@ -8,6 +8,7 @@ public class EndLevelButtonScript : MonoBehaviour {
     public GameObject steve;
     public GameObject exitDoor;
     public GameObject advanceDoor;
+    public GameObject diamondCluster;
     public Button yesButton;
     public Button noButton;
 
@@ -15,22 +16,32 @@ public class EndLevelButtonScript : MonoBehaviour {
     private PlayerBaseController playerBaseController;
     private float posAdvanceDoor;
     private float posExitDoor;
+    private GameObject diamondObj;
 
     private bool isMoveTowardsAdvance;
     private bool isMoveTowardsExit;
+    private bool isDiamondPaid;
+    private bool isPayingDiamond;
 
-	// Use this for initialization
-	void Start () {
+    private const float DIAMOND_ANIMATION_MOVE_X = 0.05f;
+    private const float DIAMOND_ANIMATION_MOVE_Y = 0.01f;
+
+    // Use this for initialization
+    void Start () {
         posAdvanceDoor = advanceDoor.transform.position.x;
         posExitDoor = exitDoor.transform.position.x;
         isMoveTowardsAdvance = false;
         isMoveTowardsExit = false;
         playerAttr = FindObjectOfType<PlayerCollisionController>();
         playerBaseController = FindObjectOfType<PlayerBaseController>();
+        isDiamondPaid = false;
+        isPayingDiamond = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
+        payDiamond();
+        advanceScene();
         if (isMoveTowardsAdvance)
         {
             movePlayerToAdvance();
@@ -50,10 +61,66 @@ public class EndLevelButtonScript : MonoBehaviour {
 
     public void clickAdvance()
     {
-        player.GetComponent<PlayerCollisionController>().enforceDiamondPenalty();
+        Vector3 playerPos = player.transform.position;
         disableButtons();
-        steve.GetComponent<Animator>().Play("steveopen");
-        StartCoroutine(openAdvanceDoor()); 
+        if (player.GetComponent<PlayerCollisionController>().getDiamondPenalty() == 0)
+        { // considered already paid if nothing to pay
+            isDiamondPaid = true;
+        } else
+        { // pay diamond
+            player.GetComponent<PlayerCollisionController>().enforceDiamondPenalty();
+            diamondObj = (GameObject)Instantiate(diamondCluster, playerPos, Quaternion.identity);
+            isPayingDiamond = true;
+        }
+    }
+
+    private void payDiamond()
+    {
+        if (isPayingDiamond)
+        {
+            Vector3 stevePos = steve.transform.position;
+            Vector3 diamondPos = diamondObj.transform.position;
+            if (Mathf.Abs(stevePos.x - diamondPos.x) <= DIAMOND_ANIMATION_MOVE_X)
+            {
+                isPayingDiamond = false;
+                StartCoroutine(fadeDiamond());
+            } else if (stevePos.x > diamondPos.x)
+            {
+                diamondPos.x += DIAMOND_ANIMATION_MOVE_X;
+                diamondPos.y += DIAMOND_ANIMATION_MOVE_Y;
+                diamondObj.transform.position = diamondPos;
+            } else
+            { // steve < diamond pos
+                diamondPos.x -= DIAMOND_ANIMATION_MOVE_X;
+                diamondPos.y += DIAMOND_ANIMATION_MOVE_Y;
+                diamondObj.transform.position = diamondPos;
+            }
+        }
+    }
+
+    IEnumerator fadeDiamond()
+    {
+        if (diamondObj.GetComponent<SpriteRenderer>().color.a > 0)
+        {
+            Color color = diamondObj.GetComponent<SpriteRenderer>().color;
+            color.a -= 0.1f;
+            diamondObj.GetComponent<SpriteRenderer>().color = color;
+            yield return new WaitForSeconds(0.1f);
+            StartCoroutine(fadeDiamond());
+        } else
+        {
+            Destroy(diamondObj);
+            isDiamondPaid = true;
+        }
+    }
+
+    private void advanceScene()
+    {
+        if (isDiamondPaid)
+        {
+            steve.GetComponent<Animator>().Play("steveopen");
+            StartCoroutine(openAdvanceDoor());
+        }
     }
 
     IEnumerator openAdvanceDoor()

@@ -1,10 +1,18 @@
 fileFormatVersion: 2
 guid: 1001ac9bf2070734588cb7631f534ee2
-timeCreated: 1476894414
+timeCreated: 1477709001
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - player: {instanceID: 0}
+  - steve: {instanceID: 0}
+  - exitDoor: {instanceID: 0}
+  - advanceDoor: {instanceID: 0}
+  - diamondCluster: {fileID: 1000010990507798, guid: a39424b3ef6088e4da109fc027852cc9,
+      type: 2}
+  - yesButton: {instanceID: 0}
+  - noButton: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
