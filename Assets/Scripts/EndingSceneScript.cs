@@ -11,8 +11,6 @@ public class EndingSceneScript : MonoBehaviour {
     private bool isFading;
     private bool isFadingIn;
 
-    public AudioSource endingMusic3;
-    public AudioSource endingMusic4;
     public AudioSource endSound;
 
     private int FRAME_STAY_DELAY = 100;
@@ -36,15 +34,18 @@ public class EndingSceneScript : MonoBehaviour {
 
         if (SceneManager.GetActiveScene().name == "Ending 3a")
         {
-            endingMusic3.Play();
             FRAME_STAY_DELAY = 140;
             FRAMES_BEFORE_TRANSIT = 140;
         }
         else if (SceneManager.GetActiveScene().name == "Ending 4a")
         {
-            endingMusic4.Play();
             FRAME_STAY_DELAY = 250;
             FRAMES_BEFORE_TRANSIT = 250;
+        }
+        else if (SceneManager.GetActiveScene().name == "Ending 6a")
+        {
+            FRAME_STAY_DELAY = 175;
+            FRAMES_BEFORE_TRANSIT = 175;
         }
     }
 
