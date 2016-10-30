@@ -223,7 +223,7 @@ public class EndingFourAnimationScript : MonoBehaviour {
         if (newColor.a >= 1.0f)
         {
             fadeToBlack = false;
-            SceneManager.LoadScene("Ending 3b", LoadSceneMode.Single);
+            SceneManager.LoadScene("Ending 4a", LoadSceneMode.Single);
         }
         else
         {
