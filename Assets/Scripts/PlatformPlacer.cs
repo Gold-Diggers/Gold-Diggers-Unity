@@ -3,9 +3,9 @@ using System.Collections;
 
 public class PlatformPlacer : MonoBehaviour {
     private Vector3 currPos;
-    private const int NUM_LEVEL_OF_PLATFORMS = 21;
+    private const int NUM_LEVEL_OF_PLATFORMS = 25;
     private const float GAP_BTW_PLATFORM_MIN = 5;
-    private const float GAP_BTW_PLATFORM_MAX = 7;
+    private const float GAP_BTW_PLATFORM_MAX = 6;
 
     // All assets possible for blocks
     public GameObject block;
