@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class PlayerCollisionController : MonoBehaviour
 {
-    public Canvas heartsCanvas;
-    public Image specialDiamondImage;
-
     // dialogue use
     public Text dialogue;
     public Button yesButton;
@@ -98,6 +95,8 @@ public class PlayerCollisionController : MonoBehaviour
     public int specialDiamonds;
     public int level;
 
+    public AudioSource injuredSound;
+
     private Animator anim;
 
     private bool isLevelTwoEndingPlayed;
@@ -108,8 +107,10 @@ public class PlayerCollisionController : MonoBehaviour
     public GameObject spawnedSpecialDiamond;
     public GameObject spawnedMonsterType1;
     public GameObject spawnedMonsterType1_level2;
+    public GameObject spawnedMonsterType1_level3;
     public GameObject spawnedMonsterType2;
     public GameObject spawnedMonsterType2_level2;
+    public GameObject spawnedMonsterType2_level3;
 
     // Use this for initialization
     void Start()
@@ -128,6 +129,11 @@ public class PlayerCollisionController : MonoBehaviour
     void FixedUpdate()
     {
 
+    }
+
+    public bool getHurt()
+    {
+        return isHurt;
     }
 
     public void enforceDiamondPenalty()
@@ -330,6 +336,10 @@ public class PlayerCollisionController : MonoBehaviour
                 {
                     spawnObject(spawnedMonsterType1_level2, coll);
                 }
+                else if (level == 3)
+                {
+                    spawnObject(spawnedMonsterType1_level3, coll);
+                }
                 else if (SceneManager.GetActiveScene().name == "TutorialLevel")
                 {
                     spawnObject(spawnedMonsterType1, coll);
@@ -345,6 +355,10 @@ public class PlayerCollisionController : MonoBehaviour
                 else if (level == 2)
                 {
                     spawnObject(spawnedMonsterType2_level2, coll);
+                }
+                else if (level == 3)
+                {
+                    spawnObject(spawnedMonsterType2_level3, coll);
                 }
                 else if (SceneManager.GetActiveScene().name == "TutorialLevel")
                 {
@@ -443,7 +457,6 @@ public class PlayerCollisionController : MonoBehaviour
 
     private int IncrementSpecialDiamondCountByOne()
     {
-        specialDiamondImage.enabled = true;
         return specialDiamonds++;
     }
 
@@ -471,12 +484,12 @@ public class PlayerCollisionController : MonoBehaviour
         return Input.GetKey(KeyCode.S);
     }
 
-    private void enforceInjury()
+    public void enforceInjury()
     {
+        injuredSound.Play();
         StartCoroutine(Blink(5, 0.1f, 0.1f));
         updateHurt(true);
         lives -= 1;
-        updateLives();
         checkIfPlayerDied();
     }
 
@@ -501,13 +514,6 @@ public class PlayerCollisionController : MonoBehaviour
         {
             GetComponent<PlayerBaseController>().updateRepelled();
         }
-    }
-
-    private void updateLives()
-    {
-        Image[] hearts = heartsCanvas.GetComponentsInChildren<Image>();
-        Assert.IsTrue(hearts.Length > lives, ERROR_INVALID_LIVES_IMAGE);
-        hearts[lives].enabled = false;
     }
 
     private void checkIfPlayerDied()

@@ -4,6 +4,7 @@ using System.Collections;
 public class MoleBehaviour : MonsterBehaviour {
     private const float MOLE_MOVE_X = -1.75f;
     private const float MOLE2_MOVE_X = -2.25f;
+    private const float MOLE3_MOVE_X = -2.5f;
     private const float MOLE_MOVE_Y = 0;
     private const float MOLE_MOVE_Z = 0;
     private const bool MOLE_IS_FLYING = false;
@@ -27,6 +28,10 @@ public class MoleBehaviour : MonsterBehaviour {
         else if (gameObject.name == "Mole2(Clone)")
         {
             this.MoveX = MOLE2_MOVE_X;
+        }
+        else if (gameObject.name == "Mole3(Clone)")
+        {
+            this.MoveX = MOLE3_MOVE_X;
         }
 
         this.MoveY = MOLE_MOVE_Y;

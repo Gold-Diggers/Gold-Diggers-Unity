@@ -3,9 +3,9 @@ using System.Collections;
 
 public class PlatformPlacer : MonoBehaviour {
     private Vector3 currPos;
-    private const int NUM_LEVEL_OF_PLATFORMS = 21;
+    private const int NUM_LEVEL_OF_PLATFORMS = 25;
     private const float GAP_BTW_PLATFORM_MIN = 5;
-    private const float GAP_BTW_PLATFORM_MAX = 7;
+    private const float GAP_BTW_PLATFORM_MAX = 6;
 
     // All assets possible for blocks
     public GameObject block;
@@ -18,9 +18,14 @@ public class PlatformPlacer : MonoBehaviour {
     public Sprite block6;
     public Sprite block7;
     public Sprite block_level2;
+    public Sprite block_level3_1;
+    public Sprite block_level3_2;
+    public Sprite block_level3_3;
+    public Sprite block_level3_4;
+    public Sprite block_level3_5;
     private Sprite[] blockCollections;
 
-    private const int PLATFORM_MIN_LENGTH = 3;
+    private const int PLATFORM_MIN_LENGTH = 4;
     private const int PLATFORM_MAX_LENGTH = 12;
     private const float CHANCE_FOR_HOLE_IN_PLATFORM = 0.1f;
 
@@ -35,6 +40,9 @@ public class PlatformPlacer : MonoBehaviour {
         } else if (level == 2)
         {
             blockCollections = new Sprite[] { block_level2 };
+        } else if (level == 3)
+        {
+            blockCollections = new Sprite[] { block_level3_1, block_level3_2, block_level3_3, block_level3_4, block_level3_5 };
         } else
         {
             print("Error in PlatformPlacer.cs for level checking.");

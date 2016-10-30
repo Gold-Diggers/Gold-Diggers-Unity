@@ -15,6 +15,8 @@ public class VendingMachineScript : MonoBehaviour {
     public PlayerCollisionController player;
     public PlayerBaseController player_upgrades;
     public Canvas shopCanvas;
+    public AudioSource visitSound;
+    public AudioSource buySound;
 
     private const int PRICE_LIFE_UPGRADE = 25;
     private const int PRICE_JETPACK_UPGRADE = 50;
@@ -130,6 +132,10 @@ public class VendingMachineScript : MonoBehaviour {
         {
             if (Input.GetKeyDown(KeyCode.O))
             {
+                if (!vendingMachineInterface.isActiveAndEnabled)
+                {
+                    visitSound.Play();
+                }
                 shopCanvas.sortingOrder = 12;
                 vendingMachineInterface.enabled = true;
                 showAllButtons();
@@ -170,6 +176,7 @@ public class VendingMachineScript : MonoBehaviour {
         }
         else
         {
+            buySound.Play();
             print("Player successfully purchased lives upgrade.");
             player.diamonds -= PRICE_LIFE_UPGRADE;
             player.lives++;
@@ -198,6 +205,7 @@ public class VendingMachineScript : MonoBehaviour {
         }
         else
         {
+            buySound.Play();
             print("Player successfully purchased jetpack upgrade.");
             player.diamonds -= PRICE_JETPACK_UPGRADE;
             player_upgrades.hasJetpackUpgrade = true;
@@ -228,6 +236,7 @@ public class VendingMachineScript : MonoBehaviour {
         }
         else
         {
+            buySound.Play();
             print("Player successfully purchased shovel upgrade.");
             player.specialDiamonds--;
             player_upgrades.hasShovelUpgrade = true;

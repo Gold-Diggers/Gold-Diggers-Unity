@@ -29,19 +29,24 @@ public class CameraController : MonoBehaviour {
     private float top = 0.05F;
     private float bottom = -0.25F; // -0.15
 
-    private const float CAM_Y_CANNOT_FALL_BEYOND = -85f;
+    private const float CAM_Y_CANNOT_FALL_BEYOND = -96f;
     private const float CAM_Y_UPPER_BOUND = 999999f; // arbitrary large value.
+
+    private int level;
+
+    private float camYClamp;
 
     void Start()
     {
-       // cameraOffset = player.transform.position;
+        // cameraOffset = player.transform.position;
+        camYClamp = CAM_Y_CANNOT_FALL_BEYOND;
     }
     void LateUpdate()
     {
         Camera cam = Camera.main;
         Matrix4x4 m = PerspectiveOffCenter(left, right, bottom, top, cam.nearClipPlane, cam.farClipPlane);
         cam.projectionMatrix = m;
-        float yPos = Mathf.Clamp(player.transform.position.y, CAM_Y_CANNOT_FALL_BEYOND, CAM_Y_UPPER_BOUND);
+        float yPos = Mathf.Clamp(player.transform.position.y, camYClamp, CAM_Y_UPPER_BOUND);
         cam.transform.position = new Vector3(cam.transform.position.x, yPos, cam.transform.position.z);
     }
     Matrix4x4 PerspectiveOffCenter(float left, float right, float bottom, float top, float near, float far)
