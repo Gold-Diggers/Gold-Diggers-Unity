@@ -21,8 +21,6 @@ public class EndingThreeAnimationScript : MonoBehaviour {
     public Image soulDiamond2;
     public Image soulDiamond3;
 
-    public AudioSource endingThreeMusic;
-
     private const string dialogue1 = "Finally got your girl back, eh?\nDon't you think you're celebrating this too early?";
     private const string dialogue2 = "I STILL HAVE YOUR SOUL, YOU FOOL!";
     private const string dialogue3 = "Let's see you leave WITHOUT it!";
