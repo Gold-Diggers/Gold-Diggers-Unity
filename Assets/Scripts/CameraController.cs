@@ -39,14 +39,7 @@ public class CameraController : MonoBehaviour {
     void Start()
     {
         // cameraOffset = player.transform.position;
-        level = GameObject.Find("GlobalPlayer").GetComponent<GlobalPlayerScript>().level;
-        if (level == 1)
-        {
-            camYClamp = CAM_Y_CANNOT_FALL_BEYOND; //- 87f;
-        } else
-        {
-            camYClamp = CAM_Y_CANNOT_FALL_BEYOND;
-        }
+        camYClamp = CAM_Y_CANNOT_FALL_BEYOND;
     }
     void LateUpdate()
     {
