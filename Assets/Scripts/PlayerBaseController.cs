@@ -16,6 +16,8 @@ public class PlayerBaseController : MonoBehaviour {
     private const float HOVER_JETPACK_FORCE = 3.5f;
     private const float CHAR_ON_PLATFORM_Y_DIFF_THRESHOLD = 0.001f;
 
+    public AudioSource hoverSound;
+
     /* ================= Player physics attributes ================= */
     public float speed;
     public float jumpHeight;
@@ -328,16 +330,23 @@ public class PlayerBaseController : MonoBehaviour {
                     } else
                     {
                         rb2d.AddForce(new Vector2(0, HOVER_FORCE) * jumpHeight);
+                        if (!hoverSound.isPlaying)
+                        {
+                            hoverSound.Play();
+                        }
+                       
                     }
                     
                 }
             } else
             {
                 anim.SetBool("isHover", false);
+                hoverSound.Pause();
             }
         } else
         {
             anim.SetBool("isHover", false);
+            hoverSound.Pause();
         }
     }
 
