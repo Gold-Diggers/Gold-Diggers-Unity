@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class LevelThreeEndScript : MonoBehaviour {
     private bool isFading;
+    private GameObject player;
+
+    private const int DIAMOND_THRESHOLD = 175;
 
     void Start()
     {
@@ -23,6 +26,7 @@ public class LevelThreeEndScript : MonoBehaviour {
         if (!isFading && other.gameObject.name == "Player")
         {
             isFading = true;
+            player = other.gameObject;
         }
     }
 
@@ -35,6 +39,23 @@ public class LevelThreeEndScript : MonoBehaviour {
         if (color.a >= 1f)
         { // if fading is done
             // Check conditions for different endings.
+            loadEndingScene();
+        }
+    }
+
+    void loadEndingScene()
+    {
+        int specialDiamond = player.GetComponent<PlayerCollisionController>().specialDiamonds;
+        int diamond = player.GetComponent<PlayerCollisionController>().diamonds;
+
+        if (specialDiamond == 3)
+        { // Golden Ending
+            SceneManager.LoadScene("Ending 3", LoadSceneMode.Single);
+        } else if (diamond >= DIAMOND_THRESHOLD)
+        { // Diamond Collector
+            SceneManager.LoadScene("Ending 4", LoadSceneMode.Single);
+        } else
+        {
             SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); // dummy
         }
     }
