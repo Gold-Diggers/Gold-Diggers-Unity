@@ -95,6 +95,8 @@ public class PlayerCollisionController : MonoBehaviour
     public int specialDiamonds;
     public int level;
 
+    public AudioSource injuredSound;
+
     private Animator anim;
 
     private bool isLevelTwoEndingPlayed;
@@ -484,6 +486,7 @@ public class PlayerCollisionController : MonoBehaviour
 
     public void enforceInjury()
     {
+        injuredSound.Play();
         StartCoroutine(Blink(5, 0.1f, 0.1f));
         updateHurt(true);
         lives -= 1;
