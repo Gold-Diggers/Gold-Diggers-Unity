@@ -5,15 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class EndingFourAnimationScript : MonoBehaviour {
 
-    public Sprite playerAngry;
-    public Sprite playerSurprised;
-    public Sprite playerConfident;
-
     public Image contract;
     
     public Text dialogueText;
-
-    public AudioSource endingFourMusic;
 
     private const string dialogue1 = "End of the road, Helmeted One.";
     private const string dialogue2 = "Unfortunately, it looks like you don't have enough\ncapital to claim back your soul...";
