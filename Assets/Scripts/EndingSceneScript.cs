@@ -11,10 +11,11 @@ public class EndingSceneScript : MonoBehaviour {
     private bool isFading;
     private bool isFadingIn;
 
+    public AudioSource endingMusic3;
     public AudioSource endSound;
 
-    private const int FRAME_STAY_DELAY = 100;
-    private const int FRAMES_BEFORE_TRANSIT = 100;
+    private int FRAME_STAY_DELAY = 100;
+    private int FRAMES_BEFORE_TRANSIT = 100;
 
 	// Use this for initialization
     
@@ -31,6 +32,13 @@ public class EndingSceneScript : MonoBehaviour {
         {
             layers[i] = transform.GetChild(i).gameObject;
         }
+
+        if (SceneManager.GetActiveScene().name == "Ending 3a")
+        {
+            endingMusic3.Play();
+            FRAME_STAY_DELAY = 140;
+            FRAMES_BEFORE_TRANSIT = 140;
+        }
     }
 
     void handleFadeIn()
@@ -38,7 +46,7 @@ public class EndingSceneScript : MonoBehaviour {
         if (!isFadingIn)
         { // First time running the fade in.
             isFadingIn = true;
-            endSound.Play();
+            if (SceneManager.GetActiveScene().name == "Ending 1" || SceneManager.GetActiveScene().name == "Ending 2") endSound.Play();
             Color color2 = layers[currentFrame].GetComponent<SpriteRenderer>().color;
             color2.a = 0f; // change to transparent to start fading in
             layers[currentFrame].GetComponent<SpriteRenderer>().color = color2;
