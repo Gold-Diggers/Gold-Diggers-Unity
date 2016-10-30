@@ -41,6 +41,10 @@ public class PlayerBaseController : MonoBehaviour {
     private const float DIG_Y_OFFSET_TOP = 0.95f;
     private const float DIG_Y_OFFSET_BTM = 0.75f;
 
+    public AudioSource whooshSound;
+    public AudioSource attackBrickSound;
+    public AudioSource attackMobSound;
+
     // For side attack
     private const float SIDEATTACK_X_OFFSET_LEFT = 0f;
     private const float SIDEATTACK_X_OFFSET_RIGHT = 1f; // 0.75
@@ -386,6 +390,11 @@ public class PlayerBaseController : MonoBehaviour {
         Vector2 ptB = new Vector2((float)(currX + DIG_X_OFFSET), currY - DIG_Y_OFFSET_BTM);
         Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8);
 
+        if (col.Length != 0)
+        {
+            attackBrickSound.Play();
+        }
+
         foreach (Collider2D current in col)
         {
             if (current.transform.tag == "Platform")
@@ -413,6 +422,7 @@ public class PlayerBaseController : MonoBehaviour {
         // player digs.
         if (Input.GetKey(KeyCode.S))
         {
+            whooshSound.Play();
             if (isDiggingAnim())
             { // sustained digging.
                 diggingCounter--;
@@ -466,6 +476,7 @@ public class PlayerBaseController : MonoBehaviour {
 
         if (col.Length != 0)
         {
+            attackMobSound.Play();
             rb2d.velocity = Vector3.zero; // reset forces before trigger jump
             rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight); // jump when hit monster
             anim.SetBool("isSusDig", false); // cancel dig
