@@ -62,7 +62,7 @@ public class LevelThreeEndScript : MonoBehaviour {
             SceneManager.LoadScene("Ending 4", LoadSceneMode.Single);
         } else if (timeTaken <= TIME_THRESHOLD)
         { // Hero Ending
-            SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); // dummy
+            SceneManager.LoadScene("Ending 5", LoadSceneMode.Single);
         } else
         { // Steve Ending
             SceneManager.LoadScene("Ending 6", LoadSceneMode.Single);
