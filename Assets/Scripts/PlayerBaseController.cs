@@ -185,6 +185,7 @@ public class PlayerBaseController : MonoBehaviour {
                 if (!isSideAttackAnim())
                 {
                     anim.Play("sideattack");
+                    whooshSound.Play();
                    // Vector3 currPos = transform.position;
                     //currPos.x += AMT_PLAYER_TRANSLATE_WHEN_SATT;
                     //transform.position = currPos;
@@ -221,22 +222,13 @@ public class PlayerBaseController : MonoBehaviour {
             xOfPtB = currX + SIDEATTACK_X_OFFSET_RIGHT;
         }
         Vector2 ptB = new Vector2(xOfPtB, currY - SIDEATTACK_Y_OFFSET_BTM);
-        /*Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8);
-
-        foreach (Collider2D current in col)
-        {
-            if (current.transform.tag == "Platform")
-            {
-                // handleFallingObjects(current.gameObject);
-                Destroy(current.gameObject);
-            }
-        }*/
 
         // Destroy monsters
         Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 10); // monsters layer
 
         if (col.Length != 0)
         {
+            attackMobSound.Play();
             foreach (Collider2D current in col)
             {
                 if (current.transform.tag == "Monster")
