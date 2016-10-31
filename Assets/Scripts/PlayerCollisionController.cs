@@ -518,7 +518,7 @@ public class PlayerCollisionController : MonoBehaviour
 
     private void checkIfPlayerDied()
     {
-        Assert.IsTrue(lives >= 0, ERROR_INVALID_LIVES_VALUE);
+        Assert.IsTrue(lives >= 0 || level == 0, ERROR_INVALID_LIVES_VALUE);
         if (IsDead())
         {
             print("Player has [" + lives + "] remaining and has died.");

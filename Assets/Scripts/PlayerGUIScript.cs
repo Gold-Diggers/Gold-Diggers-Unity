@@ -39,11 +39,12 @@ public class PlayerGUIScript : MonoBehaviour {
             player_upgrades = FindObjectOfType<PlayerBaseController>();
             soulDiamond.enabled = false;
             soulDiamondCount.enabled = false;
-            jetpackFlag.enabled = player_upgrades.hasJetpackUpgrade;
-            shovelFlag.enabled = player_upgrades.hasShovelUpgrade;
+            
             isLevelScene = (!Equals(currScene.name, "Level 1.5") && !Equals(currScene.name, "Level 2.5"));
             if (isLevelScene)
             {
+                jetpackFlag.enabled = player_upgrades.hasJetpackUpgrade;
+                shovelFlag.enabled = player_upgrades.hasShovelUpgrade;
                 getLevelGroundCollider();
                 getPlayerBodyAndCollider();
                 initializeDepthMeter();
