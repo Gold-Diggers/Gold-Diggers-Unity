@@ -414,7 +414,6 @@ public class PlayerBaseController : MonoBehaviour {
         // player digs.
         if (Input.GetKey(KeyCode.S))
         {
-            whooshSound.Play();
             if (isDiggingAnim())
             { // sustained digging.
                 diggingCounter--;
@@ -424,12 +423,17 @@ public class PlayerBaseController : MonoBehaviour {
                     anim.SetBool("isSusDig", false);
                 } else
                 {
+                    if (diggingCounter == 16)
+                    {
+                        whooshSound.Play();
+                    }
                     digPlatform();
                     jumpAttack();
                 }
                 return;
             } else
             { // start digging
+                whooshSound.Play();
                 diggingCounter = MAX_TIME_SUSTAINED_DIG;
                 anim.SetBool("isSusDig", true);
                 if (isCharacterOnPlatform() && !isDiggingAnim())
