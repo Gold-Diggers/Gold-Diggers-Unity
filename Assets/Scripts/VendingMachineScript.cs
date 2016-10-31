@@ -7,6 +7,7 @@ public class VendingMachineScript : MonoBehaviour {
     public Text hoverText;
     public GameObject vendingMachine;
     public Image vendingMachineInterface;
+    public Image livesSoldout;
     public Image jetpackSoldout;
     public Image shovelSoldout;
     public Button livesPurchase;
@@ -80,7 +81,7 @@ public class VendingMachineScript : MonoBehaviour {
 
     void updateButtonStates()
     {
-        if (player.diamonds < PRICE_LIFE_UPGRADE)
+        if (player.diamonds < PRICE_LIFE_UPGRADE || player.lives >= 6)
         {
             livesPurchase.interactable = false;
         }
@@ -108,6 +109,14 @@ public class VendingMachineScript : MonoBehaviour {
 
     void updateUpgradesState()
     {
+        if (player.lives >= 6 && vendingMachineInterface.isActiveAndEnabled)
+        {
+            livesSoldout.enabled = true;
+        }
+        else
+        {
+            livesSoldout.enabled = false;
+        }
         if (player_upgrades.hasJetpackUpgrade && vendingMachineInterface.isActiveAndEnabled)
         {
             jetpackSoldout.enabled = true;
@@ -158,7 +167,7 @@ public class VendingMachineScript : MonoBehaviour {
 
     public void onLivesPurchaseButtonHover()
     {
-        if (player.diamonds < PRICE_LIFE_UPGRADE)
+        if (player.diamonds < PRICE_LIFE_UPGRADE || player.lives >= 6)
         {
             livesPurchase.interactable = false;
         }
@@ -170,7 +179,7 @@ public class VendingMachineScript : MonoBehaviour {
 
     public void onLivesPurchase()
     {
-        if (player.diamonds < PRICE_LIFE_UPGRADE)
+        if (player.diamonds < PRICE_LIFE_UPGRADE || player.lives >= 6)
         {
             // do nothing
         }
