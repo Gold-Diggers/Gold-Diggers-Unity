@@ -101,21 +101,21 @@ public class EndingFourAnimationScript : MonoBehaviour {
         moveLeft = true;
         player.GetComponent<SpriteRenderer>().flipX = true;
         player.GetComponent<Animator>().Play("Running");
-        yield return new WaitUntil(() => player.transform.position.x <= -4.0f);
+        yield return new WaitUntil(() => player.transform.position.x <= -6.51f);
         moveLeft = !moveLeft;
         player.GetComponent<Animator>().Play("idle");
         yield return new WaitForSeconds(1f);
         moveRight = true;
         player.GetComponent<Animator>().Play("Running");
         player.GetComponent<SpriteRenderer>().flipX = false;
-        yield return new WaitUntil(() => player.transform.position.x >= 4.0f);
+        yield return new WaitUntil(() => player.transform.position.x >= 3.49f);
         moveRight = !moveRight;
         player.GetComponent<Animator>().Play("idle");
         yield return new WaitForSeconds(1f);
         moveLeft = !moveLeft;
         player.GetComponent<Animator>().Play("Running");
         player.GetComponent<SpriteRenderer>().flipX = true;
-        yield return new WaitUntil(() => player.transform.position.x <= 0f);
+        yield return new WaitUntil(() => player.transform.position.x <= -2.51f);
         movePlayer = false;
         player.GetComponent<Animator>().Play("idle");
         yield return new WaitForSeconds(1f);
@@ -124,18 +124,18 @@ public class EndingFourAnimationScript : MonoBehaviour {
 
     IEnumerator triggerDialogues()
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue1;
         player.GetComponent<SpriteRenderer>().flipX = false;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue2;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue3;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue4;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue5;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue6;
         yield return StartCoroutine(triggerHelmetRemoval());
     }
@@ -145,7 +145,7 @@ public class EndingFourAnimationScript : MonoBehaviour {
         player.GetComponent<Animator>().Play("helmetremove");
         yield return new WaitForSeconds(0.5f);
         player.GetComponent<Animator>().Play("thief_idle");
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         yield return StartCoroutine(triggerNextDialogue());
     }
 
@@ -157,19 +157,19 @@ public class EndingFourAnimationScript : MonoBehaviour {
         player.GetComponent<Animator>().Play("thief_contract");
         yield return new WaitForSeconds(0.3f);
         dialogueText.text = dialogue8;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue9;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue10;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue11;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue12;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue13;
         yield return new WaitForSeconds(1.5f);
         player.GetComponent<Animator>().Play("thief_agree");
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = "";
         fadeToBlack = true;
     }
@@ -190,7 +190,7 @@ public class EndingFourAnimationScript : MonoBehaviour {
 
     void triggerContractMove()
     {
-        if (contract.rectTransform.position.x > 0.6f)
+        if (contract.rectTransform.position.x > -2.01f)
         {
             contract.rectTransform.Translate(new Vector3(-0.05f, -0.009f, 0));
         }

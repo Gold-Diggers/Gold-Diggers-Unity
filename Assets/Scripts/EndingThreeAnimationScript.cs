@@ -73,6 +73,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //print(devilFadein);
+        animateSoulDiamonds();
         animateDevil();
         if (moveToPlayer)
         {
@@ -112,7 +113,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
         {
             cage.GetComponent<Animator>().Play("cagebreak");
             Destroy(cage.GetComponent<Collider2D>());
-            player.GetComponent<Rigidbody2D>().AddForce(new Vector2(-190f, 190f));
+            player.GetComponent<Rigidbody2D>().AddForce(new Vector2(-80f, 240f));
             StartCoroutine(makeLoverReact());
         }
     }
@@ -134,7 +135,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
 
     void moveLoverToPlayer()
     {
-        if (lover.transform.position.x > -6.8)
+        if (lover.transform.position.x > -2.85f)
         {
             lover.transform.Translate(new Vector3(-0.05f, 0, 0));
         }
@@ -147,24 +148,24 @@ public class EndingThreeAnimationScript : MonoBehaviour {
 
     IEnumerator triggerDialogues()
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         lover.GetComponent<Animator>().Stop();
         lover.GetComponent<SpriteRenderer>().sprite = loverWorried;
         player.GetComponent<Animator>().Stop();
         player.GetComponent<SpriteRenderer>().sprite = playerAngry;
         dialogueText.text = dialogue1;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue2;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue3;
-        yield return new WaitForSeconds(2.6f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue4;
         yield return StartCoroutine(triggerWhiteFlash());
     }
 
     IEnumerator triggerWhiteFlash()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3.5f);
         whiteFlash.enabled = true;
         dialogueText.text = "";
         player.GetComponent<SpriteRenderer>().sprite = playerSurprised;
@@ -173,7 +174,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
         soulDiamond3.enabled = true;
         yield return new WaitForSeconds(1f);
         whiteFlash.enabled = false;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         devil.GetComponent<Animator>().Play("devil_upset");
         yield return new WaitForSeconds(1f);
         player.GetComponent<SpriteRenderer>().sprite = playerConfident;
@@ -184,32 +185,33 @@ public class EndingThreeAnimationScript : MonoBehaviour {
     IEnumerator triggerNextDialogues()
     {
         dialogueText.text = dialogue5;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue6;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue7;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue8;
-        yield return new WaitForSeconds(2.5f);
-        devil.GetComponent<Animator>().Play("devil_upset2");
+        yield return new WaitForSeconds(3f);
+        devil.GetComponent<SpriteRenderer>().sprite = devilAngry;
         dialogueText.text = dialogue9;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue10;
         yield return StartCoroutine(triggerItemsExchange());
     }
 
     IEnumerator triggerItemsExchange()
     {
+        devil.GetComponent<Animator>().Play("devil_upset2");
         performExchange = true;
         soul.SetActive(true);
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue11;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         fadeDoorIn = true;
         dialogueText.text = dialogue12;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue13;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = "";
         yield return new WaitForSeconds(1.0f);
         fadeToBlack = true;
@@ -241,13 +243,13 @@ public class EndingThreeAnimationScript : MonoBehaviour {
 
     IEnumerator makeDevilLaugh()
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(11.85f);
         devil.GetComponent<Animator>().Play("devil_cackle");
     }
 
     void performItemExchange()
     {
-        if (soul.transform.position.x < -7.56f)
+        if (soul.transform.position.x < -3.1f)
         {
             performExchange = false;
             soulDiamond1.enabled = false;
@@ -267,6 +269,13 @@ public class EndingThreeAnimationScript : MonoBehaviour {
     void animateDevil()
     {
         devil.transform.Translate(new Vector3(0, 0.0075f * Mathf.Sin(Time.time), 0));
+    }
+
+    void animateSoulDiamonds()
+    {
+        soulDiamond1.transform.Translate(new Vector3(0, 0.001f * Mathf.Sin(Time.time), 0));
+        soulDiamond2.transform.Translate(new Vector3(0, -0.001f * Mathf.Sin(Time.time + Time.time * 0.21f), 0));
+        soulDiamond3.transform.Translate(new Vector3(0, 0.001f * Mathf.Sin(Time.time + Time.time * 0.43f), 0));
     }
 
     void revealDoor()

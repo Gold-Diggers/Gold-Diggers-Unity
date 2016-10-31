@@ -31,9 +31,9 @@ public class EndingSixAnimationScript : MonoBehaviour {
     private const string dialogue22 = "As for you, my SWEET, SWEET UNDERLING...";
     private const string dialogue23 = "... Get to work at Level 1-";
     private const string dialogue24 = "PRONTO!";
-    private const string dialogue25 = "Don't worry, I've sealed your mouth shut...";
-    private const string dialogue26 = "... so you can't protest for now! :D";
-    private const string dialogue27 = "Enjoy your job forever!";
+    private const string dialogue25 = "...";
+    private const string dialogue26 = "What are you still waiting here for?";
+    private const string dialogue27 = "Get cracking you fool!";
 
     private GameObject player;
     private GameObject devil;
@@ -84,17 +84,17 @@ public class EndingSixAnimationScript : MonoBehaviour {
     {
         yield return new WaitForSeconds(2.5f);
         dialogueText.text = dialogue1;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(1.5f);
         dialogueText.text = dialogue2;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(1.5f);
         dialogueText.text = dialogue3;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue4;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue5;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue6;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         yield return StartCoroutine(triggerNextDialogue());
     }
 
@@ -123,56 +123,59 @@ public class EndingSixAnimationScript : MonoBehaviour {
         player.GetComponent<SpriteRenderer>().flipX = true;
         moveLeft = !moveLeft;
         player.GetComponent<Animator>().Play("Running");
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.75f);
         movePlayer = !movePlayer;
         moveLeft = !moveLeft;
+        player.GetComponent<Animator>().Play("dig");
+        yield return new WaitForSeconds(0.5f);
         player.GetComponent<Animator>().Play("idle");
+        yield return new WaitForSeconds(1f);
         player.GetComponent<SpriteRenderer>().flipX = false;
         dialogueText.text = dialogue7;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue8;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue9;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue10;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue11;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         yield return StartCoroutine(activateSteve());
     }
 
     IEnumerator activateSteve()
     {
         steve.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.color = Color.gray;
         dialogueText.text = dialogue12;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.color = defaultTextColor;
         dialogueText.text = dialogue13;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue14;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.color = Color.gray;
         dialogueText.text = dialogue15;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.color = defaultTextColor;
         dialogueText.text = dialogue16;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         devil.GetComponent<SpriteRenderer>().flipX = true;
         dialogueText.text = dialogue17;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.color = Color.gray;
         dialogueText.text = dialogue18;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.color = defaultTextColor;
         dialogueText.text = dialogue19;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.color = Color.gray;
         dialogueText.text = dialogue20;
         yield return new WaitForSeconds(0.5f);
         steve.GetComponent<Animator>().Play("steveopen");
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         moveBumper = true;
         dialogueText.text = "";
         yield return new WaitForSeconds(2.5f);
@@ -184,20 +187,20 @@ public class EndingSixAnimationScript : MonoBehaviour {
         yield return new WaitForSeconds(1.0f);
         dialogueText.color = defaultTextColor;
         dialogueText.text = dialogue21;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         devil.GetComponent<SpriteRenderer>().flipX = false;
         dialogueText.text = dialogue22;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue23;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue24;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue25;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue26;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue27;
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         fadeToBlack = true;
     }
 
