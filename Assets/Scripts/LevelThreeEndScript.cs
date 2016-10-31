@@ -65,7 +65,7 @@ public class LevelThreeEndScript : MonoBehaviour {
             SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); // dummy
         } else
         { // Steve Ending
-            SceneManager.LoadScene("MainMenu", LoadSceneMode.Single); // dummy
+            SceneManager.LoadScene("Ending 6", LoadSceneMode.Single);
         }
     }
 }
