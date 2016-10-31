@@ -52,10 +52,16 @@ public class EndingFiveAnimationScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        animateDevil();
         fadeDevil();
         movePlayerToCaptives();
         fadeSceneOut();
 	}
+
+    void animateDevil()
+    {
+        devil.transform.Translate(new Vector3(0, 0.0075f * Mathf.Sin(Time.time), 0));
+    }
 
     private void fadeSceneOut()
     {
@@ -163,7 +169,7 @@ public class EndingFiveAnimationScript : MonoBehaviour {
         playDialogues(dialogue16);
         yield return new WaitForSeconds(2f);
         playDialogues(dialogue17);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
         devil.GetComponent<Animator>().Play("devilsteal");
         playDialogues(dialogue18);
         yield return new WaitForSeconds(3f);
