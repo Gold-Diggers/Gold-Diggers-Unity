@@ -34,7 +34,7 @@ public class EndingFiveAnimationScript : MonoBehaviour {
     private const string dialogue14 = "KEHAHAHAHAHAHAHAHAHA!";
     private const string dialogue15 = "A demon slayer!";
     private const string dialogue16 = "In this day and age!";
-    private const string dialogue17 = "Looks like I was mistaken about you, readhead...";
+    private const string dialogue17 = "Looks like I was mistaken about you, redhead...";
     private const string dialogue18 = "I've not had a dance like this in CENTURIES!";
 
     // Use this for initialization
