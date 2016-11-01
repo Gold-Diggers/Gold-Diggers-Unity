@@ -22,15 +22,15 @@ public class EndingThreeAnimationScript : MonoBehaviour {
     public Image soulDiamond3;
 
     private const string dialogue1 = "Finally got your girl back, eh?\nDon't you think you're celebrating this too early?";
-    private const string dialogue2 = "I STILL HAVE YOUR SOUL, YOU FOOL!";
-    private const string dialogue3 = "Let's see you leave WITHOUT it!";
+    private const string dialogue2 = "I STILL HAVE YOUR SOULS, YOU FOOL!";
+    private const string dialogue3 = "Let's see you leave WITHOUT them!";
     private const string dialogue4 = "KEEHAAHAAHAAHAAHAAAAAAA!";
     private const string dialogue5 = "Th-th-those...";
     private const string dialogue6 = "Those are Soul Gems...";
     private const string dialogue7 = "How did you-?!";
     private const string dialogue8 = "They were part of MY hidden stash!";
     private const string dialogue9 = "GRAH!!!!!! You lucky little-!";
-    private const string dialogue10 = "FINE! Take back your filthy little soul in exchange!";
+    private const string dialogue10 = "FINE! Take back your filthy little souls in exchange!";
     private const string dialogue11 = "I hope you're happy now.";
     private const string dialogue12 = "Now BEGONE-";
     private const string dialogue13 = "AND NEVER COME BACK.";
@@ -40,6 +40,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
     private GameObject player;
     private GameObject devil;
     private GameObject soul;
+    private GameObject loverSoul;
     private GameObject exitDoor;
     public Image blackPanel;
 
@@ -57,6 +58,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
         player = GameObject.Find("Player");
         devil = GameObject.Find("Devil");
         soul = GameObject.Find("Soul");
+        loverSoul = GameObject.Find("LoverSoul");
         exitDoor = GameObject.Find("Give Up Door");
         blackPanel = GameObject.Find("BlackScreen").GetComponentsInChildren<Image>()[0];
         Color hideDoorColor = exitDoor.GetComponent<SpriteRenderer>().color;
@@ -64,6 +66,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
         exitDoor.GetComponent<SpriteRenderer>().color = hideDoorColor;
         devil.SetActive(false);
         soul.SetActive(false);
+        loverSoul.SetActive(false);
         whiteFlash.enabled = false;
         soulDiamond1.enabled = false;
         soulDiamond2.enabled = false;
@@ -204,6 +207,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
         devil.GetComponent<Animator>().Play("devil_upset2");
         performExchange = true;
         soul.SetActive(true);
+        loverSoul.SetActive(true);
         yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue11;
         yield return new WaitForSeconds(3f);
@@ -256,6 +260,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
             soulDiamond2.enabled = false;
             soulDiamond3.enabled = false;
             soul.SetActive(false);
+            loverSoul.SetActive(false);
         }
         else
         {
@@ -263,6 +268,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
             soulDiamond2.rectTransform.Translate(new Vector3(8f * Time.deltaTime, 0, 0));
             soulDiamond3.rectTransform.Translate(new Vector3(8f * Time.deltaTime, 0, 0));
             soul.transform.Translate(new Vector3(-8f * Time.deltaTime, 0, 0));
+            loverSoul.transform.Translate(new Vector3(-8f * Time.deltaTime, 0, 0));
         }
     }
 
