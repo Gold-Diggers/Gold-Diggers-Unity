@@ -46,6 +46,7 @@ public class EndingFourAnimationScript : MonoBehaviour {
         devil.SetActive(false);
         colorRef = Color.white;
         colorRef.a = 0;
+        //Time.timeScale = 2.0f;
         movePlayer = true;
         StartCoroutine(movePlayerAbout());
     }
@@ -153,7 +154,7 @@ public class EndingFourAnimationScript : MonoBehaviour {
     {
         dialogueText.text = dialogue7;
         fadeContractIn = true;
-        yield return new WaitForSeconds(1.8f);
+        yield return new WaitForSeconds(1.65f);
         player.GetComponent<Animator>().Play("thief_contract");
         yield return new WaitForSeconds(0.3f);
         dialogueText.text = dialogue8;
@@ -190,7 +191,7 @@ public class EndingFourAnimationScript : MonoBehaviour {
 
     void triggerContractMove()
     {
-        if (contract.rectTransform.position.x > -2.01f)
+        if (contract.rectTransform.position.x > -1.9f)
         {
             contract.rectTransform.Translate(new Vector3(-0.05f, -0.009f, 0));
         }
