@@ -44,6 +44,7 @@ public class PlayerBaseController : MonoBehaviour {
     public AudioSource whooshSound;
     public AudioSource attackBrickSound;
     public AudioSource attackMobSound;
+    public AudioSource jetPackSound;
 
     // For side attack
     private const float SIDEATTACK_X_OFFSET_LEFT = 0f;
@@ -322,6 +323,10 @@ public class PlayerBaseController : MonoBehaviour {
                 {
                     if (hasJetpackUpgrade)
                     {
+                        if (!jetPackSound.isPlaying)
+                        {
+                            jetPackSound.Play();
+                        }
                         rb2d.AddForce(new Vector2(0, HOVER_JETPACK_FORCE) * jumpHeight);
                     } else
                     {
@@ -338,11 +343,13 @@ public class PlayerBaseController : MonoBehaviour {
             {
                 anim.SetBool("isHover", false);
                 hoverSound.Pause();
+                jetPackSound.Pause();
             }
         } else
         {
             anim.SetBool("isHover", false);
             hoverSound.Pause();
+            jetPackSound.Pause();
         }
     }
 

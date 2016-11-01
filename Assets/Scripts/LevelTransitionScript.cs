@@ -41,7 +41,7 @@ public class LevelTransitionScript : MonoBehaviour {
             loadingScreen.enabled = true;
             string levelName = "Level " + GlobalPlayerScript.Instance.level;
             print("Loading " + levelName);
-            loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
+            SceneManager.LoadScene(levelName, LoadSceneMode.Single);
         }
     }
 }

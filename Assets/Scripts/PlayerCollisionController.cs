@@ -16,6 +16,9 @@ public class PlayerCollisionController : MonoBehaviour
     private const string LEVEL_2_DIALOGUE_FRONT = "Greetings, Helmeted One. Let me relieve you of your burdens - ";
     private const string LEVEL_2_DIALOGUE_BACK = " diamonds, and your soul. Feel a little lighter? Go forth to retrieve your soul, if you wish. Otherwise, you may leave with what you have left… without your soul.";
 
+    public AudioSource diamondCollectSound;
+    public AudioSource treasureChestCollectSound;
+
     // diamond penalty use
     private const int DIAMOND_RANGE_1 = 25;
     private const int DIAMOND_LOSE_RANGE_1 = 1;
@@ -264,6 +267,7 @@ public class PlayerCollisionController : MonoBehaviour
 
     private void triggerDiamondInteraction(Collider2D coll)
     {
+        diamondCollectSound.Play();
         if (Equals(coll.gameObject.name, TEN_DIAMOND_NAME))
         {
             StartCoroutine(displayMovingUICollectDiamond(DISPLAY_TEN_DIAMOND));
@@ -301,6 +305,7 @@ public class PlayerCollisionController : MonoBehaviour
 
     private void triggerSpecialDiamondInteraction(Collider2D coll)
     {
+        diamondCollectSound.Play();
         StartCoroutine(displayMovingUICollectDiamond(DISPLAY_SPECIAL_DIAMOND));
         // print("Player has collected a special diamond.");
         IncrementSpecialDiamondCountByOne();
@@ -312,6 +317,7 @@ public class PlayerCollisionController : MonoBehaviour
     // to run the coroutine function, use StartCoroutine(<coroutine_function>(args))
     IEnumerator triggerTreasureChestInteraction(Collision2D coll)
     {
+        treasureChestCollectSound.Play();
         //coll.gameObject.SetActive(false);
         Destroy(coll.gameObject.GetComponent<BoxCollider2D>());
         coll.gameObject.GetComponent<Animator>().Play("Chest Open");
@@ -371,6 +377,7 @@ public class PlayerCollisionController : MonoBehaviour
 
     IEnumerator triggerSpecialTreasureChestInteraction(Collision2D coll)
     {
+        treasureChestCollectSound.Play();
         //coll.gameObject.SetActive(false);
         Destroy(coll.gameObject.GetComponent<BoxCollider2D>());
         coll.gameObject.GetComponent<Animator>().Play("Chest Open");
