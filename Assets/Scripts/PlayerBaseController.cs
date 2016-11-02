@@ -17,6 +17,7 @@ public class PlayerBaseController : MonoBehaviour {
     private const float CHAR_ON_PLATFORM_Y_DIFF_THRESHOLD = 0.001f;
 
     public AudioSource hoverSound;
+    public AudioSource jumpSound;
 
     /* ================= Player physics attributes ================= */
     public float speed;
@@ -301,6 +302,7 @@ public class PlayerBaseController : MonoBehaviour {
                 if (jumpCooldown <= 0 && rb2d.velocity.y < 0.02)
                 {                
                     jumpCooldown = COOLDOWN_JUMP;
+                    jumpSound.Play();
                     StartCoroutine(jumpAnimate());
                     rb2d.AddForce(new Vector2(0, JUMP_FORCE) * jumpHeight);
                 }   
