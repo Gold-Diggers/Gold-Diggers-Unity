@@ -7,6 +7,8 @@ public class EndingSixAnimationScript : MonoBehaviour {
 
     public Text dialogueText;
 
+    public AudioSource music;
+
     private const string dialogue1 = "...";
     private const string dialogue2 = "... ...";
     private const string dialogue3 = "... ... ...";
@@ -201,6 +203,8 @@ public class EndingSixAnimationScript : MonoBehaviour {
         yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue27;
         yield return new WaitForSeconds(3f);
+        dialogueText.text = "";
+        yield return new WaitForSeconds(4f);
         fadeToBlack = true;
     }
 
