@@ -85,6 +85,7 @@ public class EndingSixAnimationScript : MonoBehaviour {
     IEnumerator triggerDialogues()
     {
         yield return new WaitForSeconds(2.5f);
+        music.Play();
         dialogueText.text = dialogue1;
         yield return new WaitForSeconds(1.5f);
         dialogueText.text = dialogue2;
@@ -204,7 +205,7 @@ public class EndingSixAnimationScript : MonoBehaviour {
         dialogueText.text = dialogue27;
         yield return new WaitForSeconds(3f);
         dialogueText.text = "";
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
         fadeToBlack = true;
     }
 
