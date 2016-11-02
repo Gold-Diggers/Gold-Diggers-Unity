@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class EndingFourAnimationScript : MonoBehaviour {
 
     public Image contract;
-    
+    public AudioSource music;
     public Text dialogueText;
 
     private const string dialogue1 = "End of the road, Helmeted One.";
@@ -19,7 +19,7 @@ public class EndingFourAnimationScript : MonoBehaviour {
     private const string dialogue8 = "You get to keep 50 percent commission...";
     private const string dialogue9 = "... with health insurance and a house down in\nBurn Avenue.";
     private const string dialogue10 = "So... what say you?";
-    private const string dialogue11 = "Your eternal soul, for a job in Hell...";
+    private const string dialogue11 = "Your eternal soul, for a job in Hell?";
     private const string dialogue12 = "... that pays way better than your crappy\njob right now.";
     private const string dialogue13 = "Do we have a deal? *winks*";
     
@@ -98,7 +98,8 @@ public class EndingFourAnimationScript : MonoBehaviour {
     IEnumerator movePlayerAbout()
     {
         //print("Commencing movement");
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(1.5f);
+        music.Play();
         moveLeft = true;
         player.GetComponent<SpriteRenderer>().flipX = true;
         player.GetComponent<Animator>().Play("Running");
@@ -165,13 +166,14 @@ public class EndingFourAnimationScript : MonoBehaviour {
         yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue11;
         yield return new WaitForSeconds(3f);
-        dialogueText.text = dialogue12;
+        /*dialogueText.text = dialogue12;
         yield return new WaitForSeconds(3f);
         dialogueText.text = dialogue13;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.5f);*/
         player.GetComponent<Animator>().Play("thief_agree");
-        yield return new WaitForSeconds(3f);
         dialogueText.text = "";
+        yield return new WaitForSeconds(4f);
+        music.Stop();
         fadeToBlack = true;
     }
 
