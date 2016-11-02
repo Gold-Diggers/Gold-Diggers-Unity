@@ -15,6 +15,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
 
     public Sprite devilAngry;
     public Text dialogueText;
+    public AudioSource music;
 
     public Canvas whiteFlash;
     public Image soulDiamond1;
@@ -144,6 +145,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
         }
         else
         {
+            music.Play();
             StartCoroutine(fadeDevilIn());
             StartCoroutine(triggerDialogues());
         }
