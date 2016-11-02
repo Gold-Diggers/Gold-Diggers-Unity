@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class EndingFiveAnimationScript : MonoBehaviour {
     public Text dialogueText;
+    public AudioSource music;
 
     private GameObject devil;
     private GameObject player;
@@ -119,6 +120,7 @@ public class EndingFiveAnimationScript : MonoBehaviour {
         if (!hasPlayerLanded && coll.gameObject.tag == "Player")
         {
             hasPlayerLanded = true;
+            music.Play();
             player = coll.gameObject;
             player.GetComponent<Animator>().Play("idle");
             StartCoroutine(devilBlockPlayerAnim());
