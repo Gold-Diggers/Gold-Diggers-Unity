@@ -10,7 +10,9 @@ public class EndingFiveAnimationScript : MonoBehaviour {
     private GameObject player;
     private GameObject soul;
     private GameObject whiteFade;
+    private GameObject whiteFlashObj;
 
+    private bool isWhiteFlash;
     private bool isDevilFadingIn;
     private bool hasPlayerLanded;
     private bool isPlayerMovingToCaptives;
@@ -36,14 +38,17 @@ public class EndingFiveAnimationScript : MonoBehaviour {
     private const string dialogue16 = "In this day and age!";
     private const string dialogue17 = "Looks like I was mistaken about you, redhead...";
     private const string dialogue18 = "I've not had a dance like this in CENTURIES!";
+    private const string dialogueBlank = "";
 
     // Use this for initialization
     void Start () {
         devil = GameObject.Find("Devil");
         soul = GameObject.Find("Soul");
+        whiteFlashObj = GameObject.Find("WhiteFlash/Panel");
         soul.SetActive(false);
         isDevilFadingIn = false;
         hasPlayerLanded = false;
+        isWhiteFlash = false;
         isPlayerMovingToCaptives = false;
         defaultTextColor = dialogueText.color;
         isSceneEnded = false;
@@ -53,6 +58,7 @@ public class EndingFiveAnimationScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         animateDevil();
+        whiteFlash();
         fadeDevil();
         movePlayerToCaptives();
         fadeSceneOut();
@@ -60,7 +66,7 @@ public class EndingFiveAnimationScript : MonoBehaviour {
 
     void animateDevil()
     {
-        devil.transform.Translate(new Vector3(0, 0.0075f * Mathf.Sin(Time.time), 0));
+        devil.transform.Translate(new Vector3(0, 0.005f * Mathf.Sin(Time.time), 0));
     }
 
     private void fadeSceneOut()
@@ -87,7 +93,7 @@ public class EndingFiveAnimationScript : MonoBehaviour {
 
     private void playHeroDialogue(string dialogue)
     {
-        dialogueText.color = Color.gray;
+        dialogueText.color = Color.white;
         dialogueText.text = dialogue;
     }
 
@@ -153,12 +159,14 @@ public class EndingFiveAnimationScript : MonoBehaviour {
         playDialogues(dialogue10);
         devil.GetComponent<Animator>().Play("devil_cackle");
         yield return new WaitForSeconds(2.7f);
+        playHeroDialogue(dialogueBlank);
+        yield return new WaitForSeconds(2f);
         playHeroDialogue(dialogue11);
         player.GetComponent<Animator>().Play("herotalking");
         yield return new WaitForSeconds(3.5f);
         player.GetComponent<Animator>().Play("hero_sword");
         yield return new WaitForSeconds(0.7f);
-        StartCoroutine(transformHeroSword());
+        isWhiteFlash = true;
     }
 
     IEnumerator triggerDialoguePartFour()
@@ -176,15 +184,40 @@ public class EndingFiveAnimationScript : MonoBehaviour {
         isSceneEnded = true;
     }
 
+    private void whiteFlash()
+    {
+        if (isWhiteFlash)
+        {
+            Color color = whiteFlashObj.GetComponent<Image>().color;
+            if (color.a >= 1f)
+            { // done fading
+                isWhiteFlash = false;
+                StartCoroutine(transformHeroSword());
+            }
+            else
+            { // fade in
+                color.a += 0.025f;
+                whiteFlashObj.GetComponent<Image>().color = color;
+            }
+        }
+    }
+
+    private void shiftPlayerCollider()
+    {
+        Vector3 posColl = player.GetComponent<BoxCollider2D>().offset;
+        posColl.y -= 7.5f;
+        player.GetComponent<BoxCollider2D>().offset = posColl;
+        
+    }
+
     IEnumerator transformHeroSword()
     {
-        GameObject whiteFlash = GameObject.Find("WhiteFlash");
-        // Flash effect
-        whiteFlash.GetComponent<Canvas>().enabled = true;
         yield return new WaitForSeconds(1f);
+        shiftPlayerCollider();
+        yield return new WaitForSeconds(0.5f);
         player.GetComponent<Animator>().Play("herotransformed");
-        whiteFlash.GetComponent<Canvas>().enabled = false;
-        yield return new WaitForSeconds(1f);
+        Destroy(whiteFlashObj.gameObject);
+        yield return new WaitForSeconds(2f);
         devil.GetComponent<Animator>().Play("devil_upset");
         dialogueText.color = defaultTextColor;
         playDialogues(dialogue12);
@@ -201,9 +234,9 @@ public class EndingFiveAnimationScript : MonoBehaviour {
     {
         yield return new WaitForSeconds(1f);
         askPlayerToMoveToCaptives();
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.15f);
         isDevilFadingIn = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.8f);
         isPlayerMovingToCaptives = false; // stop moving
         player.GetComponent<Animator>().SetBool("isRunning", false);
     }
