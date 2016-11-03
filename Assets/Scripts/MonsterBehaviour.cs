@@ -257,11 +257,7 @@ public class MonsterBehaviour : MonoBehaviour {
         if (coll.gameObject.CompareTag("BackgroundBoundary"))
         {
             handleHorizontalMovements();
-        } /*else if (coll.gameObject.CompareTag("Platform"))
-        {
-            print("platform");
-             handleHorizontalMovements();
-        }*/
+        }
     }
 
     private void handleHorizontalMovements()

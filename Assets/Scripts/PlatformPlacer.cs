@@ -65,7 +65,6 @@ public class PlatformPlacer : MonoBehaviour {
         for (int i = startUpperLimit; i > startUpperLimit - platformLength; i--)
         {
             createBlock(xPos, yPos, i);
-            //createBlock(i, transform.position.y);
         }
     }
 

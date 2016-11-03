@@ -52,7 +52,6 @@ public class LevelThreeEndScript : MonoBehaviour {
     {
         int specialDiamond = player.GetComponent<PlayerCollisionController>().specialDiamonds;
         int diamond = player.GetComponent<PlayerCollisionController>().diamonds;
-        print(timeTaken);
 
         if (specialDiamond == 3)
         { // Golden Ending

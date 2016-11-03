@@ -72,15 +72,12 @@ public class MainMenuButtonScript : MonoBehaviour {
     public void Play()
     {
         loadingCanvas.enabled = true;
-        print("Loading Level 1...");
         GlobalPlayerScript.Instance.reinitialiseValues();
         SceneManager.LoadScene("Level 1", LoadSceneMode.Single);
-        //loadOp.allowSceneActivation = true;
     }
 
     public void OpenTutorial()
     {
-        //print("Opening tutorial screen...");
         tutorialCanvas.enabled = true;
     }
 

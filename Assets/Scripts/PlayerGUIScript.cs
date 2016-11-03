@@ -75,7 +75,6 @@ public class PlayerGUIScript : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        //print(playerBody.position);
         if (!isTutorialScene)
         {
             UpdateHeartDisplay(player.lives);

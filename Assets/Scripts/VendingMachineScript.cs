@@ -186,11 +186,8 @@ public class VendingMachineScript : MonoBehaviour {
         else
         {
             buySound.Play();
-            print("Player successfully purchased lives upgrade.");
             player.diamonds -= PRICE_LIFE_UPGRADE;
             player.lives++;
-            print(player.diamonds);
-            print(player.lives);
         }
     }
 
@@ -215,13 +212,8 @@ public class VendingMachineScript : MonoBehaviour {
         else
         {
             buySound.Play();
-            print("Player successfully purchased jetpack upgrade.");
             player.diamonds -= PRICE_JETPACK_UPGRADE;
             player_upgrades.hasJetpackUpgrade = true;
-            print(player.diamonds);
-            // 1. add jetpack upgrade to player
-            // 2. superimpose 'SOLD OUT' over jetpack
-            // 3. must check if this upgrade exist in player for level 2.5 and perform #2 if the upgrade exists
         }
     }
 
@@ -246,13 +238,8 @@ public class VendingMachineScript : MonoBehaviour {
         else
         {
             buySound.Play();
-            print("Player successfully purchased shovel upgrade.");
             player.specialDiamonds--;
             player_upgrades.hasShovelUpgrade = true;
-            print(player.specialDiamonds);
-            // 1. add shovel upgrade to player
-            // 2. superimpose 'SOLD OUT' over shovel
-            // 3. must check if this upgrade exist in player for level 2.5 and perform #2 if the upgrade exists
         }
     }
 }

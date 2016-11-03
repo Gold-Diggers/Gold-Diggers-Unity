@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Assertions;
 using System;
 using System.Collections;
 using UnityEngine.SceneManagement;
@@ -72,9 +71,6 @@ public class PlayerBaseController : MonoBehaviour {
     private bool isRepelled;
     private const float AMT_COLLIDER_TRANSLATE_WHEN_FLIPPING = 2.7f;
 
-    // Boolean constant to change for testing/production purposes
-    private const bool IS_TESTING = true;
-
     public void setEndLevel()
     {
         isLevelEnd = true;
@@ -102,7 +98,6 @@ public class PlayerBaseController : MonoBehaviour {
     void Start()
     {
         isRepelled = false;
-        Assert.raiseExceptions = IS_TESTING;
         rb2d = GetComponent<Rigidbody2D>();
         yPos = transform.position.y;
         xPos = transform.position.x;
@@ -144,20 +139,13 @@ public class PlayerBaseController : MonoBehaviour {
     		if (isRunning) {
 
 			} else {
-				//print ("run");
 				isRunning = true;
 				anim.SetBool("isRunning", isRunning);
-				//GetComponent<Animator>().StartPlayback();
 			}
     	} else {
     		if (isRunning) {
     			isRunning = false;
-    			//print("idle");
-    			//anim.Play("idle");
     			anim.SetBool("isRunning", isRunning);
-    			//GetComponent<Animator>().StartPlayback();
-			} else {
-
 			}
     	}
 
@@ -188,9 +176,6 @@ public class PlayerBaseController : MonoBehaviour {
                 {
                     anim.Play("sideattack");
                     whooshSound.Play();
-                   // Vector3 currPos = transform.position;
-                    //currPos.x += AMT_PLAYER_TRANSLATE_WHEN_SATT;
-                    //transform.position = currPos;
                     isSideAttack = true;
                     return;
                 }
@@ -202,9 +187,6 @@ public class PlayerBaseController : MonoBehaviour {
             } else if (isSideAttack && !isSideAttackAnim())
             {
                 isSideAttack = false;
-               // Vector3 currPos = transform.position;
-               // currPos.x -= AMT_PLAYER_TRANSLATE_WHEN_SATT;
-               // transform.position = currPos;
             }
         }
     }
@@ -497,14 +479,6 @@ public class PlayerBaseController : MonoBehaviour {
 
     bool isCharacterOnPlatform()
     {
-        /*float currX = transform.GetComponent<Collider2D>().bounds.center.x;
-        float currY = transform.GetComponent<Collider2D>().bounds.center.y;
-        Vector2 ptA = new Vector2((float)(currX - DIG_X_OFFSET), (float)(currY - 0.7f));
-        Vector2 ptB = new Vector2((float)(currX + DIG_X_OFFSET), currY - 0.7f);
-        Collider2D[] col = Physics2D.OverlapAreaAll(ptA, ptB, 1 << 8);
-
-        return col.Length > 0;*/
-
         if (Math.Abs(transform.position.y - yPos) < CHAR_ON_PLATFORM_Y_DIFF_THRESHOLD)
         {
             return true;
@@ -528,14 +502,6 @@ public class PlayerBaseController : MonoBehaviour {
 
     void handleHorizontalMovement()
     {
-        // The commented out code is buggy - might get stuck
-        /*float moveHorizontal = Input.GetAxis("Horizontal");
-        Vector2 movement = new Vector2(moveHorizontal, 0);
-        rb2d.AddForce(movement * speed);*/
-
-        //if (!isDigging)
-        if (true)
-        {
             if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.A)) // when pressing left and right keys together
             {
                 return;
@@ -546,7 +512,6 @@ public class PlayerBaseController : MonoBehaviour {
             {
                 flipPlayer(false);
                 Vector3 movement = Vector3.right * speed * Time.deltaTime;
-                //if (!isColliding(transform.position + movement))
                 Vector3 currPos = transform.GetComponent<Collider2D>().bounds.center;
                 if (!isColliding(currPos + movement))
                 {
@@ -557,14 +522,13 @@ public class PlayerBaseController : MonoBehaviour {
             {
                 flipPlayer(true);
                 Vector3 movement = Vector3.left * speed * Time.deltaTime;
-                //if (!isColliding(transform.position + movement))
                 Vector3 currPos = transform.GetComponent<Collider2D>().bounds.center;
                 if (!isColliding(currPos + movement))
                 {
                     transform.position += movement;
                 }
             }
-        } 
+         
     }
 
     void flipPlayer(bool expected)
