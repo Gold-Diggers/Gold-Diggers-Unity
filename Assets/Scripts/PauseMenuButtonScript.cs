@@ -12,11 +12,13 @@ public class PauseMenuButtonScript : MonoBehaviour {
     public Canvas pauseCanvas;
 
     private float speed = 2f;
+    private GameObject player;
 
     // Use this for initialization
     void Start()
     {
         pauseCanvas.enabled = false;
+        player = GameObject.Find("Player");
     }
 
     // Update is called once per frame
@@ -24,8 +26,11 @@ public class PauseMenuButtonScript : MonoBehaviour {
     {
         if (Input.GetKeyDown("escape"))
         {
-            Time.timeScale = 0f;
-            pauseCanvas.enabled = true;
+            if (player.transform.position.y >= -85)
+            {
+                Time.timeScale = 0f;
+                pauseCanvas.enabled = true;
+            }
         }
     }
 
