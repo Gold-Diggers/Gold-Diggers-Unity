@@ -27,6 +27,8 @@ public class EndingFourAnimationScript : MonoBehaviour {
     private GameObject devil;
     public Image blackPanel;
     private Color colorRef;
+	private float intervalX;
+	private float intervalY;
 
     private bool movePlayer;
     private bool moveLeft;
@@ -47,7 +49,8 @@ public class EndingFourAnimationScript : MonoBehaviour {
         devil.SetActive(false);
         colorRef = Color.white;
         colorRef.a = 0;
-        //Time.timeScale = 2.0f;
+		intervalX = (contract.rectTransform.position.x - player.transform.position.x) / 100f;
+		intervalY = (contract.rectTransform.position.y - player.transform.position.y) / 487f;
         movePlayer = true;
         StartCoroutine(movePlayerAbout());
     }
@@ -98,7 +101,6 @@ public class EndingFourAnimationScript : MonoBehaviour {
 
     IEnumerator movePlayerAbout()
     {
-        //print("Commencing movement");
         yield return new WaitForSeconds(1.5f);
         music.Play();
         moveLeft = true;
@@ -156,8 +158,8 @@ public class EndingFourAnimationScript : MonoBehaviour {
     {
         dialogueText.text = dialogue7;
         fadeContractIn = true;
-        yield return new WaitForSeconds(1.65f);
-        player.GetComponent<Animator>().Play("thief_contract");
+		yield return new WaitForSeconds(1.925f);
+		contract.enabled = false;
         yield return new WaitForSeconds(0.3f);
         dialogueText.text = dialogue8;
         yield return new WaitForSeconds(3f);
@@ -194,14 +196,14 @@ public class EndingFourAnimationScript : MonoBehaviour {
 
     void triggerContractMove()
     {
-        if (contract.rectTransform.position.x > -1.9f)
+		if (contract.rectTransform.position.x > player.transform.position.x + 0.65f)
         {
-            contract.rectTransform.Translate(new Vector3(-0.05f, -0.009f, 0));
+            contract.rectTransform.Translate(new Vector3(-1 * intervalX, intervalY, 0));
         }
         else
         {
             moveContract = false;
-            contract.enabled = false;
+			player.GetComponent<Animator>().Play("thief_contract");
         }
     }
 
