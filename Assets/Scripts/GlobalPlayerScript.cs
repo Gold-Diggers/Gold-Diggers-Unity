@@ -10,6 +10,7 @@ public class GlobalPlayerScript : MonoBehaviour {
     public int level;
     public bool hasJetpackUpgrade;
     public bool hasShovelUpgrade;
+	public bool[] hasEndings = new bool[] {false, false, false, false, false, false};
 
     public void reinitialiseValues()
     {
