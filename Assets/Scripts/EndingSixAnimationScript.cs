@@ -53,6 +53,7 @@ public class EndingSixAnimationScript : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+		GlobalPlayerScript.Instance.hasEndings[5] = true;
         player = GameObject.Find("Player");
         devil = GameObject.Find("Devil");
         steve = GameObject.Find("Steve");

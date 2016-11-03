@@ -55,6 +55,7 @@ public class EndLevelButtonScript : MonoBehaviour {
     {
         disableButtons();
         isMoveTowardsExit = true;
+		GlobalPlayerScript.Instance.hasEndings [0] = true;
         player.GetComponent<SpriteRenderer>().flipX = true;
         player.GetComponent<Animator>().SetBool("isRunning", true);
     }

@@ -199,6 +199,11 @@ public class LevelTwoEndScript : MonoBehaviour {
 
     public void clickExit()
     {
+		if (SceneManager.GetActiveScene ().name == "Level 2")
+		{
+			print ("Completed ending 2.");
+			GlobalPlayerScript.Instance.hasEndings [1] = true;
+		}
         disableButtons();
         isMoveTowardsExit = true;
         player.GetComponent<SpriteRenderer>().flipX = true;

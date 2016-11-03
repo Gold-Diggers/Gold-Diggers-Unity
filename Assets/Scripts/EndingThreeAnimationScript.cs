@@ -54,6 +54,7 @@ public class EndingThreeAnimationScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		GlobalPlayerScript.Instance.hasEndings[2] = true;
         lover = GameObject.Find("Lover");
         cage = GameObject.Find("cagebroken");
         player = GameObject.Find("Player");

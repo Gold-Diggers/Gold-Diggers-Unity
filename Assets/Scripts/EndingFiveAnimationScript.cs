@@ -43,6 +43,7 @@ public class EndingFiveAnimationScript : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+		GlobalPlayerScript.Instance.hasEndings[4] = true;
         devil = GameObject.Find("Devil");
         soul = GameObject.Find("Soul");
         whiteFlashObj = GameObject.Find("WhiteFlash/Panel");

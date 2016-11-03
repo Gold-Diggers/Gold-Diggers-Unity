@@ -40,6 +40,7 @@ public class EndingFourAnimationScript : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+		GlobalPlayerScript.Instance.hasEndings[3] = true;
         player = GameObject.Find("Player");
         devil = GameObject.Find("Devil");
         blackPanel = GameObject.Find("BlackScreen").GetComponentsInChildren<Image>()[0];
