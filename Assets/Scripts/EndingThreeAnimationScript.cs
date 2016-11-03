@@ -144,7 +144,6 @@ public class EndingThreeAnimationScript : MonoBehaviour {
         }
         else
         {
-            music.Play();
             StartCoroutine(fadeDevilIn());
             StartCoroutine(triggerDialogues());
         }
