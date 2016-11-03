@@ -19,8 +19,6 @@ public class DeathMenuButtonScript : MonoBehaviour {
     private float originalBlue;
     private string levelName;
 
-    private AsyncOperation loadOp;
-
     private float speed = 2f;
 
     public int SavedLevel
@@ -70,10 +68,8 @@ public class DeathMenuButtonScript : MonoBehaviour {
 
     public void Replay()
     {
-        GlobalPlayerScript.Instance.lives = 3;
         loadingCanvas.enabled = true;
-        loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
-        loadOp.allowSceneActivation = true;
+        SceneManager.LoadScene(levelName, LoadSceneMode.Single);
     }
 
     public void NavigateToMainMenu()
