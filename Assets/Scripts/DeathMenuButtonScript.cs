@@ -70,7 +70,6 @@ public class DeathMenuButtonScript : MonoBehaviour {
 
     public void Replay()
     {
-        print("Loading " + levelName + " ...");
         GlobalPlayerScript.Instance.lives = 3;
         loadingCanvas.enabled = true;
         loadOp = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
@@ -79,7 +78,6 @@ public class DeathMenuButtonScript : MonoBehaviour {
 
     public void NavigateToMainMenu()
     {
-        print("Leaving to main menu...");
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 

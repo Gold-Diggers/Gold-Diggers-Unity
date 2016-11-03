@@ -46,7 +46,6 @@ public class PauseMenuButtonScript : MonoBehaviour {
 
     public void Resume()
     {
-        print("Resuming...");
         pauseCanvas.enabled = false;
         Time.timeScale = 1.0f;
     }

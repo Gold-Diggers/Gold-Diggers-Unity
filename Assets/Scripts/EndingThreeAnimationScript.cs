@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class EndingThreeAnimationScript : MonoBehaviour {
 
-    public Sprite loverAwake;
-    public Sprite loverStand;
     public Sprite loverWorried;
 
     public Sprite playerAngry;

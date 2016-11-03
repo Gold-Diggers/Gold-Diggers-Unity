@@ -40,7 +40,6 @@ public class LevelTransitionScript : MonoBehaviour {
             savePlayerState();
             loadingScreen.enabled = true;
             string levelName = "Level " + GlobalPlayerScript.Instance.level;
-            print("Loading " + levelName);
             SceneManager.LoadScene(levelName, LoadSceneMode.Single);
         }
     }

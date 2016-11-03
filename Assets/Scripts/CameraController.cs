@@ -2,32 +2,12 @@
 using System.Collections;
 
 public class CameraController : MonoBehaviour {
-    /*public GameObject player;
-    private Vector3 cameraOffset;
-    private const float CAMERA_BOUNDS = 1.82f; // 1.52
-    
-	// Use this for initialization
-	void Start () {
-        cameraOffset = transform.position - player.transform.position;
-	}
-
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        float yPos = player.transform.position.y + cameraOffset.y;
-        float xPos = Mathf.Clamp(player.transform.position.x + cameraOffset.x, -CAMERA_BOUNDS , CAMERA_BOUNDS);
-        float zPos = player.transform.position.z + cameraOffset.z;
-        transform.position = new Vector3(xPos, yPos, zPos);
-
-        //transform.position = player.transform.position + cameraOffset;
-    }*/
     public GameObject player;
-    // private Vector3 cameraOffset;
 
     private float left = -0.2F; 
     private float right = 0.2F;
     private float top = 0.05F;
-    private float bottom = -0.25F; // -0.15
+    private float bottom = -0.25F;
 
     private const float CAM_Y_CANNOT_FALL_BEYOND = -96f;
     private const float CAM_Y_UPPER_BOUND = 999999f; // arbitrary large value.
@@ -38,7 +18,6 @@ public class CameraController : MonoBehaviour {
 
     void Start()
     {
-        // cameraOffset = player.transform.position;
         camYClamp = CAM_Y_CANNOT_FALL_BEYOND;
     }
     void LateUpdate()

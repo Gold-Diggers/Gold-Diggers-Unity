@@ -148,9 +148,6 @@ public class PlayerCollisionController : MonoBehaviour
     // Handles collisions with diamonds or end level
     void OnTriggerEnter2D(Collider2D other)
     {
-        Assert.IsTrue(other.gameObject.CompareTag(DIAMOND) || other.gameObject.CompareTag(SPECIAL_DIAMOND) ||
-            other.gameObject.CompareTag(END_LEVEL) || other.gameObject.CompareTag(VENDING_MACHINE));
-
         if (other.gameObject.CompareTag(DIAMOND))
         {
             triggerDiamondInteraction(other);
@@ -169,12 +166,7 @@ public class PlayerCollisionController : MonoBehaviour
     void OnCollisionStay2D(Collision2D coll)
     {
         string collidedObject = coll.gameObject.tag;
-        // if (!Equals(collidedObject, PLATFORM)) print(collidedObject);
-        Assert.IsTrue(Equals(collidedObject, PLATFORM) || Equals(collidedObject, DIAMOND) || Equals(collidedObject, SPECIAL_DIAMOND) ||
-                      Equals(collidedObject, TREASURE_CHEST) || Equals(collidedObject, SPECIAL_TREASURE_CHEST) || Equals(collidedObject, MONSTER) ||
-                      Equals(collidedObject, TRAP) || Equals(collidedObject, BG_BOUNDARY) || Equals(collidedObject, VENDING_MACHINE) ||
-                      Equals(collidedObject, END_LEVEL) || Equals(collidedObject, END_LEVEL_TWO), ERROR_UNEXPECTED_COLLISION_EVENT);
-
+        
         switch (collidedObject)
         {
             case PLATFORM:
@@ -307,7 +299,6 @@ public class PlayerCollisionController : MonoBehaviour
     {
         diamondCollectSound.Play();
         StartCoroutine(displayMovingUICollectDiamond(DISPLAY_SPECIAL_DIAMOND));
-        // print("Player has collected a special diamond.");
         IncrementSpecialDiamondCountByOne();
         Assert.IsTrue(specialDiamonds <= NUM_SPECIAL_DIAMONDS_MAX);
         Destroy(coll.gameObject);
@@ -318,7 +309,6 @@ public class PlayerCollisionController : MonoBehaviour
     IEnumerator triggerTreasureChestInteraction(Collision2D coll)
     {
         treasureChestCollectSound.Play();
-        //coll.gameObject.SetActive(false);
         Destroy(coll.gameObject.GetComponent<BoxCollider2D>());
         coll.gameObject.GetComponent<Animator>().Play("Chest Open");
         // needed to make the script "pause" for a specified amount of time
@@ -378,7 +368,6 @@ public class PlayerCollisionController : MonoBehaviour
     IEnumerator triggerSpecialTreasureChestInteraction(Collision2D coll)
     {
         treasureChestCollectSound.Play();
-        //coll.gameObject.SetActive(false);
         Destroy(coll.gameObject.GetComponent<BoxCollider2D>());
         coll.gameObject.GetComponent<Animator>().Play("Chest Open");
         // needed to make the script "pause" for a specified amount of time
@@ -390,7 +379,6 @@ public class PlayerCollisionController : MonoBehaviour
     private void triggerMonsterInteraction(Collision2D coll)
     {
         if (isHurt) return; // if player is already hurt, he/she is granted invincibility frames
-        print("Player has touched a monster.");
         enforceInjury();
         repelPlayer(coll);
         anim.SetBool("isSusDig", false);
@@ -399,7 +387,6 @@ public class PlayerCollisionController : MonoBehaviour
     private void triggerTrapInteraction(Collision2D coll)
     {
         if (isHurt) return; // if player is already hurt, he/she is granted invincibility frames
-        print("Player has touched a trap.");
         enforceInjury();
         repelPlayer(coll);
     }
@@ -469,12 +456,6 @@ public class PlayerCollisionController : MonoBehaviour
 
     private bool isMonsterHitFromTop(Collision2D coll)
     {
-        /*
-        print("PlayerX: " + rb2d.position.x + " | MonsterX: " + coll.collider.bounds.min.x + ","
-                 + coll.collider.bounds.max.x);
-
-        Use this printline code to do checking of desired acceptable position to constitute a hit from top
-        */
         bool isHitFromTop = GetIsHitFromTop(coll);
         if (isHitFromTop) return true;
         return false;
@@ -528,12 +509,7 @@ public class PlayerCollisionController : MonoBehaviour
         Assert.IsTrue(lives >= 0 || level == 0, ERROR_INVALID_LIVES_VALUE);
         if (IsDead())
         {
-            print("Player has [" + lives + "] remaining and has died.");
             showDeathScreen();
-        }
-        else if (IsAlive())
-        {
-            print("Player has lost 1 life with [" + lives + "] remaining.");
         }
     }
 
