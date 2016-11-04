@@ -42,6 +42,11 @@ public class EndingSceneScript : MonoBehaviour {
             FRAME_STAY_DELAY = 250;
             FRAMES_BEFORE_TRANSIT = 250;
         }
+		else if (SceneManager.GetActiveScene().name == "Ending 5a")
+		{
+			FRAME_STAY_DELAY = 140;
+			FRAMES_BEFORE_TRANSIT = 140;
+		}
         else if (SceneManager.GetActiveScene().name == "Ending 6a")
         {
             FRAME_STAY_DELAY = 175;
