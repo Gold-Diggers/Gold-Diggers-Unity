@@ -76,6 +76,8 @@ public class PlayerBaseController : MonoBehaviour {
         isLevelEnd = true;
         anim.Play("idle");
         anim.SetBool("isRunning", false);
+        hoverSound.Pause();
+        jetPackSound.Pause();
     }
 
     // Used by collision controller to update whether player is hurt.
