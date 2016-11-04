@@ -130,6 +130,10 @@ public class PlayerBaseController : MonoBehaviour {
             handleDig();
             handleSideAttack();
             handleAnimation();
+        } else
+        {
+            hoverSound.Pause();
+            jetPackSound.Pause();
         }
         updatePos(); // must be last
     }
