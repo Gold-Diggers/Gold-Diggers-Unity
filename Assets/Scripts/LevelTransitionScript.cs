@@ -37,6 +37,7 @@ public class LevelTransitionScript : MonoBehaviour {
     {
         if (coll.tag == "Player")
         {
+            coll.gameObject.GetComponent<PlayerBaseController>().setEndLevel();
             savePlayerState();
             loadingScreen.enabled = true;
             string levelName = "Level " + GlobalPlayerScript.Instance.level;
