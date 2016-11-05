@@ -477,7 +477,7 @@ public class PlayerCollisionController : MonoBehaviour
         injuredSound.Play();
         StartCoroutine(Blink(5, 0.1f, 0.1f));
         updateHurt(true);
-        lives -= 1;
+		if (SceneManager.GetActiveScene().name != "TutorialLevel") lives -= 1;
         checkIfPlayerDied();
     }
 
@@ -507,7 +507,7 @@ public class PlayerCollisionController : MonoBehaviour
     private void checkIfPlayerDied()
     {
         Assert.IsTrue(lives >= 0 || level == 0, ERROR_INVALID_LIVES_VALUE);
-        if (IsDead())
+		if (IsDead() && SceneManager.GetActiveScene().name != "TutorialLevel")
         {
             showDeathScreen();
         }
