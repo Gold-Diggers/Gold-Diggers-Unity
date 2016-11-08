@@ -324,7 +324,11 @@ public class PlayerCollisionController : MonoBehaviour
             int randSpawn = Random.Range(0, 2);
             if (randSpawn == MONSTER_ONE)
             {
-                if (level == 1)
+				if (SceneManager.GetActiveScene().name == "TutorialLevel")
+				{
+					spawnObject(spawnedMonsterType1, coll);
+				}
+                else if (level == 1)
                 {
                     spawnObject(spawnedMonsterType1, coll);
                 }
@@ -336,15 +340,14 @@ public class PlayerCollisionController : MonoBehaviour
                 {
                     spawnObject(spawnedMonsterType1_level3, coll);
                 }
-                else if (SceneManager.GetActiveScene().name == "TutorialLevel")
-                {
-                    spawnObject(spawnedMonsterType1, coll);
-                }
-                
             }
             else if (randSpawn == MONSTER_TWO)
             {
-                if (level == 1)
+				if (SceneManager.GetActiveScene().name == "TutorialLevel")
+				{
+					spawnObject(spawnedMonsterType2, coll);
+				}
+				else if (level == 1)
                 {
                     spawnObject(spawnedMonsterType2, coll);
                 }
@@ -355,10 +358,6 @@ public class PlayerCollisionController : MonoBehaviour
                 else if (level == 3)
                 {
                     spawnObject(spawnedMonsterType2_level3, coll);
-                }
-                else if (SceneManager.GetActiveScene().name == "TutorialLevel")
-                {
-                    spawnObject(spawnedMonsterType2, coll);
                 }
             }
         }
